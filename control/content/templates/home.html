@@ -22,7 +22,7 @@
              data-infinite-container=".infinite-scroll-parent"
              infinite-scroll="ContentHome.loadMoreItems()"
              infinite-scroll-disabled="ContentHome.noMore">
-      <div class="review-item" ng-repeat="review in ContentHome.reviews | orderBy:'-data.addedDate' | unique:'userToken'">
+      <div class="review-item" ng-repeat="review in ContentHome.reviews | orderBy:'-data.addedDate'">
         <div class="rating br-wrapper br-theme-css-stars">
             <ng-rate-it ng-model="review.data.starRating" class="custom" rated="" read-only = "true"></ng-rate-it>
         </div>

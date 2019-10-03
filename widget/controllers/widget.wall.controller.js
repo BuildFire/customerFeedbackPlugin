@@ -51,7 +51,7 @@
                 console.log('Inside getReviews---------');
                 if(!WidgetWall.waitAPICompletion) {
                     WidgetWall.waitAPICompletion = true;
-                  buildfire.userData.search({sort: {addedDate: -1}, skip: skip, limit: limit}, 'AppRatings2', function (err, results) {
+                  buildfire.publicData.search({sort: {addedDate: -1}, skip: skip, limit: limit}, 'AppRatings2', function (err, results) {
                         if (err) {
                             console.error("++++++++++++++ctrlerrddd", JSON.stringify(err));
                             $location.path('/');
@@ -108,7 +108,7 @@
               if (user) {
                 WidgetWall.currentLoggedInUser = user;
                 var tagName = 'chatData-' + WidgetWall.currentLoggedInUser._id;
-                buildfire.userData.search({}, tagName, function (err, results) {
+                buildfire.publicData.search({}, tagName, function (err, results) {
                   if (err) {
                     console.error("Error", JSON.stringify(err));
                   }
@@ -232,7 +232,7 @@
             if (user) {
               WidgetWall.currentLoggedInUser = user;
               var tagName = 'chatData-' + WidgetWall.currentLoggedInUser._id;
-              buildfire.userData.search({}, tagName, function (err, results) {
+              buildfire.publicData.search({}, tagName, function (err, results) {
                 if (err) {
                   console.error("Error", JSON.stringify(err));
                 }

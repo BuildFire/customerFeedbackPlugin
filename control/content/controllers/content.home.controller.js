@@ -70,7 +70,7 @@
 
         ContentHome.loadMoreItems = function () {
             console.log('inside loadMoreItems ----------');
-            buildfire.userData.search({skip: skip, limit: limit}, 'AppRatings2', function (err, results) {
+            buildfire.publicData.search({skip: skip, limit: limit}, 'AppRatings2', function (err, results) {
                 if (err) console.error("++++++++++++++ctrlerr",JSON.stringify(err));
                 else {
                     console.log("++++++++++++++ctrl", results);
@@ -82,12 +82,8 @@
                         ContentHome.noMore = true;
                     }
                     results.forEach(function (result) {
-                        if (uniqueTokens.indexOf(result.userToken) == -1) {
-                            uniqueTokens.push(result.userToken);
-                            uniqueReviews.push(result);
-                            elemCount = elemCount + 1;
-                            avgRating = avgRating + parseInt(result.data.starRating);
-                        }
+                      elemCount = elemCount + 1;
+                      avgRating = avgRating + parseInt(result.data.starRating);
                     });
                     ContentHome.avgRating = elemCount ? avgRating / elemCount : 0;
                     ContentHome.totalReviews = elemCount;
@@ -181,7 +177,7 @@
             });
             modalInstance.result.then(function (message) {
               if (message === 'yes') {
-                buildfire.userData.delete(review.id, 'AppRatings2',review.userToken, function (err, result) {
+                buildfire.publicData.delete(review.id, 'AppRatings2',review.userToken, function (err, result) {
                   if(err)
                   console.log("Error occured while deleting review:", err);
                   else{

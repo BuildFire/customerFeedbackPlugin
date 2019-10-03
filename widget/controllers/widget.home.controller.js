@@ -159,8 +159,8 @@
           };
 
         function getReviews() {
-                buildfire.userData.search({}, 'AppRatings2', function (err, results) {
-                    if (err){
+            buildfire.publicData.search({}, 'AppRatings2', function (err, results) {
+                if (err){
                         console.error("++++++++++++++ctrlerrddd",JSON.stringify(err));
 //                        $location.path('/');
                         if (!$scope.$$phase)
@@ -211,8 +211,8 @@
               } else if (!WidgetHome.waitAPICompletion) {
                   WidgetHome.waitAPICompletion = true;
                   var tagName = 'chatData-' + WidgetHome.currentLoggedInUser._id;
-                  buildfire.userData.search({sort: {chatTime: -1}, skip: skip, limit: limit}, tagName, function (err, results) {
-                      if (err) {
+                  buildfire.publicData.search({sort: {chatTime: -1}, skip: skip, limit: limit}, tagName, function (err, results) {
+                    if (err) {
                           console.error("Error", JSON.stringify(err));
                       }
                       else {
@@ -235,7 +235,7 @@
 
           /*WidgetHome.getChatData = function () {
               var tagName = 'chatData-' + WidgetHome.currentLoggedInUser._id;
-              buildfire.userData.get(tagName, function (err, result) {
+              buildfire.publicData.get(tagName, function (err, result) {
                   if (err){
                       console.error("Error",JSON.stringify(err));
                   }
@@ -270,13 +270,13 @@
 
             WidgetHome.getChatData();
           if(WidgetHome.chatData!=''){
-            buildfire.userData.get(tagName, function (err, result) {
+            buildfire.publicData.get(tagName, function (err, result) {
                 var saveResult = [];
                 if(result && result.data && result.data.length) {
                     saveResult = result && result.data;
                 }
                 saveResult.push(WidgetHome.chatMessageObj);
-                buildfire.userData.save(saveResult, tagName, function (e, data) {
+                buildfire.publicData.save(saveResult, tagName, function (e, data) {
                     if (e) console.error("+++++++++++++++err", JSON.stringify(e));
                     else {
                         WidgetHome.chatData = '';
@@ -302,8 +302,8 @@
             };
 
               if(WidgetHome.chatData != '') {
-                  buildfire.userData.insert(WidgetHome.chatMessageObj, tagName, function (err, result) {
-                      if (err) console.error("+++++++++++++++err", JSON.stringify(err));
+                buildfire.publicData.insert(WidgetHome.chatMessageObj, tagName, function (err, result) {
+                    if (err) console.error("+++++++++++++++err", JSON.stringify(err));
                       else {
                           WidgetHome.chatData = '';
                           $rootScope.$broadcast("COMMENT_ADDED");

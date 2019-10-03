@@ -58,7 +58,7 @@
                 var objData = {starRating: WidgetSubmit.Feedback.starRating || 1, Message: WidgetSubmit.Feedback.Message, displayName: WidgetSubmit.currentLoggedInUser.displayName, addedDate: new Date(), userName: WidgetSubmit.currentLoggedInUser.username, userImage: WidgetSubmit.currentLoggedInUser.imageUrl }
                 console.log("++++++++++++++", objData);
                 if (WidgetSubmit.Feedback.Message) {
-                    buildfire.userData.insert(objData, 'AppRatings2', function (err, data) {
+                    buildfire.publicData.insert(objData, 'AppRatings2', function (err, data) {
                         if (err) console.error("+++++++++++++++err", JSON.stringify(err));
                         else {
                             data.userToken = WidgetSubmit.currentLoggedInUser._id;
@@ -88,7 +88,7 @@
         //  //  $scope.complain.data.response = "";
         //  var objData = {starRating:WidgetSubmit.Feedback.starRating, Message:WidgetSubmit.Feedback.Message, displayName: WidgetSubmit.currentLoggedInUser.displayName, addedDate: new Date(), userName:WidgetSubmit.currentLoggedInUser.username}
         //  console.log("++++++++++++++",objData)
-        //  buildfire.userData.update(WidgetSubmit.updateId, objData, 'AppRatings2', function (e) {
+        //  buildfire.publicData.update(WidgetSubmit.updateId, objData, 'AppRatings2', function (e) {
         //    if (e) console.error("+++++++++++++++err",JSON.stringify(e));
         //    else{
         //      $location.path('/')

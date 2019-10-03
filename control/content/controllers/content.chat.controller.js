@@ -28,7 +28,7 @@
                     console.log('inside getChatData-------------');
                     if(!ContentChat.waitAPICompletion) {
                         ContentChat.waitAPICompletion = true;
-                        buildfire.userData.search({skip: skip, limit: limit}, tagName, function (err, results) {
+                        buildfire.publicData.search({skip: skip, limit: limit}, tagName, function (err, results) {
                             if (err) {
                                 console.error("Error", JSON.stringify(err));
                             }
@@ -70,7 +70,7 @@
                         id: ContentChat.currentLoggedInUser._id
                     }
                     if (ContentChat.chatData) {
-                            buildfire.userData.insert(ContentChat.chatMessageObj, tagName, $routeParams.userToken, function (err, result) {
+                            buildfire.publicData.insert(ContentChat.chatMessageObj, tagName, $routeParams.userToken, function (err, result) {
                                 if (err) console.error("Error : ", JSON.stringify(err));
                                 else {
                                     ContentChat.chatMessageData.unshift(result);
