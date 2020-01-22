@@ -1,6 +1,6 @@
 {
   "author":"Buildfire"
-,"pluginName":"Customer Feedback"
+,"pluginName":"Customer Feedback Mustafas"
 ,"pluginDescription":"Listen to your customers' honest feedback through a star rating system and custom commenting. Customer feedback is critical in gaining insight and creating better processes whether own a restaurant, small business, school, consulting, or any other type of company."
 ,"supportEmail":"support@buildfire.com"
 ,"control":{
@@ -18,5 +18,6 @@
 
 },
   "features" : [],
+  "media": [{ "type": "image-resource", "path": "image.gif" }],
   "languages" : ["en"]
 }
