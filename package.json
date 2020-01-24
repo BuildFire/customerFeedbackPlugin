@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "scripts": {
     "postinstall": "./node_modules/.bin/bower install",
-    "test": "./node_modules/.bin/karma start --single-run --browsers PhantomJS"
+    "test": "./node_modules/.bin/karma start --single-run --browsers PhantomJS",
+    "build": "cd .. && rm -rf customerFeedbackPlugin.zip && zip -r customerFeedbackPlugin.zip customerFeedbackPlugin/ -x \\*node_modules\\* \\*.git\\* \\*test\\*"
   },
   "license": "ISC",
   "dependencies": {
