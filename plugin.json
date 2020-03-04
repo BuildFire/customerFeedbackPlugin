@@ -18,5 +18,6 @@
 
 },
   "features" : [],
+  "media": [{ "type": "image-resource", "path": "image.gif" }],
   "languages" : ["en"]
 }
