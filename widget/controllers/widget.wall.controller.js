@@ -77,9 +77,9 @@
                             WidgetWall.startPoints =  WidgetWall.totalRating / (WidgetWall.reviews.length );
                             WidgetWall.lastRating = WidgetWall.reviews && WidgetWall.reviews.length && WidgetWall.reviews[WidgetWall.reviews.length - 1].data.starRating;
                           } else {
+
                             WidgetWall.noReviews = true;
                             WidgetWall.reviewButtonText = "Submit Review";
-                            WidgetWall.submitReview();
                           }
                             //$scope.complains = results;
                             skip = skip + results.length;
