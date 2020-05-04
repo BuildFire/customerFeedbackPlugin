@@ -14,7 +14,8 @@
 	margin-left:5px;
 }
 .br-theme-css-stars .br-widget a::after {
-    color: #dddddd;
+    /* color: #dddddd; */
+    opacity: .2;
     content: "★";
 }
 .br-theme-css-stars .br-widget a.br-active::after {

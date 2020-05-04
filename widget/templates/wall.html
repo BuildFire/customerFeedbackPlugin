@@ -6,8 +6,8 @@
 	  	});
 	});
 </script>
-<div class="holder padding-zero" ng-controller="WidgetWallCtrl as WidgetWall">
-	<div class="feedback-plugin review-wall">
+<div class="holder padding-zero load-in" ng-controller="WidgetWallCtrl as WidgetWall">
+	<div class="feedback-plugin review-wall load-in">
 		<div class="intro text-center padding-top-ten padding-bottom-twenty">
 			<p class="margin-top-ten margin-bottom-zero" ng-if="WidgetWall.reviews.length">Your Reviews: <span style="font-weight:400;">{{WidgetWall.reviews.length}}</span></p>
 			<p ng-if="WidgetWall.reviews.length">Your Average Rating: <span style="font-weight:400;">{{ WidgetWall.totalRating / (WidgetWall.reviews.length) | number:2 }}/5</span></p>
@@ -24,11 +24,15 @@
 			<p ng-if="WidgetWall.startPoints>4" ng-if="WidgetWall.reviews.length">Outstanding</p>
 			</div>
 			<div  ng-if="WidgetWall.noReviews" class="no-event-found padded">
-				<div>You have not submitted any reviews. If you would like to do so, click the button below. Thanks!</div>
+				<div class="empty-state">
+					<p>
+						You have not submitted any reviews. If you would like to do so, click the button below. Thanks!
+					</p>
+				</div>
 			</div>
 			<!--<a class="btn btn-success btn-sm" ng-if="WidgetWall.noReviews && WidgetWall.reviews" ng-click="WidgetWall.submitReview()">Submit Review</a>-->
             <!--<a class="btn btn-success btn-sm" ng-if="!WidgetWall.noReviews && WidgetWall.reviews" ng-click="WidgetWall.submitReview()">Write a Review</a>-->
-			<a class="btn btn-success btn-sm" ng-if="WidgetWall.reviews" ng-click="WidgetWall.submitReview()">{{WidgetWall.reviewButtonText}}</a>
+			<a class="btn btn-success" ng-if="WidgetWall.reviews" ng-click="WidgetWall.submitReview()">{{WidgetWall.reviewButtonText}}</a>
 			<!--<a class="btn btn-success btn-sm" ng-if="!WidgetWall.noReviews && WidgetWall.reviews" ng-click="WidgetWall.submitReview()">Write a Review</a>-->
 
 			<!--<a class="btn btn-success btn-sm" href="#/">Home</a>-->
