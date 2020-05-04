@@ -1,5 +1,5 @@
 <div ng-controller="WidgetHomeCtrl as WidgetHome">
-<div class="holder padding-zero has-bottom sticky-bottom-menu clearfix" >
+<div class="holder padding-zero has-bottom load-in sticky-bottom-menu clearfix" >
     <div class="infinite-scroll-parent scrollable">
     <div class="feedback-plugin review">
         <div class="media-center-banner plugin-banner clearfix" ng-if="WidgetHome.data">
@@ -17,46 +17,46 @@
                 <average-star-rating ng-model="WidgetHome.lastRating" max="5"><average-star-rating>
 
             </div>
-            <p ng-if="WidgetHome.lastRating >= 0 && WidgetHome.lastRating <=1 && WidgetHome.reviews.length">Poor</p>
-            <p ng-if="WidgetHome.lastRating>1 && WidgetHome.lastRating<=2 && WidgetHome.reviews.length">Average</p>
-            <p ng-if="WidgetHome.lastRating>2 && WidgetHome.lastRating<=3 && WidgetHome.reviews.length">Good</p>
-            <p ng-if="WidgetHome.lastRating>3 && WidgetHome.lastRating<=4 && WidgetHome.reviews.length">Excellent</p>
-            <p ng-if="WidgetHome.lastRating>4 && WidgetHome.reviews.length">Outstanding</p>
+            <h5 ng-if="WidgetHome.lastRating >= 0 && WidgetHome.lastRating <=1 && WidgetHome.reviews.length">Poor</h5>
+            <h5 ng-if="WidgetHome.lastRating>1 && WidgetHome.lastRating<=2 && WidgetHome.reviews.length">Average</h5>
+            <h5 ng-if="WidgetHome.lastRating>2 && WidgetHome.lastRating<=3 && WidgetHome.reviews.length">Good</h5>
+            <h5 ng-if="WidgetHome.lastRating>3 && WidgetHome.lastRating<=4 && WidgetHome.reviews.length">Excellent</h5>
+            <h5 ng-if="WidgetHome.lastRating>4 && WidgetHome.reviews.length">Outstanding</h5>
 
             <!--<p ng-if="WidgetHome.reviews.length"><span ng-bind-html="WidgetHome.lastReviewComment | newLine"></span></p>-->
             <!--<a class="btn btn-success btn-sm" ng-if="WidgetHome.data && WidgetHome.reviews.length" ng-click="WidgetHome.openWall()">Wall</a>-->
             <!--<a class="btn btn-success btn-sm"  ng-if="WidgetHome.data && !WidgetHome.reviews.length" ng-click="WidgetHome.openSubmit()">Submit Review</a>-->
 
     </div>
-        <div class="head row clearfix padding-left-ten padding-right-ten margin-bottom-fifteen" ng-if="WidgetHome.reviews">
-            <div class="col-xs-8 pull-left">
-                <div class="media-holder pull-left">
-                    <img ng-if="!WidgetHome.currentView.params.data.data.userImage" src="../../../styles/media/avatar-placeholder.png">
-                    <!--<img src="http://www.placehold.it/100x100" ng-if="!data.data.userImage">-->
-                    <img ng-if="WidgetHome.currentView.params.data.data.userImage"  load-image="1x1" crop-type="crop" crop-width="60" crop-height="60" data-final-src="{{WidgetHome.currentView.params.data.data.userImage}}">
-                </div>
-                <div>
-                    <p class="text-primary ellipsis margin-bottom-zero padding-left-ten">
-                        <a class="text-primary" ng-click="WidgetWall.buildfire.auth.openProfile(WidgetHome.currentView.params.data.userToken)">{{WidgetHome.currentView.params.data.data.displayName || 'No Name'}}</a>
-                    </p>
-                    <p class="date opacity-seventy">{{WidgetHome.currentView.params.data.data.addedDate | date:'medium'}}</p>
-                </div>
+    <div class="review-item review-item-detail">
+        <div class="head" ng-if="WidgetHome.reviews">
+            <div class="media-holder pull-left">
+                <img ng-if="!WidgetHome.currentView.params.data.data.userImage" src="../../../styles/media/avatar-placeholder.png">
+                <!--<img src="http://www.placehold.it/100x100" ng-if="!data.data.userImage">-->
+                <img ng-if="WidgetHome.currentView.params.data.data.userImage"  load-image="1x1" crop-type="crop" crop-width="60" crop-height="60" data-final-src="{{WidgetHome.currentView.params.data.data.userImage}}">
+            </div>
+            <div class="ellipsis">
+                <a class="text-primary ellipsis" ng-click="WidgetWall.buildfire.auth.openProfile(WidgetHome.currentView.params.data.userToken)">{{WidgetHome.currentView.params.data.data.displayName || 'No Name'}}</a>
+                <p class="date caption opacity-seventy">{{WidgetHome.currentView.params.data.data.addedDate | date:'medium'}}</p>
             </div>
         </div>
-        <div class="copy padding-left-ten padding-right-ten margin-bottom-fifteen"  ng-if="WidgetHome.reviews.length">
-            <p class="margin-zero"><span ng-bind-html="WidgetHome.lastReviewComment | newLine"></span></p>
+        <div class="copy"  ng-if="WidgetHome.reviews.length">
+            <p><span ng-bind-html="WidgetHome.lastReviewComment | newLine"></span></p>
         </div>
+    </div>
 
-    <div class="review-comments clearfix" >
+    <div class="review-comments" >
         <div id="top"
              infinite-scroll-distance="1"
              data-infinite-container=".infinite-scroll-parent"
              infinite-scroll="WidgetHome.getChatData()"
-             infinite-scroll-disabled="WidgetHome.noMore">
+             infinite-scroll-disabled="WidgetHome.noMore"
+             class="comment-holder">
         <div class="comment" ng-repeat = "data in WidgetHome.chatMessageData | orderBy:'-data.chatTime'">
-            <hr class="small">
+            <div class="comment-indicator primaryBackgroundTheme"></div>
             <div class="inner">
-                <p class="info margin-bottom-zero opacity-seventy"><a class="text-primary" ng-click="WidgetHome.buildfire.auth.openProfile(data.data.id)">{{data.data.chatFrom || 'No Name'}}</a> - {{data.data.chatTime |date:'medium'}}</p>
+                <p class="info margin-bottom-zero"><a class="text-primary" ng-click="WidgetHome.buildfire.auth.openProfile(data.data.id)">{{data.data.chatFrom || 'No Name'}}</a></p>
+                <span class="caption">{{data.data.chatTime |date:'medium'}}</span>
                 <p class="margin-bottom-zero"><span ng-bind-html="data.data.chatMessage | newLine"></span></p>
             </div>
         </div>
@@ -66,17 +66,14 @@
 </div>
 </div>
 <!--<a ng-click="WidgetHome.goBack()">Edit</a>-->
-<div class="holder padding-zero bottom-post post-container" ng-if="WidgetHome.currentLoggedInUser">
-    <hr class="small">
-    <div class="post-holder clearfix">
-        <div class="add-message pull-left">
-            <textarea rows="1" cols="30" placeholder="Type your message..." name="text"
-                      ng-model="WidgetHome.chatData" class="text-area-custom"></textarea>
-            <!--<input type="text" class="form-control" ng-model="WidgetHome.chatData"
-                   placeholder="Type your message...">-->
-        </div>
+<div class="holder bottom-post post-container titleBarBackgroundTheme" ng-if="WidgetHome.currentLoggedInUser">
+    <div class="post-holder">
+        <textarea rows="1" cols="30" placeholder="Type your message..." name="text"
+                    ng-model="WidgetHome.chatData" class="text-area-custom titleBarTextAndIcons"></textarea>
+        <!--<input type="text" class="form-control" ng-model="WidgetHome.chatData"
+                placeholder="Type your message...">-->
         <div class="send-message">
-            <input type="submit" class="text-primary" value="Send" ng-click="WidgetHome.sendMessage()">
+            <input type="submit" class="titleBarTextAndIcons" value="Send" ng-click="WidgetHome.sendMessage()">
         </div>
     </div>
 </div>
