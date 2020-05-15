@@ -19,12 +19,12 @@
 				<textarea id="submitMsg" ng-if="!WidgetSubmit.currentLoggedInUser" class="form-control" placeholder="Enter message..." ng-model="WidgetSubmit.Feedback.Message"></textarea>
 			</div>
 			<div class="margin-bottom-thirty">
-					<span style="color: #d14 !important;" class="textfield-error" ng-show="reviewForm.feedbackMessage.$error.required">Please fill in this field</span>
+					<span class="textfield-error text-danger" ng-show="reviewForm.feedbackMessage.$error.required">Please fill in this field</span>
 			</div>
 		</div>
 		<div class="text-center submit-actions">
 			<input type="button" class="submit btn btn-success padding-left-thirty padding-right-thirty" ng-click="WidgetSubmit.save()" value="Submit Review" ng-disabled="WidgetSubmit.disabled"></br></br>
-			<input type="button" class="submit btn btn-danger padding-left-thirty padding-right-thirty" ng-click="WidgetSubmit.cancel()" value="Cancel">
+			<input type="button" class="submit btn-text bodyTextTheme padding-left-thirty padding-right-thirty" ng-click="WidgetSubmit.cancel()" value="Cancel">
 			<!--<a class="submit btn btn-success padding-left-thirty padding-right-thirty" ng-click="WidgetSubmit.update()" ng-if="WidgetSubmit.isUpdate">Update Review</a>-->
 		</div>
 
