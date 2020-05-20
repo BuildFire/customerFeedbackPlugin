@@ -40,7 +40,7 @@
                 <p class="date caption opacity-seventy">{{WidgetHome.currentView.params.data.data.addedDate | date:'medium'}}</p>
             </div>
         </div>
-        <div class="copy"  ng-if="WidgetHome.reviews.length">
+        <div class="copy word-break"  ng-if="WidgetHome.reviews.length">
             <p ng-bind-html="WidgetHome.lastReviewComment | newLine"></p>
         </div>
     </div>
@@ -54,7 +54,7 @@
              class="comment-holder">
         <div class="comment" ng-repeat = "data in WidgetHome.chatMessageData | orderBy:'-data.chatTime'">
             <div class="comment-indicator primaryBackgroundTheme"></div>
-            <div class="inner">
+            <div class="inner word-break">
                 <p class="info margin-bottom-zero"><a class="text-primary" ng-click="WidgetHome.buildfire.auth.openProfile(data.data.id)">{{data.data.chatFrom || 'No Name'}}</a></p>
                 <span class="caption">{{data.data.chatTime |date:'medium'}}</span>
                 <p class="margin-bottom-zero"><span ng-bind-html="data.data.chatMessage | newLine"></span></p>

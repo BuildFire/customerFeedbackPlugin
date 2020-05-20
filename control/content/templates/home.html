@@ -27,7 +27,7 @@
             <ng-rate-it ng-model="review.data.starRating" class="custom" rated="" read-only = "true"></ng-rate-it>
         </div>
 
-        <p><span ng-bind-html="review.data.Message | newLine"></span> <span class="pull-right dlt-review" ng-click="ContentHome.deleteReview(review, $index)">Delete Review</span></p>
+        <p class="word-break"><span ng-bind-html="review.data.Message | newLine"></span> <span class="pull-right dlt-review" ng-click="ContentHome.deleteReview(review, $index)">Delete Review</span></p>
           <div class="item clearfix row">
               <div class="col-xs-8 pull-left text-left">
                   <p class="author no-icon info padding-zero margin-zero">
