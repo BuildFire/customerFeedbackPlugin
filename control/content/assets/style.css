@@ -157,3 +157,6 @@
     color: red;
     cursor: pointer;
 }
+.word-break{
+	word-break: break-word;
+}

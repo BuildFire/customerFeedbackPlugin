@@ -25,7 +25,7 @@
          data-infinite-container=".infinite-scroll-parent"
          infinite-scroll="ContentChat.getChatData()"
          infinite-scroll-disabled="ContentChat.noMore">
-    <div class="comment" ng-repeat = "chatData in ContentChat.chatMessageData | orderBy: '-data.chatTime' ">
+    <div class="comment word-break" ng-repeat = "chatData in ContentChat.chatMessageData | orderBy: '-data.chatTime' ">
         <p class="no-icon info margin-zero"><a class="text-primary">{{chatData.data.chatFrom || 'No Name'}}</a> - {{chatData.data.chatTime | date:'medium'}}</p>
         <p class="margin-zero"><span ng-bind-html="chatData.data.chatMessage | newLine"></span></p>
     </div>

@@ -18,6 +18,10 @@
 
 },
   "features" : [],
-  "media": [{ "type": "image-resource", "path": "image.gif" }],
+  "media": [
+    { "type": "image-resource", "path": "marketplacegif.gif" },
+    { "type": "image-resource", "path": "image.png" }
+  ],
   "languages" : ["en"]
+  
 }

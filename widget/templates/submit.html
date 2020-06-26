@@ -1,38 +1,30 @@
-<div class="holder padding-zero" ng-controller="WidgetSubmitCtrl as WidgetSubmit">
+<div class="holder load-in submit-holder" ng-controller="WidgetSubmitCtrl as WidgetSubmit">
 	<form name="reviewForm" class="feedback-plugin submit-review">
 		<div class="item clearfix padded">
-			<p>Submit Review</p>			
+			<h5 class="text-center">Submit Review</h5>
 		</div>
-		<hr class="none">
-		<div class="item clearfix">
-			<div class="col-xs-12 pull-left">
-				<span>Rating:</span>
-			</div>
 
-			<div class="col-xs-12 pull-right margin-top-five">
+		<div class="item">
+			<div class="rating-stars">
+				<span class="text-center">Rating:</span>
 			<!--<ng-rate-it ng-model="WidgetSubmit.Feedback.starRating" class="custom" rated=""></ng-rate-it>-->
 				<star-rating ng-model="WidgetSubmit.Feedback.starRating" max="5" on-rating-select="WidgetSubmit.rateFunction(rating)"></star-rating>
 				{{WidgetSubmit.Feedback.starRating}}
 			</div>
 		</div>
-		<hr class="none">
-		<hr class="none">
-		<div class="item clearfix">
-			<div class="col-xs-12 pull-left">
-				<span>Message:</span>
+		<div class="item">
+			<div class="md-textfield">
+				<label for="submitMsg">Message:</label>
+				<textarea id="submitMsg" ng-if="WidgetSubmit.currentLoggedInUser" name="feedbackMessage" class="form-control" placeholder="Enter message..." ng-model="WidgetSubmit.Feedback.Message" required></textarea>
+				<textarea id="submitMsg" ng-if="!WidgetSubmit.currentLoggedInUser" class="form-control" placeholder="Enter message..." ng-model="WidgetSubmit.Feedback.Message"></textarea>
 			</div>
-			<div class="col-xs-12 pull-right margin-top-five">
-				<textarea ng-if="WidgetSubmit.currentLoggedInUser" name="feedbackMessage" class="form-control" placeholder="Enter message..." ng-model="WidgetSubmit.Feedback.Message" required></textarea>
-				<textarea ng-if="!WidgetSubmit.currentLoggedInUser" class="form-control" placeholder="Enter message..." ng-model="WidgetSubmit.Feedback.Message"></textarea>
+			<div class="margin-bottom-thirty">
+					<span class="textfield-error text-danger" ng-show="reviewForm.feedbackMessage.$error.required">Please fill in this field</span>
 			</div>
-            <div class="col-xs-12 pull-left">
-                <span style="color: #d14 !important;" class="error" ng-show="reviewForm.feedbackMessage.$error.required">Please fill in this field</span>
-            </div>
 		</div>
-		<hr class="none">
-		<div class="col-xs-12 pull-left text-center">
+		<div class="text-center submit-actions">
 			<input type="button" class="submit btn btn-success padding-left-thirty padding-right-thirty" ng-click="WidgetSubmit.save()" value="Submit Review" ng-disabled="WidgetSubmit.disabled"></br></br>
-			<input type="button" class="submit btn btn-danger padding-left-thirty padding-right-thirty" ng-click="WidgetSubmit.cancel()" value="Cancel">
+			<input type="button" class="submit btn-text bodyTextTheme padding-left-thirty padding-right-thirty" ng-click="WidgetSubmit.cancel()" value="Cancel">
 			<!--<a class="submit btn btn-success padding-left-thirty padding-right-thirty" ng-click="WidgetSubmit.update()" ng-if="WidgetSubmit.isUpdate">Update Review</a>-->
 		</div>
 
