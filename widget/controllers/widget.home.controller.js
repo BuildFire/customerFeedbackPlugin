@@ -221,9 +221,15 @@
                           }
                           console.log("++++++++++++++successsChat", results);
                           WidgetHome.chatMessageData = WidgetHome.chatMessageData ? WidgetHome.chatMessageData : [];
-                          WidgetHome.chatMessageData = WidgetHome.chatMessageData.concat(results);
+                          /*WidgetHome.chatMessageData = WidgetHome.chatMessageData.concat(results);
                           WidgetHome.chatMessageData = $filter('unique')(WidgetHome.chatMessageData, 'id');
                           skip = skip + results.length;
+                          */
+                        results.map(item => {
+                            if(item.data.chatId === WidgetHome.currentView.params.data.id) {
+                                WidgetHome.chatMessageData.push(item)
+                            }
+                        })
                           //$scope.complains = results;
                           if (!$scope.$$phase)
                               $scope.$digest();
@@ -233,71 +239,20 @@
               }
           }
 
-          /*WidgetHome.getChatData = function () {
-              var tagName = 'chatData-' + WidgetHome.currentLoggedInUser._id;
-              buildfire.userData.get(tagName, function (err, result) {
-                  if (err){
-                      console.error("Error",JSON.stringify(err));
-                  }
-                  else {
-                      console.log("++++++++++++++successsChat", result);
-                      WidgetHome.chatMessageData= result && result.data;
-                      //$scope.complains = results;
-                      $scope.$apply();
-                  }
-              });
-          }
-*/
-
           console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         /* Initialize current logged in user as null. This field is re-initialized if user is already logged in or user login user auth api.
          */
         WidgetHome.currentLoggedInUser = null;
 
-        /*WidgetHome.goBack = function(){
-          $location.path("/submit");
-        }
-*/
-        /*WidgetHome.sendMessage = function(){
-            var tagName = 'chatData-' + WidgetHome.currentLoggedInUser._id;
-            WidgetHome.chatMessageObj=
-            {
-                chatMessage:WidgetHome.chatData,
-                chatTime: new Date(),
-                chatFrom: WidgetHome.currentLoggedInUser.displayName,
-                id: WidgetHome.currentLoggedInUser._id
-            }
-
-            WidgetHome.getChatData();
-          if(WidgetHome.chatData!=''){
-            buildfire.userData.get(tagName, function (err, result) {
-                var saveResult = [];
-                if(result && result.data && result.data.length) {
-                    saveResult = result && result.data;
-                }
-                saveResult.push(WidgetHome.chatMessageObj);
-                buildfire.userData.save(saveResult, tagName, function (e, data) {
-                    if (e) console.error("+++++++++++++++err", JSON.stringify(e));
-                    else {
-                        WidgetHome.chatData = '';
-                        buildfire.messaging.sendMessageToControl({'name': EVENTS.CHAT_ADDED, 'data': data});
-                        // $location.path('/chatHome')
-                        WidgetHome.getChatData();
-                        $scope.$apply();
-                        console.log("+++++++++++++++success")
-                    }
-                });
-            });
-          }
-        };*/
-
           WidgetHome.sendMessage = function(){
+              console.log("WIDGET HOME", WidgetHome)
             var tagName = 'chatData-' + WidgetHome.currentLoggedInUser._id;
             WidgetHome.chatMessageObj=
             {
                 chatMessage:WidgetHome.chatData,
                 chatTime: new Date(),
                 chatFrom: WidgetHome.currentLoggedInUser.displayName,
+                chatId: WidgetHome.currentView.params.data.id,
                 id: WidgetHome.currentLoggedInUser._id
             };
 

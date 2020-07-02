@@ -25,7 +25,7 @@
                 });
 
                 ContentChat.getChatData = function(){
-                    console.log('inside getChatData-------------');
+                    console.log('inside getChatData-------------', ContentChat);
                     if(!ContentChat.waitAPICompletion) {
                         ContentChat.waitAPICompletion = true;
                         buildfire.userData.search({skip: skip, limit: limit}, tagName, function (err, results) {
@@ -67,6 +67,7 @@
                         chatMessage: ContentChat.chatData,
                         chatTime: new Date(),
                         chatFrom: (ContentChat.currentLoggedInUser.firstName ? ContentChat.currentLoggedInUser.firstName + ' ' + ContentChat.currentLoggedInUser.lastName : ''),
+                        chatId: $routeParams.chatId,
                         id: ContentChat.currentLoggedInUser._id
                     }
                     if (ContentChat.chatData) {

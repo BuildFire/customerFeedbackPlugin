@@ -239,8 +239,21 @@
                 else {
                   console.log("_______result", results);
                   if(results && results.length){
-                    WidgetWall.chatCommentCount = results.length;
-                    $scope.$digest();
+                    //WidgetWall.chatCommentCount = results.length;
+                    results.map(item => {
+                      if(WidgetWall.reviews && WidgetWall.reviews.length) {
+                        //if(item.data.chatId === )
+                        let found = WidgetWall.reviews.find(review => review.id === item.data.chatId)
+                        if(found) {
+                          let index = WidgetWall.reviews.indexOf(found);
+                          WidgetWall.reviews[index].chatCommentCount = WidgetWall.reviews[index].chatCommentCount ? WidgetWall.reviews[index].chatCommentCount + 1 : 1;
+                          console.log("CHAT ITEM", item)
+                        console.log("REVIEWS", WidgetWall.reviews)
+                        }
+                        
+                      }
+                      $scope.$digest();
+                    })
                   }
                 }
               });

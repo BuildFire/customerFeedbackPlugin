@@ -1,7 +1,8 @@
 {
   "author":"Buildfire"
-,"pluginName":"Customer Feedback"
-,"pluginDescription":"Listen to your customers' honest feedback through a star rating system and custom commenting. Customer feedback is critical in gaining insight and creating better processes whether own a restaurant, small business, school, consulting, or any other type of company."
+,"pluginName":"Feedback and Reviews"
+,"pluginDescription":"Listen to your customers and users suggestions, feedback, and improvement requests. Feedback and Reviews feature utilizes a star rating system that measures features popularity, and a custom commenting allows additional details that are  critical in gaining insight and creating better processes.  Feedback and Reviews feature is vital to raising customer satisfaction for retails, service provides, small business, school, consulting, or non-profit. Feedback and Reviews feature can help your company gain and maintain market advantage."
+,"pluginKeywords": "Feedback, Ratings, Reviews, Stars, Customers, Users"
 ,"supportEmail":"support@buildfire.com"
 ,"control":{
   "content":{
