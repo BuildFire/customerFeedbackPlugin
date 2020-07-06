@@ -261,7 +261,7 @@
                       if (err) console.error("+++++++++++++++err", JSON.stringify(err));
                       else {
                           WidgetHome.chatData = '';
-                          $rootScope.$broadcast("COMMENT_ADDED");
+                          $rootScope.$broadcast("COMMENT_ADDED:chatId", WidgetHome.chatMessageObj.chatId);
                           buildfire.messaging.sendMessageToControl({'name': EVENTS.CHAT_ADDED, 'data': result});
                           WidgetHome.chatMessageData = WidgetHome.chatMessageData ? WidgetHome.chatMessageData : [];
                           WidgetHome.chatMessageData.unshift(result);

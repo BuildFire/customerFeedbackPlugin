@@ -292,9 +292,15 @@
             DataStore.onUpdate().then(null, null, onUpdateCallback);
 
             //Update comment count when added on chat page
-          $rootScope.$on('COMMENT_ADDED', function (e) {
-            WidgetWall.chatCommentCount += 1;
-            $scope.$digest();
+          $rootScope.$on('COMMENT_ADDED:chatId', function (e, params) {
+            if(WidgetWall.reviews && WidgetWall.reviews.length) {
+              let found = WidgetWall.reviews.find(review => review.id === params)
+              if (found) {
+                let index = WidgetWall.reviews.indexOf(found);
+                WidgetWall.reviews[index].chatCommentCount = WidgetWall.reviews[index].chatCommentCount ? WidgetWall.reviews[index].chatCommentCount + 1 : 1;
+                $scope.$digest();
+              }
+            }
           });
 
           buildfire.messaging.onReceivedMessage = function (event) {
