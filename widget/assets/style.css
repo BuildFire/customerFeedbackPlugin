@@ -251,7 +251,7 @@ html[safe-area="true"] .submitReview {
 .btnSubmitReview, .firstSubmission {
 	border: none;
 	background-color: var(--bf-theme-success) !important;
-	color: var(--bf-theme-background) !important;
+	color: #fff !important;
 }
 
 
