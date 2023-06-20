@@ -285,6 +285,10 @@
           });
 
           buildfire.messaging.onReceivedMessage = function (event) {
+            if(event.scope === 'showComments'){
+              WidgetWall.goToChat(event.review);
+              return;
+            }
             if(event && event.name == "CHAT_ADDED" && event.data){
               if(WidgetWall.currentLoggedInUser && WidgetWall.currentLoggedInUser._id && (event.data.tag ==  'chatData-' + WidgetWall.currentLoggedInUser._id)){
                 WidgetWall.chatCommentCount += 1;

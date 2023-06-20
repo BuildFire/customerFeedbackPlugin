@@ -1,7 +1,39 @@
+.feedback-calculations{
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.section__title {
+    font-size: 21px;
+    font-weight: bold;
+    color: #000;
+    padding-top: .875rem;
+    margin-bottom: 1.5rem;
+    margin-top: 0;
+}
+
+.section__title::before {
+    display: block;
+    content: '';
+    height: .25rem;
+    width: 3.5rem;
+    margin-bottom: .875rem;
+    background-color: #000;
+}
+
+.content .section-header {
+    margin-bottom: 20px;
+}
+
 .review-item{
     border-radius:3px;
-    border:1px solid #ddd;
-    padding:15px;
+    border: 1px solid #DDDDDD;
+    border-radius: 4px;
+    width: 100% !important;
+    margin: 0;
+    padding-bottom: 16px;
 }
 .review-item:nth-child(even){
     background:#eef0f0;
@@ -156,4 +188,66 @@
 .dlt-review {
     color: red;
     cursor: pointer;
+}
+
+.review-item .row{
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+.review-item .review-header{
+    background: #F2F2F2;
+    padding: 12px 16px;
+    gap: 8px;
+}
+.review-item .user-image-col{
+    display: flex;
+    padding: 0;
+    width: auto !important;
+}
+.review-item .user-image-col .user-image{
+    width: 48px;
+    height: 48px;
+    border-radius: 100%;
+}
+
+.review-item .user-info-col{
+    padding-left: 4px;
+}
+.review-item .user-info-col .user-name span{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #5F5F5F;
+}
+.review-item .user-info-col .review-date span{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 20px;
+    color: #AFAFAF;
+}
+.review-item .comments-col{
+    display: flex;
+    padding: 0;
+    justify-content: flex-end;
+    align-items: center;
+    flex: auto;
+    margin: auto 0;
+    gap: 5px;
+}
+
+.review-item .review-message{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 20px;
+    color: #5F5F5F;
+}
+
+.review-item .review-action-col{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
