@@ -14,6 +14,10 @@
   }
 , "settings":{
     "enabled":false
+  },
+  "language": {
+    "enabled": true,
+    "languageJsonPath": "resources/languages.json"
   }
 }
 ,"widget":{

@@ -1,0 +1,79 @@
+{
+    "sections": {
+      "reviews": {
+        "title": "Reviews",
+        "labels": {
+          "reviews": {
+            "title": "Reviews",
+            "defaultValue": "Reviews",
+            "placeholder": "Reviews"
+          },
+          "averageRating": {
+            "title": "Average Rating",
+            "defaultValue": "Average Rating",
+            "placeholder": "Average Rating"
+          },
+          "oneStarRating": {
+            "title": "1 Star Rating",
+            "defaultValue": "Poor",
+            "placeholder": "Poor"
+          },
+          "twoStarsRating": {
+            "title": "2 Stars Rating",
+            "defaultValue": "Average",
+            "placeholder": "Average"
+          },
+          "threeStarsRating": {
+            "title": "3 Stars Rating",
+            "defaultValue": "Good",
+            "placeholder": "Good"
+          },
+          "fourStarsRating": {
+            "title": "4 Stars Rating",
+            "defaultValue": "Excellent",
+            "placeholder": "Excellent"
+          },
+          "fiveStarsRating": {
+            "title": "5 Stars Rating",
+            "defaultValue": "Outstanding",
+            "placeholder": "Outstanding"
+          },
+          "typeMessagePlaceholder": {
+            "title": "Type Message Placeholder",
+            "defaultValue": "Type your message...",
+            "placeholder": "Type your message..."
+          },
+          "sendMessage": {
+            "title": "Send Message",
+            "defaultValue": "Send",
+            "placeholder": "Send"
+          }
+        }
+      },
+      "addReview": {
+        "title": "Add Review",
+        "labels": {
+          "leaveYourFeedback": {
+            "title": "Leave Your Feedback",
+            "defaultValue": "Leave Your Feedback",
+            "placeholder": "Leave Your Feedback"
+          },
+          "yourRating": {
+            "title": "Your Rating",
+            "defaultValue": "Your Rating",
+            "placeholder": "Your Rating"
+          },
+          "writeANote": {
+            "title": "Write a Note",
+            "defaultValue": "Write a Note",
+            "placeholder": "Write a Note"
+          },
+          "submitReviewButton": {
+            "title": "Submit",
+            "defaultValue": "Submit",
+            "placeholder": "Submit"
+          }
+        }
+      }
+    }
+  }
