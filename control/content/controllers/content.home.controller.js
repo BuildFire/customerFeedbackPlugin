@@ -92,6 +92,10 @@
                   }).catch(function(error) {
                     console.error('Save error:', error);
                   });
+                  buildfire.messaging.sendMessageToWidget({
+                    scope: "introduction",
+                    introductionContent: wysiwygContent,
+                  });  
               }, 500);
             });
             editor.on("init", () => {

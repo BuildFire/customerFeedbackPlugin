@@ -1,6 +1,27 @@
-<div class="holder padding-zero" ng-controller="WidgetSubmitCtrl as WidgetSubmit">
+<div class="holder padding-zero submit-review-page" ng-controller="WidgetSubmitCtrl as WidgetSubmit">
 	<form name="reviewForm" class="feedback-plugin submit-review">
-		<div class="item clearfix padded">
+		<div class="top-container">
+			<span class="title">Leave Your Feedback</span>
+			<span class="subtitle">Your Rating</span>
+			<star-rating ng-model="WidgetSubmit.Feedback.starRating" max="5" on-rating-select="WidgetSubmit.rateFunction(rating)"></star-rating>
+		</div>
+
+		<div class="message-container">
+			<div ng-if="WidgetSubmit.currentLoggedInUser"  class="mdc-text-field mdc-text-field--filled review-textarea required-review-textarea">
+				<span class="mdc-text-field__ripple"></span>
+				<span class="textarea-label">Write a Review</span>
+				<textarea name="feedbackMessage" ng-focus="WidgetSubmit.showReviewDialog()" ng-model="WidgetSubmit.Feedback.Message" class="mdc-text-field__input review-message-textarea"  ng-model="WidgetSubmit.Feedback.Message" id="requiredReviewTextarea" required></textarea>
+
+			</div>
+			<div ng-if="!WidgetSubmit.currentLoggedInUser"  class="mdc-text-field mdc-text-field--filled review-textarea">
+				<span class="mdc-text-field__ripple"></span>
+				<span class="textarea-label">Write a Review</span>
+				<textarea name="feedbackMessage" class="mdc-text-field__input review-message-textarea" ng-model="WidgetSubmit.Feedback.Message" ng-model="WidgetSubmit.Feedback.Message"></textarea>
+			</div>
+		</div>
+
+
+		<!-- <div class="item clearfix padded">
 			<p>Submit Review</p>			
 		</div>
 		<hr class="none">
@@ -10,29 +31,28 @@
 			</div>
 
 			<div class="col-xs-12 pull-right margin-top-five">
-			<!--<ng-rate-it ng-model="WidgetSubmit.Feedback.starRating" class="custom" rated=""></ng-rate-it>-->
 				<star-rating ng-model="WidgetSubmit.Feedback.starRating" max="5" on-rating-select="WidgetSubmit.rateFunction(rating)"></star-rating>
 				{{WidgetSubmit.Feedback.starRating}}
 			</div>
-		</div>
-		<hr class="none">
-		<hr class="none">
-		<div class="item clearfix">
+		</div> -->
+		<!-- <hr class="none">
+		<hr class="none"> -->
+		<!-- <div class="item clearfix">
 			<div class="col-xs-12 pull-left">
 				<span>Message:</span>
-			</div>
-			<div class="col-xs-12 pull-right margin-top-five">
+			</div> -->
+			<!-- <div class="col-xs-12 pull-right margin-top-five">
 				<textarea ng-if="WidgetSubmit.currentLoggedInUser" name="feedbackMessage" class="form-control" placeholder="Enter message..." ng-model="WidgetSubmit.Feedback.Message" required></textarea>
 				<textarea ng-if="!WidgetSubmit.currentLoggedInUser" class="form-control" placeholder="Enter message..." ng-model="WidgetSubmit.Feedback.Message"></textarea>
-			</div>
-            <div class="col-xs-12 pull-left">
+			</div> -->
+            <!-- <div class="col-xs-12 pull-left">
                 <span style="color: #d14 !important;" class="error" ng-show="reviewForm.feedbackMessage.$error.required">Please fill in this field</span>
-            </div>
-		</div>
-		<hr class="none">
-		<div class="col-xs-12 pull-left text-center">
-			<input type="button" class="submit btn btn-success padding-left-thirty padding-right-thirty" ng-click="WidgetSubmit.save()" value="Submit Review" ng-disabled="WidgetSubmit.disabled"></br></br>
-			<input type="button" class="submit btn btn-danger padding-left-thirty padding-right-thirty" ng-click="WidgetSubmit.cancel()" value="Cancel">
+            </div> -->
+		<!-- </div> -->
+		<!-- <hr class="none"> -->
+		<div class="button-container">
+			<input type="button" class="submit submit-button btn" id="submitButton" ng-click="WidgetSubmit.save()" value="Submit" ng-disabled="WidgetSubmit.disabled"></br></br>
+			<!-- <input type="button" class="submit btn btn-danger padding-left-thirty padding-right-thirty" ng-click="WidgetSubmit.cancel()" value="Cancel"> -->
 			<!--<a class="submit btn btn-success padding-left-thirty padding-right-thirty" ng-click="WidgetSubmit.update()" ng-if="WidgetSubmit.isUpdate">Update Review</a>-->
 		</div>
 

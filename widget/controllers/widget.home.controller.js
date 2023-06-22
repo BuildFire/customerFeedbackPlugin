@@ -12,6 +12,8 @@
         WidgetHome.listeners = {};
         WidgetHome.buildfire = buildfire;
         WidgetHome.waitAPICompletion = false;
+        WidgetHome.totalRating = 0;
+        WidgetHome.ratingAverage = 0;
         WidgetHome.noMore = false;
           $rootScope.deviceHeight = window.innerHeight;
           $rootScope.deviceWidth = window.innerWidth;
@@ -95,13 +97,18 @@
                     } else {
                         $rootScope.backgroundImage = WidgetHome.data.design.backgroundImage;
                     }
+                    document.querySelector('.intro').style.boxShadow = `rgba(${colorToRGBA(
+                        getComputedStyle(document.documentElement)
+                        .getPropertyValue('--bf-theme-body-text')
+                        .trim(),
+                        0.2
+                    )}) 0 2px 8px`;
                 }
                 , error = function (err) {
                     console.error('Error while getting data', err);
                 };
             DataStore.get(TAG_NAMES.FEEDBACK_APP_INFO).then(success, error);
             getReviews();
-
             /**
              * Check for current logged in user, if not show ogin screen
              */
@@ -120,6 +127,20 @@
              */
             buildfire.auth.onLogin(loginCallback);
             buildfire.auth.onLogout(logoutCallback);
+        }
+        const colorToRGBA = (color, opacity = 1)=> {
+            const isHexColor = (color) => /^#([A-Fa-f0-9]{3,4}){1,2}$/.test(color);
+            const getChunksFromString = (st, chunkSize) =>
+                st.match(new RegExp(`.{${chunkSize}}`, 'g'));
+            const convertHexUnitTo256 = (hexStr) =>
+                parseInt(hexStr.repeat(2 / hexStr.length), 16);
+    
+            if (isHexColor(color)) {
+                const chunkSize = Math.floor((color.length - 1) / 3);
+                const hexArr = getChunksFromString(color.slice(1), chunkSize);
+                const [r, g, b] = hexArr.map(convertHexUnitTo256);
+                return `${r}, ${g}, ${b},${opacity}`;
+            }
         }
 
         init();
@@ -177,8 +198,13 @@
                         //        return startRating.data.starRating
                         //    })
                         //}
+                        results.forEach(review => {
+                            WidgetHome.totalRating += Number(review.data.starRating);
+                        });
+                        WidgetHome.ratingAverage = WidgetHome.totalRating / results.length;
                         WidgetHome.startPoints = WidgetHome.currentView.params.data.data.starRating / (WidgetHome.reviews.length )
                         WidgetHome.lastReviewComment = WidgetHome.currentView.params.data.data.Message;
+                        WidgetHome.lastReviewDate = WidgetHome.currentView.params.data.data.addedDate;
                        // if(WidgetHome.data && WidgetHome.reviews && WidgetHome.reviews.length) {
                             WidgetHome.lastRating = WidgetHome.currentView.params.data.data.starRating;
                       //  }

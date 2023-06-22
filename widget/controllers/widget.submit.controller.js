@@ -11,7 +11,7 @@
         console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         /* Initialize current logged in user as null. This field is re-initialized if user is already logged in or user login user auth api.
          */
-        WidgetSubmit.disabled = false;
+        WidgetSubmit.disabled = true;
        // buildfire.history.push('Events', { elementToShow: 'Event' });
         WidgetSubmit.Feedback = {
           Message : "",
@@ -20,6 +20,15 @@
           UserName: ""
         }
         WidgetSubmit.currentLoggedInUser = null;
+
+        WidgetSubmit.initTextarea = function () {
+          new mdc.textField.MDCTextField(
+              document.querySelector('.required-review-textarea')
+          );
+          new mdc.textField.MDCTextField(
+              document.querySelector('.review-textarea')
+          );
+        }
         /**
          * Method to open buildfire auth login pop up and allow user to login using credentials.
          */
@@ -28,7 +37,27 @@
 
           });
         };
+        
 
+         WidgetSubmit.showReviewDialog = function(){
+          let textarea = document.getElementById('requiredReviewTextarea');
+          buildfire.input.showTextDialog(
+            {
+              placeholder: "Write a Review",
+              saveText: "Save",
+              defaultValue: textarea.value,
+            },
+            (err, response) => {
+              if (err) return console.error(err);
+              if (response.cancelled) return;
+              textarea.value=response.results[0].textValue
+              WidgetSubmit.Feedback.Message = response.results[0].textValue;
+              if(response.results[0].textValue.trim() !== ''){
+                document.getElementById('submitButton').disabled = false;
+              }
+            }
+          );
+        }
 
         var loginCallback = function () {
           buildfire.auth.getCurrentUser(function (err, user) {
@@ -36,6 +65,7 @@
             if (user) {
               $rootScope.$broadcast(EVENTS.LOGIN);
               WidgetSubmit.currentLoggedInUser = user;
+              WidgetSubmit.initTextarea();
               $scope.$digest();
             }
           });
@@ -52,7 +82,7 @@
         };
 
         WidgetSubmit.save = function () {
-          WidgetSubmit.disabled = true;
+          // WidgetSubmit.disabled = true;
             if (WidgetSubmit.currentLoggedInUser) {
                 //  $scope.complain.data.response = "";
                 var objData = {starRating: WidgetSubmit.Feedback.starRating || 1, Message: WidgetSubmit.Feedback.Message, displayName: WidgetSubmit.currentLoggedInUser.displayName, addedDate: new Date(), userName: WidgetSubmit.currentLoggedInUser.username, userImage: WidgetSubmit.currentLoggedInUser.imageUrl }
@@ -66,7 +96,7 @@
                             buildfire.messaging.sendMessageToControl({'name': EVENTS.REVIEW_CREATED, 'data': data, 'lastReviewCount': ((WidgetSubmit.currentView && WidgetSubmit.currentView.params && WidgetSubmit.currentView.params.lastReviewCount) || 0)});
                             $rootScope.$broadcast(EVENTS.REVIEW_CREATED, {'data': data, 'lastReviewCount': ((WidgetSubmit.currentView && WidgetSubmit.currentView.params && WidgetSubmit.currentView.params.lastReviewCount) || 0)});
 //                      $location.path('/');
-                          WidgetSubmit.disabled = false;
+                          // WidgetSubmit.disabled = false;
                             $scope.$apply();
                             console.log("+++++++++++++++success");
                             $timeout(function () {

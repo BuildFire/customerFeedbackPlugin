@@ -10,6 +10,7 @@
           var skip = 0;
           var limit = 15;
           var currentView = ViewStack.getCurrentView();
+          let _initialized = false;
           WidgetWall.waitAPICompletion = false;
           WidgetWall.noMore = false;
           WidgetWall.buildfire = buildfire;
@@ -24,7 +25,8 @@
           WidgetWall.currentLoggedInUser = null;
 
             function init() {
-                var success = function (result) {
+              var success = function (result) {
+                        let introductionElement = document.getElementById('introduction');
                         WidgetWall.data = result.data;
                         if (!WidgetWall.data.design)
                             WidgetWall.data.design = {};
@@ -37,6 +39,18 @@
                             $rootScope.backgroundImage = WidgetWall.data.design.backgroundImage;
                         }
 //                        getReviews();
+                        if(introductionElement) introductionElement.innerHTML = result.data.introduction;
+
+                        document.querySelector('.user-info-container').style.boxShadow = `rgba(${colorToRGBA(
+                          getComputedStyle(document.documentElement)
+                          .getPropertyValue('--bf-theme-body-text')
+                          .trim(),
+                          0.2
+                      )}) 0 2px 8px`;
+                      if(!_initialized){
+                        _initialized = true;
+                        
+                      }
                     }
                     , error = function (err) {
                         console.error('Error while getting data', err);
@@ -44,7 +58,7 @@
                 DataStore.get(TAG_NAMES.FEEDBACK_APP_INFO).then(success, error);
             }
 
-            init();
+            // init();
 
             WidgetWall.getReviews = function () {
                 // buildfire.history.push('Submit Reviewsss', {});
@@ -88,6 +102,7 @@
                         WidgetWall.waitAPICompletion = false;
                     });
                 }
+                WidgetWall.initializedFABButton();
             };
 
           /**
@@ -143,6 +158,33 @@
             WidgetWall.reviews = [];
             $scope.$digest();
           };
+          WidgetWall.initializedFABButton = function () {
+            const fabSpeedDial = new buildfire.components.fabSpeedDial('#fabSpeedDialContainer', {
+              showOverlay: false,
+              mainButton: {
+                type: 'success',
+              },
+            });
+
+            fabSpeedDial.onMainButtonClick = event => {
+              WidgetWall.submitReview();
+            };
+          }
+
+          const colorToRGBA = (color, opacity = 1)=> {
+              const isHexColor = (color) => /^#([A-Fa-f0-9]{3,4}){1,2}$/.test(color);
+              const getChunksFromString = (st, chunkSize) =>
+                  st.match(new RegExp(`.{${chunkSize}}`, 'g'));
+              const convertHexUnitTo256 = (hexStr) =>
+                  parseInt(hexStr.repeat(2 / hexStr.length), 16);
+      
+              if (isHexColor(color)) {
+                  const chunkSize = Math.floor((color.length - 1) / 3);
+                  const hexArr = getChunksFromString(color.slice(1), chunkSize);
+                  const [r, g, b] = hexArr.map(convertHexUnitTo256);
+                  return `${r}, ${g}, ${b},${opacity}`;
+              }
+          }
 
 
           WidgetWall.listeners[EVENTS.LOGOUT] = $rootScope.$on(EVENTS.LOGOUT, function (e) {
@@ -285,14 +327,21 @@
           });
 
           buildfire.messaging.onReceivedMessage = function (event) {
-            if(event.scope === 'showComments'){
-              WidgetWall.goToChat(event.review);
-              return;
-            }
-            if(event && event.name == "CHAT_ADDED" && event.data){
-              if(WidgetWall.currentLoggedInUser && WidgetWall.currentLoggedInUser._id && (event.data.tag ==  'chatData-' + WidgetWall.currentLoggedInUser._id)){
-                WidgetWall.chatCommentCount += 1;
-                $scope.$digest();
+            if(event){
+              if(event.scope === 'showComments'){
+                WidgetWall.goToChat(event.review);
+                return;
+              }
+              if(event.scope === 'introduction'){
+                let introductionElement = document.getElementById('introduction');
+                introductionElement.innerHTML = event.introductionContent;
+                return;
+              }
+              if(event.name == "CHAT_ADDED" && event.data){
+                if(WidgetWall.currentLoggedInUser && WidgetWall.currentLoggedInUser._id && (event.data.tag ==  'chatData-' + WidgetWall.currentLoggedInUser._id)){
+                  WidgetWall.chatCommentCount += 1;
+                  $scope.$digest();
+                }
               }
             }
           }

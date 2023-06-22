@@ -249,12 +249,12 @@
         restrict : "EA",
         template : "<div class='average-rating-container'>" +
         "  <ul class='rating background' class='readonly'>" +
-        "    <li ng-repeat='star in stars' class='star'>" +
+        "    <li ng-repeat='star in stars' class='star' style='opacity:0.5;'>" +
         "      <i class='icon-star'></i>" + //&#9733
         "    </li>" +
         "  </ul>" +
         "  <ul class='rating foreground' class='readonly' style='width:{{filledInStarsContainerWidth}}%'>" +
-        "    <li ng-repeat='star in stars' class='star primaryTheme'>" +
+        "    <li ng-repeat='star in stars' class='star filled'>" +
         "      <i class='icon-star'></i>" + //&#9733
         "    </li>" +
         "  </ul>" +
@@ -287,7 +287,7 @@
       restrict: 'EA',
       template:
       '<ul class="star-rating" ng-class="{readonly: readonly}">' +
-      '  <li ng-repeat="star in stars" class="star" ng-class="{primaryTheme: star.filled}" ng-click="toggle($index)">' +
+      '  <li ng-repeat="star in stars" class="star" ng-class="{filled: star.filled}" ng-click="toggle($index)">' +
       '    <i class="icon-star"></i>' + // or &#9733
       '  </li>' +
       '</ul>',
