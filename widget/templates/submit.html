@@ -1,21 +1,21 @@
 <div class="holder padding-zero submit-review-page" ng-controller="WidgetSubmitCtrl as WidgetSubmit">
 	<form name="reviewForm" class="feedback-plugin submit-review">
 		<div class="top-container">
-			<span class="title">Leave Your Feedback</span>
-			<span class="subtitle">Your Rating</span>
+			<span class="title">{{WidgetSubmit.leaveYourFeedback || 'Leave Your Feedback'}}</span>
+			<span class="subtitle">{{WidgetSubmit.yourRating|| 'Your Rating'}}</span>
 			<star-rating ng-model="WidgetSubmit.Feedback.starRating" max="5" on-rating-select="WidgetSubmit.rateFunction(rating)"></star-rating>
 		</div>
 
 		<div class="message-container">
 			<div ng-if="WidgetSubmit.currentLoggedInUser"  class="mdc-text-field mdc-text-field--filled review-textarea required-review-textarea">
 				<span class="mdc-text-field__ripple"></span>
-				<span class="textarea-label">Write a Review</span>
+				<span class="textarea-label">{{WidgetSubmit.writeANote || 'Write a Review'}}</span>
 				<textarea name="feedbackMessage" ng-focus="WidgetSubmit.showReviewDialog()" ng-model="WidgetSubmit.Feedback.Message" class="mdc-text-field__input review-message-textarea"  ng-model="WidgetSubmit.Feedback.Message" id="requiredReviewTextarea" required></textarea>
 
 			</div>
 			<div ng-if="!WidgetSubmit.currentLoggedInUser"  class="mdc-text-field mdc-text-field--filled review-textarea">
 				<span class="mdc-text-field__ripple"></span>
-				<span class="textarea-label">Write a Review</span>
+				<span class="textarea-label">{{WidgetSubmit.writeANote || 'Write a Review'}}</span>
 				<textarea name="feedbackMessage" class="mdc-text-field__input review-message-textarea" ng-model="WidgetSubmit.Feedback.Message" ng-model="WidgetSubmit.Feedback.Message"></textarea>
 			</div>
 		</div>
@@ -51,7 +51,7 @@
 		<!-- </div> -->
 		<!-- <hr class="none"> -->
 		<div class="button-container">
-			<input type="button" class="submit submit-button btn" id="submitButton" ng-click="WidgetSubmit.save()" value="Submit" ng-disabled="WidgetSubmit.disabled"></br></br>
+			<input id="submitReviewButton" type="button" class="submit submit-button btn" id="submitButton" ng-click="WidgetSubmit.save()" value="Submit" ng-disabled="WidgetSubmit.disabled"></br></br>
 			<!-- <input type="button" class="submit btn btn-danger padding-left-thirty padding-right-thirty" ng-click="WidgetSubmit.cancel()" value="Cancel"> -->
 			<!--<a class="submit btn btn-success padding-left-thirty padding-right-thirty" ng-click="WidgetSubmit.update()" ng-if="WidgetSubmit.isUpdate">Update Review</a>-->
 		</div>

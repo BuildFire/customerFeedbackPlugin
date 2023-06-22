@@ -10,7 +10,6 @@
           var skip = 0;
           var limit = 15;
           var currentView = ViewStack.getCurrentView();
-          let _initialized = false;
           WidgetWall.waitAPICompletion = false;
           WidgetWall.noMore = false;
           WidgetWall.buildfire = buildfire;
@@ -47,10 +46,6 @@
                           .trim(),
                           0.2
                       )}) 0 2px 8px`;
-                      if(!_initialized){
-                        _initialized = true;
-                        
-                      }
                     }
                     , error = function (err) {
                         console.error('Error while getting data', err);
@@ -58,7 +53,7 @@
                 DataStore.get(TAG_NAMES.FEEDBACK_APP_INFO).then(success, error);
             }
 
-            // init();
+            init();
 
             WidgetWall.getReviews = function () {
                 // buildfire.history.push('Submit Reviewsss', {});

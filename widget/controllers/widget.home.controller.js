@@ -8,6 +8,15 @@
         var WidgetHome = this;
         var skip = 0;
         var limit = 10;
+        let stringsKeys=[
+            'oneStarRating',
+            'twoStarsRating',
+            'threeStarsRating',
+            'fourStarsRating',
+            'fiveStarsRating',
+            'typeMessagePlaceholder',
+            'sendMessage',
+        ];
         WidgetHome.chatData = "";
         WidgetHome.listeners = {};
         WidgetHome.buildfire = buildfire;
@@ -83,8 +92,19 @@
               if (!$scope.$$phase)
                   $scope.$digest();
           };
+        
+        const getStrings = ()=>{
+            stringsKeys.forEach((key)=>{
+                buildfire.language.get({stringKey: 'reviews.' + key}, (err, result) => {
+                if (err) return console.error("Error while retrieving string value", err);
+                WidgetHome[key] = result;
+                });
+                
+            });
+        }
 
         function init() {
+            getStrings();
             var success = function (result) {
                     WidgetHome.data = result.data;
                     if (!WidgetHome.data.design)

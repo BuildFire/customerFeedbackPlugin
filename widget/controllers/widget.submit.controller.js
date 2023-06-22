@@ -7,6 +7,14 @@
       function ($scope, $location, $rootScope, $timeout, EVENTS, ViewStack) {
 
         var WidgetSubmit = this;
+        let stringsKeys=[
+          'leaveYourFeedback',
+          'yourRating',
+          'writeANote',
+          'submitReviewButton',
+          'dialogSave',
+          'dialogCancel',
+      ];
         WidgetSubmit.currentView = ViewStack.getCurrentView();
         console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         /* Initialize current logged in user as null. This field is re-initialized if user is already logged in or user login user auth api.
@@ -20,6 +28,20 @@
           UserName: ""
         }
         WidgetSubmit.currentLoggedInUser = null;
+
+        const getStrings = ()=>{
+          stringsKeys.forEach((key)=>{
+              buildfire.language.get({stringKey: 'addReview.' + key}, (err, result) => {
+              if (err) return console.error("Error while retrieving string value", err);
+              WidgetSubmit[key] = result;
+              });
+              
+          });
+        }
+
+        getStrings();
+        
+        document.getElementById('submitReviewButton').value = WidgetSubmit.submitReviewButton || 'Submit';
 
         WidgetSubmit.initTextarea = function () {
           new mdc.textField.MDCTextField(
@@ -43,8 +65,9 @@
           let textarea = document.getElementById('requiredReviewTextarea');
           buildfire.input.showTextDialog(
             {
-              placeholder: "Write a Review",
-              saveText: "Save",
+              placeholder: WidgetSubmit.writeANote || 'Write a Review',
+              saveText: WidgetSubmit.dialogSave || 'Save',
+              cancelText: WidgetSubmit.dialogCancel || 'Cancel',
               defaultValue: textarea.value,
             },
             (err, response) => {

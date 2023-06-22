@@ -72,6 +72,16 @@
             "title": "Submit",
             "defaultValue": "Submit",
             "placeholder": "Submit"
+          },
+          "dialogSave":{
+            "title":"Save",
+            "defaultValue":"Save",
+            "placeholder":"Save"
+          },
+          "dialogCancel":{
+            "title":"Cancel",
+            "defaultValue":"Cancel",
+            "placeholder":"Cancel"
           }
         }
       }
