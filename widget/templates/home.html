@@ -9,7 +9,7 @@
         <div class="padded padding-bottom-zero" ng-if="WidgetHome.showDescription(WidgetHome.data.content.description)">
             <p ng-bind-html='WidgetHome.safeHtml(WidgetHome.data.content.description)'></p>
         </div>
-		<div class="intro">
+		<div class="intro" style="box-shadow: {{WidgetHome.dynamicBoxShadow}};">
             <div class="user-info-container">
                 <div class="column">
                     <img ng-if="!WidgetHome.currentLoggedInUser.imageUrl" src="../../../styles/media/avatar-placeholder.png" alt="user name" class="user-image">

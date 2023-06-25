@@ -8,7 +8,7 @@
 </script>
 <div class="holder padding-zero wall-page" ng-controller="WidgetWallCtrl as WidgetWall">
 	<div class="feedback-plugin review-wall">
-		<div class="user-info-container">
+		<div ng-if="!WidgetWall.noReviews" class="user-info-container" style="box-shadow: {{WidgetWall.dynamicBoxShadow}};">
 			<div class="column">
 				<!-- todo get the user image -->
 				<img ng-if="!WidgetWall.currentLoggedInUser.imageUrl" src="../../../styles/media/avatar-placeholder.png" alt="user name" class="user-image">
@@ -46,11 +46,14 @@
 			</div> -->
 			<div  ng-if="WidgetWall.noReviews" class="no-event-found padded">
 				<div id="introduction"></div>
+				<div class="empty-box-container">
+					<img src="../../../../styles/media/empty.svg" alt="">
+				</div>
 			</div>
 			<!--<a class="btn btn-success btn-sm" ng-if="WidgetWall.noReviews && WidgetWall.reviews" ng-click="WidgetWall.submitReview()">Submit Review</a>-->
             <!--<a class="btn btn-success btn-sm" ng-if="!WidgetWall.noReviews && WidgetWall.reviews" ng-click="WidgetWall.submitReview()">Write a Review</a>-->
 			<!-- ! FAB -->
-			<a class="btn btn-success btn-sm" ng-if="WidgetWall.reviews" ng-click="WidgetWall.submitReview()">{{WidgetWall.reviewButtonText}}</a>
+			<!-- <a class="btn btn-success btn-sm" ng-if="WidgetWall.reviews" ng-click="WidgetWall.submitReview()">{{WidgetWall.reviewButtonText}}</a> -->
 			<!-- !End FAB -->
 			<!--<a class="btn btn-success btn-sm" ng-if="!WidgetWall.noReviews && WidgetWall.reviews" ng-click="WidgetWall.submitReview()">Write a Review</a>-->
 

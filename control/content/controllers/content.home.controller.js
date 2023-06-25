@@ -256,8 +256,12 @@
                   if(err)
                   console.log("Error occured while deleting review:", err);
                   else{
-                    ContentHome.reviews.splice(index, 1);
+                    ContentHome.reviews.pop();
                     $scope.$digest();
+                    buildfire.messaging.sendMessageToWidget({
+                      scope: "removeReview",
+                      review: review,
+                    });
                   }
                 });
               }

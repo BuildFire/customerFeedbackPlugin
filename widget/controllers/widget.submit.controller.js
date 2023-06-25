@@ -76,7 +76,12 @@
               textarea.value=response.results[0].textValue
               WidgetSubmit.Feedback.Message = response.results[0].textValue;
               if(response.results[0].textValue.trim() !== ''){
-                document.getElementById('submitButton').disabled = false;
+                WidgetSubmit.disabled = false;
+                $scope.$apply();
+              }else{
+                WidgetSubmit.disabled = true;
+                $scope.$apply();
+                
               }
             }
           );

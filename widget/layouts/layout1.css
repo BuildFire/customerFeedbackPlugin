@@ -5,6 +5,14 @@
 	overflow-x: hidden;
 }
 
+.wall-page .empty-box-container{
+	display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    inset: 0px;
+}
+
 .head .media-holder{
 	width:35px;
 	height:35px;

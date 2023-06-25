@@ -117,12 +117,7 @@
                     } else {
                         $rootScope.backgroundImage = WidgetHome.data.design.backgroundImage;
                     }
-                    document.querySelector('.intro').style.boxShadow = `rgba(${colorToRGBA(
-                        getComputedStyle(document.documentElement)
-                        .getPropertyValue('--bf-theme-body-text')
-                        .trim(),
-                        0.2
-                    )}) 0 2px 8px`;
+                    setBoxShadow();
                 }
                 , error = function (err) {
                     console.error('Error while getting data', err);
@@ -148,6 +143,16 @@
             buildfire.auth.onLogin(loginCallback);
             buildfire.auth.onLogout(logoutCallback);
         }
+
+        const setBoxShadow = ()=>{
+            WidgetHome.dynamicBoxShadow = `rgba(${colorToRGBA(
+                getComputedStyle(document.documentElement)
+                .getPropertyValue('--bf-theme-body-text')
+                .trim(),
+                0.2
+            )}) 0 2px 8px`;
+        }
+
         const colorToRGBA = (color, opacity = 1)=> {
             const isHexColor = (color) => /^#([A-Fa-f0-9]{3,4}){1,2}$/.test(color);
             const getChunksFromString = (st, chunkSize) =>

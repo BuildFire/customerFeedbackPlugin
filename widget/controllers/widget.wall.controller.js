@@ -13,7 +13,7 @@
           WidgetWall.waitAPICompletion = false;
           WidgetWall.noMore = false;
           WidgetWall.buildfire = buildfire;
-          WidgetWall.noReviews = false;
+          WidgetWall.noReviews = true;
           WidgetWall.reviewButtonText = "";
           WidgetWall.totalRating = 0;
           WidgetWall.chatCommentCount = 0;
@@ -39,13 +39,8 @@
                         }
 //                        getReviews();
                         if(introductionElement) introductionElement.innerHTML = result.data.introduction;
+                        setBoxShadow();
 
-                        document.querySelector('.user-info-container').style.boxShadow = `rgba(${colorToRGBA(
-                          getComputedStyle(document.documentElement)
-                          .getPropertyValue('--bf-theme-body-text')
-                          .trim(),
-                          0.2
-                      )}) 0 2px 8px`;
                     }
                     , error = function (err) {
                         console.error('Error while getting data', err);
@@ -83,7 +78,7 @@
                             });
                             console.log("+++++++++++++++++++++SSSSSSSSSSSS", WidgetWall.reviews.length, WidgetWall.ratingsTotal.data.starRating,  WidgetWall.reviews)
                             WidgetWall.totalRating = WidgetWall.totalRating + WidgetWall.ratingsTotal.data.starRating
-                            WidgetWall.startPoints =  WidgetWall.totalRating / (WidgetWall.reviews.length );
+                            WidgetWall.startPoints =  parseFloat((WidgetWall.totalRating / (WidgetWall.reviews.length )).toFixed(2));
                             WidgetWall.lastRating = WidgetWall.reviews && WidgetWall.reviews.length && WidgetWall.reviews[WidgetWall.reviews.length - 1].data.starRating;
                           } else {
 
@@ -96,9 +91,19 @@
                         }
                         WidgetWall.waitAPICompletion = false;
                     });
+
                 }
                 WidgetWall.initializedFABButton();
             };
+
+          const setBoxShadow = ()=>{
+              WidgetWall.dynamicBoxShadow = `rgba(${colorToRGBA(
+                  getComputedStyle(document.documentElement)
+                  .getPropertyValue('--bf-theme-body-text')
+                  .trim(),
+                  0.2
+              )}) 0 2px 8px`;
+          }
 
           /**
            * Method to open buildfire auth login pop up and allow user to login using credentials.
@@ -163,6 +168,7 @@
 
             fabSpeedDial.onMainButtonClick = event => {
               WidgetWall.submitReview();
+              $scope.$apply();
             };
           }
 
@@ -249,7 +255,7 @@
               console.log("+++++++++++++++++++++SSSSSSSSSSSS", WidgetWall.reviews.length, WidgetWall.ratingsTotal.data.starRating, WidgetWall.totalRating)
 
               WidgetWall.startPoints = WidgetWall.ratingsTotal.data.starRating / (WidgetWall.reviews.length );
-                WidgetWall.lastRating = WidgetWall.reviews && WidgetWall.reviews.length && WidgetWall.reviews[WidgetWall.reviews.length - 1].data.starRating;
+              WidgetWall.lastRating = WidgetWall.reviews && WidgetWall.reviews.length && WidgetWall.reviews[WidgetWall.reviews.length - 1].data.starRating;
                 if (!$scope.$$phase)
                     $scope.$digest();
             });
@@ -323,8 +329,21 @@
 
           buildfire.messaging.onReceivedMessage = function (event) {
             if(event){
+              if(event.scope === 'removeReview'){
+                  WidgetWall.totalRating = WidgetWall.totalRating - Number(event.review.data.starRating);
+                  WidgetWall.startPoints = 0;
+                  WidgetWall.lastRating = 0;
+                  WidgetWall.reviews.shift();
+                  if (WidgetWall.reviews.length === 0) {
+                      init();
+                      WidgetWall.noReviews = true;
+                  }
+                  $scope.$apply();
+                  return;
+              }
               if(event.scope === 'showComments'){
                 WidgetWall.goToChat(event.review);
+                $scope.$apply();
                 return;
               }
               if(event.scope === 'introduction'){
