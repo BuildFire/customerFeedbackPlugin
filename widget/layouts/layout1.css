@@ -199,7 +199,9 @@
 	left: 0;
 	top: 0;
 } */
-
+.speed-dial-container > .main-fab-button i{
+	font-family: revert !important;
+}
 /* !--------------- new style */
 
 .user-info-container{
