@@ -168,6 +168,49 @@
             }
         }
 
+        WidgetHome.initializedFABButton = function () {
+            const fabSpeedDial = new buildfire.components.fabSpeedDial('#sendCommentFabContainer', {
+              showOverlay: false,
+              mainButton: {
+                type: 'success',
+              },
+            });
+
+            fabSpeedDial.onMainButtonClick = event => {
+              console.log('🚀 ~ file: widget.home.controller.js:183 ~ event:', event)
+              WidgetHome.showReviewDialog();
+              $scope.$apply();
+            };
+          }
+
+          WidgetHome.showReviewDialog = function(){
+            buildfire.input.showTextDialog(
+              {
+                placeholder:'Write a Review',
+                saveText: 'Save',
+                cancelText:'Cancel',
+                defaultValue: 'ss',
+              },
+              (err, response) => {
+                if (err) return console.error(err);
+                if (response.cancelled) return;
+                if(response.results[0].textValue.trim() !== ''){
+                    console.log('🚀 ~ file: widget.home.controller.js:198 ~ response.results[0].textValue:', response.results[0].textValue)
+                    WidgetHome.chatData = response.results[0].textValue,
+                    WidgetHome.chatMessageObj=
+                    {
+                        chatMessage:WidgetHome.chatData,
+                        chatTime: new Date(),
+                        chatFrom: WidgetHome.currentLoggedInUser.displayName,
+                        id: WidgetHome.currentLoggedInUser._id
+                    };
+                    WidgetHome.sendMessage();
+                    $scope.$apply();
+                }
+              }
+            );
+          }
+
         init();
 
           WidgetHome.openWall = function () {
@@ -214,6 +257,7 @@
                     }
                     else {
                         console.log("++++++++++++++ctrldd home", results);
+                        WidgetHome.initializedFABButton();
 
                         WidgetHome.reviews = results || [];
                         //WidgetWall.lastRating = results[results.length-1].data.starRating;
