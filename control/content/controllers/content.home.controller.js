@@ -249,12 +249,6 @@
           }
         };
 
-        ContentHome.showComments = function(review,index){
-          buildfire.messaging.sendMessageToWidget({
-            scope: "showComments",
-            review: review,
-          });          
-        }
         init();
       }]);
 })(window.angular);

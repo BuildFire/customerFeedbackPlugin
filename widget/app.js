@@ -200,7 +200,6 @@
           buildfire.navigation.onBackButtonClick = function () {
               if (ViewStack.hasViews()) {
                   ViewStack.pop();
-                  window.onReceivedMessageWall();
               } else {
                   buildfire.navigation._goBackOne();
               }

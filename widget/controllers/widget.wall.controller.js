@@ -40,7 +40,6 @@
 //                        getReviews();
                         if(introductionElement) introductionElement.innerHTML = result.data.introduction;
                         setBoxShadow();
-                        window.onReceivedMessageWall();
                     }
                     , error = function (err) {
                         console.error('Error while getting data', err);
@@ -327,7 +326,6 @@
             $scope.$digest();
           });
 
-          window.onReceivedMessageWall = ()=>{
             buildfire.messaging.onReceivedMessage = function (event) {
               if(event){
                 if(event.scope === 'removeReview'){
@@ -341,11 +339,6 @@
                     }
                     $scope.$apply();
                     return;
-                }
-                if(event.scope === 'showComments'){
-                  WidgetWall.goToChat(event.review);
-                  $scope.$apply();
-                  return;
                 }
                 if(event.scope === 'introduction'){
                   let introductionElement = document.getElementById('introduction');
@@ -362,8 +355,7 @@
                 }
               }
             }
-          }
 
         }]);
-})(window.angular, window.buildfire,window.onReceivedMessageWall);
+})(window.angular, window.buildfire);
 

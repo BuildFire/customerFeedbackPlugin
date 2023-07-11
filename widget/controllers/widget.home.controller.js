@@ -511,27 +511,25 @@
           function onReceivedMessage(event) {
 
         }
-          buildfire.messaging.onReceivedMessage = (event)=> {
-              console.log('Content syn called method in content.home.controller called-----', event);
-              if (event) {
-                  console.log("++++++++++++", event);
-                  switch (event.name) {
-                      case EVENTS.CHAT_ADDED :
-                          if (event.data && event.data.data) {
+        buildfire.messaging.onReceivedMessage = (event)=> {
+            console.log('Content syn called method in content.home.controller called-----', event);
+            if (event) {
+                console.log("++++++++++++", event);
+                switch (event.name) {
+                    case EVENTS.CHAT_ADDED :
+                        if (event.data && event.data.data) {
 //                              WidgetHome.chatMessageData = event.data.data;
-                              WidgetHome.chatMessageData = WidgetHome.chatMessageData ? WidgetHome.chatMessageData : [];
-                              WidgetHome.chatMessageData.unshift(event.data);
-                          }
-                          break;
-                      default :
-                          break;
-                  }
-                  if (!$scope.$$phase)
-                      $scope.$digest();
-              }else{
-                
-              }
-          };
+                            WidgetHome.chatMessageData = WidgetHome.chatMessageData ? WidgetHome.chatMessageData : [];
+                            WidgetHome.chatMessageData.unshift(event.data);
+                        }
+                        break;
+                    default :
+                        break;
+                }
+                if (!$scope.$$phase)
+                    $scope.$digest();
+            }
+        };
 
           WidgetHome.listeners['CHANGED'] = $rootScope.$on('VIEW_CHANGED', function (e, type, view) {
 
