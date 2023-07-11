@@ -8,7 +8,7 @@
 </script>
 <div class="holder padding-zero wall-page" ng-controller="WidgetWallCtrl as WidgetWall">
 	<div class="feedback-plugin review-wall">
-		<div ng-if="!WidgetWall.noReviews" class="user-info-container" style="box-shadow: {{WidgetWall.dynamicBoxShadow}};">
+		<div ng-if="!WidgetWall.noReviews"  class="user-info-container" ng-class="{'invisible-titlebar-safe-area':window.isTitlebarVisible}" style="box-shadow: {{WidgetWall.dynamicBoxShadow}};">
 			<div class="column">
 				<!-- todo get the user image -->
 				<img ng-if="!WidgetWall.currentLoggedInUser.imageUrl" src="../../../styles/media/avatar-placeholder.png" alt="user name" class="user-image">
@@ -19,46 +19,22 @@
 			</div>
 			<div class="column">
 				<span class="user-name" ng-click="WidgetWall.buildfire.auth.openProfile(WidgetWall.currentLoggedInUser._id)">{{WidgetWall.currentLoggedInUser.displayName || 'No Name'}}</span>
-				<span class="reviews-number"><span bfString="reviews.reviews">Reviews</span>: {{WidgetWall.reviews.length}}</span>
-				<span class="average-rating"><span bfString="reviews.averageRating">Average Rating</span>: {{ WidgetWall.totalRating / (WidgetWall.reviews.length) | number:2 }}/5</span>
+				<span class="reviews-number"><span bfString="reviews.reviews" class="reviews-number">Reviews</span>: {{WidgetWall.reviews.length}}</span>
+				<span class="average-rating"><span bfString="reviews.averageRating" class="average-rating">Average Rating</span>: {{ WidgetWall.totalRating / (WidgetWall.reviews.length) | number:2 }}/5</span>
 				<div class="rating-stars">
 					<div class="rating br-wrapper br-theme-css-stars" ng-if="WidgetWall.reviews.length">
-						<!--<ng-rate-it ng-model="WidgetWall.startPoints" class="custom"  read-only = "true"></ng-rate-it>-->
 						<average-star-rating ng-model="WidgetWall.startPoints" max="5"></average-star-rating>
-		
 					</div>
 				</div>
 			</div>
 		</div>
 		<div>
-			<!-- <p class="margin-top-ten margin-bottom-zero" ng-if="WidgetWall.reviews.length">Your Reviews: <span style="font-weight:400;">{{WidgetWall.reviews.length}}</span></p>
-			<p ng-if="WidgetWall.reviews.length">Your Average Rating: <span style="font-weight:400;">{{ WidgetWall.totalRating / (WidgetWall.reviews.length) | number:2 }}/5</span></p>
-			<div class="rating br-wrapper br-theme-css-stars" ng-if="WidgetWall.reviews.length">
-				<average-star-rating ng-model="WidgetWall.startPoints" max="5"></average-star-rating>
-
-			</div> -->
-			<!-- <div  ng-if="!WidgetWall.noReviews">
-			<p ng-if="WidgetWall.startPoints<=1" ng-if="WidgetWall.reviews.length">Poor</p>
-			<p ng-if="WidgetWall.startPoints>1 && WidgetWall.startPoints<=2" ng-if="WidgetWall.reviews.length">Average</p>
-			<p ng-if="WidgetWall.startPoints>2 && WidgetWall.startPoints<=3" ng-if="WidgetWall.reviews.length">Good</p>
-			<p ng-if="WidgetWall.startPoints>3 && WidgetWall.startPoints<=4" ng-if="WidgetWall.reviews.length">Excellent</p>
-			<p ng-if="WidgetWall.startPoints>4" ng-if="WidgetWall.reviews.length">Outstanding</p>
-			</div> -->
 			<div  ng-if="WidgetWall.noReviews" class="no-event-found padded">
 				<div id="introduction"></div>
 				<div class="empty-box-container">
 					<img src="../../../../styles/media/empty.svg" alt="">
 				</div>
 			</div>
-			<!--<a class="btn btn-success btn-sm" ng-if="WidgetWall.noReviews && WidgetWall.reviews" ng-click="WidgetWall.submitReview()">Submit Review</a>-->
-            <!--<a class="btn btn-success btn-sm" ng-if="!WidgetWall.noReviews && WidgetWall.reviews" ng-click="WidgetWall.submitReview()">Write a Review</a>-->
-			<!-- ! FAB -->
-			<!-- <a class="btn btn-success btn-sm" ng-if="WidgetWall.reviews" ng-click="WidgetWall.submitReview()">{{WidgetWall.reviewButtonText}}</a> -->
-			<!-- !End FAB -->
-			<!--<a class="btn btn-success btn-sm" ng-if="!WidgetWall.noReviews && WidgetWall.reviews" ng-click="WidgetWall.submitReview()">Write a Review</a>-->
-
-			<!--<a class="btn btn-success btn-sm" href="#/">Home</a>-->
-			<!--<a href="#/chatHome" ng-if="WidgetWall.reviews.length">Chat</a>-->
 		</div>
          <div id="top"
              infinite-scroll-distance="1"
@@ -80,36 +56,6 @@
 			<div class="review-rate">
 				<average-star-rating ng-model="data.data.starRating" max="5"></average-star-rating>
 			</div>
-			
-			
-			<!-- <hr class="small">
-			<div class="head row clearfix padding-left-ten padding-right-ten margin-bottom-fifteen">
-				<div class="col-xs-8 pull-left">
-					<div class="media-holder pull-left">
-                        <img ng-if="!data.data.userImage" src="../../../styles/media/avatar-placeholder.png">
-						<img ng-if="data.data.userImage"  load-image="1x1"
-                             crop-width="60" crop-height="60" crop-type="crop"
-                             data-final-src="{{data.data.userImage}}">
-					</div>
-					<div>
-						<p class="text-primary ellipsis margin-bottom-zero padding-left-ten">
-							<a class="text-primary" ng-click="WidgetWall.buildfire.auth.openProfile(data.userToken)">{{data.data.displayName || 'No Name'}}</a>
-						</p>
-						<p class="date opacity-seventy">{{data.data.addedDate | date:'medium'}}</p>
-					</div>
-				</div>
-				<div class="col-xs-3 pull-right text-right">
-					<span class="stars"><span style="font-weight:400;">{{data.data.starRating}}</span> stars</span>
-					<a ng-click="WidgetWall.goToChat(data)" style="position: relative; display: block; width: 30px; margin-left: 28px;">
-						<span class="icon icon-bubble"></span>
-						<span>{{WidgetWall.chatCommentCount || 0}}</span>
-					</a>
-				</div>
-
-			</div>
-			<div class="copy padding-left-ten padding-right-ten margin-bottom-fifteen" ng-click="WidgetWall.goToChat(data)">
-				<p class="margin-zero"><span ng-bind-html="data.data.Message | newLine"></span></p>
-			</div> -->
 		</div>
      </div>
     </div>

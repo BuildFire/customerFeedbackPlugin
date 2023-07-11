@@ -1,3 +1,8 @@
+.invisible-titlebar-safe-area {
+    padding-top: calc(30px + constant(safe-area-inset-top)) !important;
+    padding-top: calc(30px + env(safe-area-inset-top)) !important;
+}
+
 .wall-page{
 	position: relative;
 	height: 100vh;
@@ -283,6 +288,9 @@
 	margin-bottom:4px;
 	padding: 12px 16px 0;
 }
+.review-item:last-child{
+	padding-bottom: 64px;
+}
 .review-item .review-title{
 	display: flex;
 	flex-direction: row;
@@ -313,7 +321,9 @@
 
 
 /* comments page */
-
+.review-comments {
+	padding-bottom: 32px;
+}
 .review-comments .comment {
 	display: flex;
     flex-direction: column;

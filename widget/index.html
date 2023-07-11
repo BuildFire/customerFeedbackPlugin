@@ -64,5 +64,23 @@
 </div>
 <div view-switcher="">
 </div>
+
+<script>
+const titlebarVisibility = () => {
+    buildfire.appearance.titlebar.isVisible(null, (err, isVisible) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+        if (isVisible) {
+            window.isTitlebarVisible = isVisible;
+        }else{
+            window.isTitlebarVisible = isVisible; 
+        }
+    });
+
+}
+titlebarVisibility();
+</script>
 </body>
 </html>

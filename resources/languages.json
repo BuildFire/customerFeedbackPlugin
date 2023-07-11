@@ -84,6 +84,26 @@
             "placeholder":"Cancel"
           }
         }
+      },
+      "addReviewMessage": {
+        "title": "Add Review Message",
+        "labels": {
+          "typeYourMessage": {
+            "title": "Type your message...",
+            "defaultValue": "Type your message...",
+            "placeholder": "Type your message..."
+          },
+          "dialogSave":{
+            "title":"Save",
+            "defaultValue":"Save",
+            "placeholder":"Save"
+          },
+          "dialogCancel":{
+            "title":"Cancel",
+            "defaultValue":"Cancel",
+            "placeholder":"Cancel"
+          }
+        }
       }
     }
   }

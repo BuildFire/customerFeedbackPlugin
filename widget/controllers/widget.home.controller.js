@@ -9,13 +9,16 @@
         var skip = 0;
         var limit = 10;
         let stringsKeys=[
-            'oneStarRating',
-            'twoStarsRating',
-            'threeStarsRating',
-            'fourStarsRating',
-            'fiveStarsRating',
-            'typeMessagePlaceholder',
-            'sendMessage',
+            'reviews.oneStarRating',
+            'reviews.twoStarsRating',
+            'reviews.threeStarsRating',
+            'reviews.fourStarsRating',
+            'reviews.fiveStarsRating',
+            'reviews.typeMessagePlaceholder',
+            'reviews.sendMessage',
+            'addReviewMessage.typeYourMessage',
+            'addReviewMessage.dialogSave',
+            'addReviewMessage.dialogCancel',
         ];
         WidgetHome.chatData = "";
         WidgetHome.listeners = {};
@@ -95,9 +98,9 @@
         
         const getStrings = ()=>{
             stringsKeys.forEach((key)=>{
-                buildfire.language.get({stringKey: 'reviews.' + key}, (err, result) => {
+                buildfire.language.get({stringKey: key}, (err, result) => {
                 if (err) return console.error("Error while retrieving string value", err);
-                WidgetHome[key] = result;
+                WidgetHome[key.split('.')[1]] = result;
                 });
                 
             });
@@ -168,16 +171,29 @@
             }
         }
 
-        WidgetHome.initializedFABButton = function () {
+        const initializedFABButton = function () {
             const fabSpeedDial = new buildfire.components.fabSpeedDial('#sendCommentFabContainer', {
               showOverlay: false,
               mainButton: {
+                content:`
+                <i>
+                    <svg width="24" height="24" viewBox="0 0 24 24"  xmlns="http://www.w3.org/2000/svg">
+                        <g id="icons/send" clip-path="url(#clip0_1245_218)">
+                            <path id="Vector" d="M3.4 20.4L20.85 12.92C21.66 12.57 21.66 11.43 20.85 11.08L3.4 3.60002C2.74 3.31002 2.01 3.80002 2.01 4.51002L2 9.12002C2 9.62002 2.37 10.05 2.87 10.11L17 12L2.87 13.88C2.37 13.95 2 14.38 2 14.88L2.01 19.49C2.01 20.2 2.74 20.69 3.4 20.4V20.4Z"/>
+                        </g>
+                        <defs>
+                            <clipPath id="clip0_1245_218">
+                                <rect width="24" height="24" />
+                            </clipPath>
+                        </defs>
+                    </svg>
+                </i>
+                `,
                 type: 'success',
               },
             });
 
             fabSpeedDial.onMainButtonClick = event => {
-              console.log('🚀 ~ file: widget.home.controller.js:183 ~ event:', event)
               WidgetHome.showReviewDialog();
               $scope.$apply();
             };
@@ -186,16 +202,14 @@
           WidgetHome.showReviewDialog = function(){
             buildfire.input.showTextDialog(
               {
-                placeholder:'Write a Review',
-                saveText: 'Save',
-                cancelText:'Cancel',
-                defaultValue: 'ss',
+                placeholder: WidgetHome.typeYourMessage || 'Type your message...',
+                saveText: WidgetHome.dialogSave || 'Save',
+                cancelText: WidgetHome.dialogCancel || 'Cancel',
               },
               (err, response) => {
                 if (err) return console.error(err);
                 if (response.cancelled) return;
                 if(response.results[0].textValue.trim() !== ''){
-                    console.log('🚀 ~ file: widget.home.controller.js:198 ~ response.results[0].textValue:', response.results[0].textValue)
                     WidgetHome.chatData = response.results[0].textValue,
                     WidgetHome.chatMessageObj=
                     {
@@ -257,8 +271,7 @@
                     }
                     else {
                         console.log("++++++++++++++ctrldd home", results);
-                        WidgetHome.initializedFABButton();
-
+                        initializedFABButton();
                         WidgetHome.reviews = results || [];
                         //WidgetWall.lastRating = results[results.length-1].data.starRating;
                         //if(results && results.length) {
@@ -494,8 +507,11 @@
           //    if (!$scope.$$phase)
           //        $scope.$digest();
           //});
+          
+          function onReceivedMessage(event) {
 
-          buildfire.messaging.onReceivedMessage = function (event) {
+        }
+          buildfire.messaging.onReceivedMessage = (event)=> {
               console.log('Content syn called method in content.home.controller called-----', event);
               if (event) {
                   console.log("++++++++++++", event);
@@ -512,6 +528,8 @@
                   }
                   if (!$scope.$$phase)
                       $scope.$digest();
+              }else{
+                
               }
           };
 

@@ -59,7 +59,6 @@
               }*/
               updateMasterItem(ContentHome.data);
               if (tmrDelay)clearTimeout(tmrDelay);
-              initTinymce(result.data.introduction);
             }
             , error = function (err) {
               if (err && err.code !== STATUS_CODE.NOT_FOUND) {
@@ -69,41 +68,6 @@
             };
             DataStore.get(TAG_NAME.FEEDBACK_APP_INFO).then(success, error);
         };
-
-        const initTinymce = function(introductionContent = ''){
-          /*
-         * initialize tinymce editor 
-         **/
-        let timerDelay = null;
-        tinymce.init({
-          selector: "#introduction",
-          setup: (editor) => {
-            editor.on("change keyUp", (e) => { // use change and keyUp to cover all cases
-              if (timerDelay) clearTimeout(timerDelay);
-              timerDelay = setTimeout(() => { // use timer delay to avoid handling too many WYSIWYG updates
-                  let wysiwygContent = tinymce.activeEditor.getContent();
-                  const payload = {
-                    $set: {
-                        introduction: wysiwygContent,
-                    },
-                };
-                  DataStore.save(payload,TAG_NAME.FEEDBACK_APP_INFO).then(function(result) {
-                    console.log('Item saved:', result);
-                  }).catch(function(error) {
-                    console.error('Save error:', error);
-                  });
-                  buildfire.messaging.sendMessageToWidget({
-                    scope: "introduction",
-                    introductionContent: wysiwygContent,
-                  });  
-              }, 500);
-            });
-            editor.on("init", () => {
-              tinymce.activeEditor.setContent(introductionContent);
-            });
-          }
-        });
-        }
 
         ContentHome.loadMoreItems = function () {
             console.log('inside loadMoreItems ----------');
@@ -121,11 +85,11 @@
                     let promises = [];
                     results.forEach(function (result) {
                         if (uniqueTokens.indexOf(result.userToken) == -1) {
-                            uniqueTokens.push(result.userToken);
-                            uniqueReviews.push(result);
-                            elemCount = elemCount + 1;
-                            avgRating = avgRating + parseInt(result.data.starRating);
-                            promises.push(getCommentsCount(result.userToken));
+                          uniqueTokens.push(result.userToken);
+                          uniqueReviews.push(result);
+                          elemCount = elemCount + 1;
+                          avgRating = avgRating + parseInt(result.data.starRating);
+                          promises.push(getCommentsCount(result.userToken));
                         }
                     });
                     
@@ -134,7 +98,7 @@
                     skip = skip + results.length;
                     console.log("ContentHome.avgRating", ContentHome.avgRating);
                     Promise.all(promises).then((res) => {
-                      ContentHome.numberOfCommentsList.push(res[0]);
+                      ContentHome.numberOfCommentsList.push(...res);
                     }).then((res)=>{
                       results.forEach(function (result) {
                         let numberOfComments =
@@ -224,6 +188,12 @@
                       case EVENTS.REVIEW_CREATED :
                           if (event.data) {
                               ContentHome.reviews.push(event.data);
+                              let reviewItem = ContentHome.numberOfCommentsList.find(
+                                (item) =>
+                                item.userToken === event.data.userToken);
+                                if(reviewItem) {
+                                  event.data.numberOfComments = reviewItem.numberOfComments
+                                }; 
                               if (uniqueTokens.indexOf(event.data.userToken) == -1) {
                                   uniqueTokens.push(event.data.userToken);
                                   uniqueReviews.push(event.data);
@@ -234,6 +204,14 @@
                                   ContentHome.avgRating = ((ContentHome.avgRating * ContentHome.totalReviews) - parseInt(event.lastReviewCount) + parseInt(event.data.data.starRating)) / ContentHome.totalReviews;
                           }
                           break;
+                      case EVENTS.CHAT_ADDED :
+                          if(event.data){
+                            let reviewItem = ContentHome.reviews.find(
+                              (item) =>
+                              item.userToken === event.data.data.id);
+                              if(reviewItem) reviewItem.numberOfComments +=1; 
+                            }
+                          break;   
                       default :
                           break;
                   }

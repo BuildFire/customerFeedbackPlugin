@@ -40,7 +40,7 @@
 //                        getReviews();
                         if(introductionElement) introductionElement.innerHTML = result.data.introduction;
                         setBoxShadow();
-
+                        window.onReceivedMessageWall();
                     }
                     , error = function (err) {
                         console.error('Error while getting data', err);
@@ -327,39 +327,43 @@
             $scope.$digest();
           });
 
-          buildfire.messaging.onReceivedMessage = function (event) {
-            if(event){
-              if(event.scope === 'removeReview'){
-                  WidgetWall.totalRating = WidgetWall.totalRating - Number(event.review.data.starRating);
-                  WidgetWall.startPoints = 0;
-                  WidgetWall.lastRating = 0;
-                  WidgetWall.reviews.shift();
-                  if (WidgetWall.reviews.length === 0) {
-                      init();
-                      WidgetWall.noReviews = true;
-                  }
+          window.onReceivedMessageWall = ()=>{
+            buildfire.messaging.onReceivedMessage = function (event) {
+              if(event){
+                if(event.scope === 'removeReview'){
+                    WidgetWall.totalRating = WidgetWall.totalRating - Number(event.review.data.starRating);
+                    WidgetWall.startPoints = 0;
+                    WidgetWall.lastRating = 0;
+                    WidgetWall.reviews.shift();
+                    if (WidgetWall.reviews.length === 0) {
+                        init();
+                        WidgetWall.noReviews = true;
+                    }
+                    $scope.$apply();
+                    return;
+                }
+                if(event.scope === 'showComments'){
+                  WidgetWall.goToChat(event.review);
                   $scope.$apply();
                   return;
-              }
-              if(event.scope === 'showComments'){
-                WidgetWall.goToChat(event.review);
-                $scope.$apply();
-                return;
-              }
-              if(event.scope === 'introduction'){
-                let introductionElement = document.getElementById('introduction');
-                introductionElement.innerHTML = event.introductionContent;
-                return;
-              }
-              if(event.name == "CHAT_ADDED" && event.data){
-                if(WidgetWall.currentLoggedInUser && WidgetWall.currentLoggedInUser._id && (event.data.tag ==  'chatData-' + WidgetWall.currentLoggedInUser._id)){
-                  WidgetWall.chatCommentCount += 1;
-                  $scope.$digest();
+                }
+                if(event.scope === 'introduction'){
+                  let introductionElement = document.getElementById('introduction');
+                  if(introductionElement){
+                    introductionElement.innerHTML = event.introductionContent;
+                  }
+                  return;
+                }
+                if(event.name == "CHAT_ADDED" && event.data){
+                  if(WidgetWall.currentLoggedInUser && WidgetWall.currentLoggedInUser._id && (event.data.tag ==  'chatData-' + WidgetWall.currentLoggedInUser._id)){
+                    WidgetWall.chatCommentCount += 1;
+                    $scope.$digest();
+                  }
                 }
               }
             }
           }
 
         }]);
-})(window.angular, window.buildfire);
+})(window.angular, window.buildfire,window.onReceivedMessageWall);
 

@@ -35,15 +35,7 @@
     margin: 0;
     padding-bottom: 16px;
 }
-.review-item:nth-child(even){
-    background:#eef0f0;
-}
-.review-item:nth-child(even) .comment{
-    text-align:left;
-}
-.review-item:nth-child(even) .well{
-    background:#fff;
-}
+
 .review-item .well .comment{
     text-align:left;
 }
