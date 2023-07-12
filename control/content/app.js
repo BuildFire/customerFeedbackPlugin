@@ -15,7 +15,7 @@
                     controllerAs: 'ContentChat',
                     controller: 'ContentChatCtrl'
                 })
-                .when('/chat/:userToken', {
+                .when('/chat/:encodedReview', {
                     templateUrl: 'templates/chat.html',
                     controllerAs: 'ContentChat',
                     controller: 'ContentChatCtrl'

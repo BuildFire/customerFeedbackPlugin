@@ -169,9 +169,10 @@
           }
         };
 
-          ContentHome.getUrl = function (userToken) {
+          ContentHome.getUrl = function (review) {
               ContentHome.showChat = true;
-              $location.path('/chat/' + userToken);
+              var encodedReview = encodeURIComponent(JSON.stringify(review));
+              $location.path('/chat/' + encodedReview);
           };
 
         /*

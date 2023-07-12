@@ -6,12 +6,15 @@
         .controller('ContentChatCtrl', ['$scope', '$routeParams', '$location', '$filter', 'Buildfire', 'TAG_NAME', 'STATUS_CODE', 'DataStore','EVENTS',
             function ($scope, $routeParams, $location, $filter, Buildfire, TAG_NAME, STATUS_CODE, DataStore, EVENTS) {
                 var ContentChat = this;
-                var tagName = 'chatData-' + $routeParams.userToken;
+                var encodedReview = $routeParams.encodedReview;
+                var review = JSON.parse(decodeURIComponent(encodedReview));
+                var tagName = 'chatData-' + review.userToken;
                 var skip = 0;
                 var limit = 10;
                 ContentChat.chatData = "";
                 ContentChat.noMore = false;
                 ContentChat.waitAPICompletion = false;
+                ContentChat.review = review;
                 /*
                  * Go pull any previously saved data
                  * */
@@ -70,7 +73,7 @@
                         id: ContentChat.currentLoggedInUser._id
                     }
                     if (ContentChat.chatData) {
-                            buildfire.userData.insert(ContentChat.chatMessageObj, tagName, $routeParams.userToken, function (err, result) {
+                            buildfire.userData.insert(ContentChat.chatMessageObj, tagName, ContentChat.review.userToken, function (err, result) {
                                 if (err) console.error("Error : ", JSON.stringify(err));
                                 else {
                                     ContentChat.chatMessageData.unshift(result);
@@ -102,6 +105,14 @@
                             $scope.$digest();
                     }
                 };
+
+                document.getElementById('commentInput').addEventListener('keyup',(e)=>{
+                    if(e.target.value.trim() !== '') {
+                        document.getElementById('sendCommentButton').disabled = false;
+                    }else{
+                        document.getElementById('sendCommentButton').disabled = true;
+                    }
+                });
             }]);
 })(window.angular);
 

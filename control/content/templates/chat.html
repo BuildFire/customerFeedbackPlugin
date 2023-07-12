@@ -1,34 +1,62 @@
-<div class="item clearfix row">
-    <div class="col-xs-3 pull-left">
-        <a class="btn btn-primary stretch" ng-href="#/">Back</a>
+<div class="review-comments-container">
+    <div class="row clearfix">
+        <ul id="breadcrumbs" class="breadcrumb">
+            <li><a ng-href="#/">Home</a></li>
+            <li><a>Review Comments</a></li>
+        </ul>
     </div>
-</div>
-<hr class="none">
-<div class="holder padding-zero bottom-post">
-
-    <hr class="small">
-    <div class="post-holder clearfix">
-        <div class="add-message pull-left">
-            <input type="text" class="form-control" ng-model="ContentChat.chatData"
-                   placeholder="Type your message...">
+    <div class="review-comments-card">
+        <div class="card-header clearfix row">
+            <div class="col-xs-1 col">
+                <img ng-if="!ContentChat.review.data.userImage" load-image="1x1"  data-final-src="../../../../styles/media/avatar-placeholder.png" alt="user-image" class="user-image">
+                <img ng-if="ContentChat.review.data.userImage" load-image="1x1"  data-final-src="{{ContentChat.review.data.userImage | getImageUrl : 60 : 60}}" alt="user-image" class="user-image">
+            </div>
+            <div class="col-xs-9 col">
+                <span class="user-name">{{ContentChat.review.data.displayName}}</span>
+                <span class="review-date">{{ContentChat.review.data.addedDate |date:'medium'}}</span>
+                <div class="review-rate">
+                    <ng-rate-it ng-model="ContentChat.review.data.starRating" class="custom" rated="" read-only = "true"></ng-rate-it>
+                </div>
+            </div>
+            <div class="col-xs-2 col">
+                <div class="comments-count">
+                    <span class="icon icon-bubble"></span>
+                    <span class="number-of-comments">2</span>
+                </div>
+            </div>
         </div>
-        <div class="send-message">
-            <input type="submit" class="text-primary" value="Send" ng-click="ContentChat.sendMessage()">
+        <div class="card-body infinite-scroll-parent scrollable" style="border: none; height: 50vh; overflow-y: auto;">
+            <div class="review-details clearfix row">
+                <div class="review-message">{{ContentChat.review.data.Message}}</div>
+                <span class="delete-review-button">Delete Review</span>
+            </div>
+            <div class="clearfix row comments-details"    
+            infinite-scroll-distance="1"
+            data-infinite-container=".infinite-scroll-parent"
+            infinite-scroll="ContentChat.getChatData()"
+            infinite-scroll-disabled="ContentChat.noMore">
+                <div class="row comment-item" ng-repeat = "chatData in ContentChat.chatMessageData | orderBy: '-data.chatTime' ">
+                    <div class="col-xs-1 col point">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                            <circle cx="6" cy="6" r="6" fill="#DDDDDD"/>
+                        </svg>
+                    </div>
+                    <div class="col-xs-11 col comment-item-content">
+                        <span class="comment-user-name">{{chatData.data.chatFrom || 'No Name'}}</span>
+                        <span class="comment-date">{{chatData.data.chatTime | date:'medium'}}</span>
+                        <span class="comment-content">{{chatData.data.chatMessage | newLine}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <input type="text" placeholder="Type your message..." id="commentInput" class="form-control comment-input" ng-model="ContentChat.chatData">
+            <input disabled type="submit" class="btn send-comment-btn" id="sendCommentButton" value="Send" ng-click="ContentChat.sendMessage()">
         </div>
     </div>
 </div>
-<hr class="none">
-<div class="review-item infinite-scroll-parent scrollable" style="border: none; height: 400px; overflow-y: auto;">
-<div class="comments-container margin-top-fifteen well well-sm margin-bottom-zero" style="background: #fff;">
-    <div style="margin-bottom: 50px; "
-         infinite-scroll-distance="1"
-         data-infinite-container=".infinite-scroll-parent"
-         infinite-scroll="ContentChat.getChatData()"
-         infinite-scroll-disabled="ContentChat.noMore">
-    <div class="comment" ng-repeat = "chatData in ContentChat.chatMessageData | orderBy: '-data.chatTime' ">
-        <p class="no-icon info margin-zero"><a class="text-primary">{{chatData.data.chatFrom || 'No Name'}}</a> - {{chatData.data.chatTime | date:'medium'}}</p>
-        <p class="margin-zero"><span ng-bind-html="chatData.data.chatMessage | newLine"></span></p>
+<div class="close-button-container">
+    <div class="row clearfix">
+        <button class="btn"><a ng-href="#/">Close</a></button>
     </div>
-</div>
-</div>
 </div>
