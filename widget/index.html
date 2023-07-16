@@ -66,21 +66,17 @@
 </div>
 
 <script>
-const titlebarVisibility = () => {
     buildfire.appearance.titlebar.isVisible(null, (err, isVisible) => {
         if (err) {
             console.error(err);
             return;
         }
-        if (isVisible) {
-            window.isTitlebarVisible = isVisible;
-        }else{
-            window.isTitlebarVisible = isVisible; 
+        if (!isVisible) {
+            document.body.classList.add('invisible-titlebar-safe-area');
         }
     });
-
-}
-titlebarVisibility();
+    
+    titlebarVisibility();
 </script>
 </body>
 </html>
