@@ -65,18 +65,5 @@
 <div view-switcher="">
 </div>
 
-<script>
-    buildfire.appearance.titlebar.isVisible(null, (err, isVisible) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
-        if (!isVisible) {
-            document.body.classList.add('invisible-titlebar-safe-area');
-        }
-    });
-    
-    titlebarVisibility();
-</script>
 </body>
 </html>

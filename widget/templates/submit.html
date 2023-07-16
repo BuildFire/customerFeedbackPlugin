@@ -1,4 +1,4 @@
-<div class="holder padding-zero submit-review-page" ng-controller="WidgetSubmitCtrl as WidgetSubmit">
+<div class="holder padding-zero submit-review-page" ng-class="{'invisible-titlebar-safe-area' : WidgetSubmit.titlebarVisibility}" ng-controller="WidgetSubmitCtrl as WidgetSubmit">
 	<form name="reviewForm" class="feedback-plugin submit-review">
 		<div class="top-container">
 			<span class="title">{{WidgetSubmit.leaveYourFeedback || 'Leave Your Feedback'}}</span>

@@ -18,6 +18,7 @@
           WidgetWall.totalRating = 0;
           WidgetWall.chatCommentCount = 0;
           WidgetWall.listeners = [];
+          WidgetWall.titlebarVisibility = window.titlebarVisibility;
           console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
           /* Initialize current logged in user as null. This field is re-initialized if user is already logged in or user login user auth api.
            */

@@ -6,7 +6,7 @@
 	  	});
 	});
 </script>
-<div class="holder padding-zero wall-page" ng-controller="WidgetWallCtrl as WidgetWall">
+<div class="holder padding-zero wall-page" ng-class="{'invisible-titlebar-safe-area' : WidgetWall.titlebarVisibility}" ng-controller="WidgetWallCtrl as WidgetWall">
 	<div class="feedback-plugin review-wall">
 		<div ng-if="!WidgetWall.noReviews"  class="user-info-container" ng-class="{'invisible-titlebar-safe-area':window.isTitlebarVisible}" style="box-shadow: {{WidgetWall.dynamicBoxShadow}};">
 			<div class="column">

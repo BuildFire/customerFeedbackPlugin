@@ -14,8 +14,6 @@
             'reviews.threeStarsRating',
             'reviews.fourStarsRating',
             'reviews.fiveStarsRating',
-            'reviews.typeMessagePlaceholder',
-            'reviews.sendMessage',
             'addReviewMessage.typeYourMessage',
             'addReviewMessage.dialogSave',
             'addReviewMessage.dialogCancel',
@@ -27,8 +25,9 @@
         WidgetHome.totalRating = 0;
         WidgetHome.ratingAverage = 0;
         WidgetHome.noMore = false;
-          $rootScope.deviceHeight = window.innerHeight;
-          $rootScope.deviceWidth = window.innerWidth;
+        $rootScope.deviceHeight = window.innerHeight;
+        $rootScope.deviceWidth = window.innerWidth;
+        $rootScope.titlebarVisibility = window.titlebarVisibility;
        //   $rootScope.backgroundImage = "";
 
         WidgetHome.currentView = ViewStack.getCurrentView();

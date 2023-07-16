@@ -197,6 +197,13 @@
           };
       })
       .run(['ViewStack', function (ViewStack) {
+        buildfire.appearance.titlebar.isVisible(null, (err, isVisible) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            window.titlebarVisibility = isVisible;
+      });
           buildfire.navigation.onBackButtonClick = function () {
               if (ViewStack.hasViews()) {
                   ViewStack.pop();
