@@ -28,11 +28,11 @@
                             <average-star-rating ng-model="WidgetHome.ratingAverage" max="5"><average-star-rating>            
                             </div>
                         <span class="average-rating">{{ WidgetHome.ratingAverage | number:2 }}/5
-                            <span ng-if="WidgetHome.ratingAverage >= 0 && WidgetHome.ratingAverage <=1 && WidgetHome.reviews.length">({{WidgetHome.oneStarRating || 'Poor'}})</span>
-                            <span ng-if="WidgetHome.ratingAverage>1 && WidgetHome.ratingAverage<=2 && WidgetHome.reviews.length">({{WidgetHome.twoStarsRating || 'Average'}})</span>
-                            <span ng-if="WidgetHome.ratingAverage>2 && WidgetHome.ratingAverage<=3 && WidgetHome.reviews.length">({{WidgetHome.threeStarsRating || 'Good'}})</span>
-                            <span ng-if="WidgetHome.ratingAverage>3 && WidgetHome.ratingAverage<=4 && WidgetHome.reviews.length">({{WidgetHome.fourStarsRating || 'Excellent'}})</span>
-                            <span ng-if="WidgetHome.ratingAverage>4 && WidgetHome.reviews.length">({{WidgetHome.fiveStarsRating || 'Outstanding'}})</span>
+                            <span class="rating-average-label" ng-if="WidgetHome.ratingAverage >= 0 && WidgetHome.ratingAverage <=1 && WidgetHome.reviews.length">({{WidgetHome.oneStarRating || 'Poor'}})</span>
+                            <span class="rating-average-label" ng-if="WidgetHome.ratingAverage>1 && WidgetHome.ratingAverage<=2 && WidgetHome.reviews.length">({{WidgetHome.twoStarsRating || 'Average'}})</span>
+                            <span class="rating-average-label" ng-if="WidgetHome.ratingAverage>2 && WidgetHome.ratingAverage<=3 && WidgetHome.reviews.length">({{WidgetHome.threeStarsRating || 'Good'}})</span>
+                            <span class="rating-average-label" ng-if="WidgetHome.ratingAverage>3 && WidgetHome.ratingAverage<=4 && WidgetHome.reviews.length">({{WidgetHome.fourStarsRating || 'Excellent'}})</span>
+                            <span class="rating-average-label" ng-if="WidgetHome.ratingAverage>4 && WidgetHome.reviews.length">({{WidgetHome.fiveStarsRating || 'Outstanding'}})</span>
                         </span>
                     </div>
                 </div>

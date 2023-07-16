@@ -19,8 +19,8 @@
 			</div>
 			<div class="column">
 				<span class="user-name" ng-click="WidgetWall.buildfire.auth.openProfile(WidgetWall.currentLoggedInUser._id)">{{WidgetWall.currentLoggedInUser.displayName || 'No Name'}}</span>
-				<span class="reviews-number"><span bfString="reviews.reviews" class="reviews-number">Reviews</span>: {{WidgetWall.reviews.length}}</span>
-				<span class="average-rating"><span bfString="reviews.averageRating" class="average-rating">Average Rating</span>: {{ WidgetWall.totalRating / (WidgetWall.reviews.length) | number:2 }}/5</span>
+				<span class="reviews-number"><span bfString="reviews.reviews" class="reviews-number-label">Reviews</span>: {{WidgetWall.reviews.length}}</span>
+				<span class="average-rating"><span bfString="reviews.averageRating" class="average-rating-label">Average Rating</span>: {{ WidgetWall.totalRating / (WidgetWall.reviews.length) | number:2 }}/5</span>
 				<div class="rating-stars">
 					<div class="rating br-wrapper br-theme-css-stars" ng-if="WidgetWall.reviews.length">
 						<average-star-rating ng-model="WidgetWall.startPoints" max="5"></average-star-rating>
@@ -30,7 +30,7 @@
 		</div>
 		<div>
 			<div  ng-if="WidgetWall.noReviews" class="no-event-found padded">
-				<div id="introduction"></div>
+				<div id="introduction" ng-bind-html="WidgetWall.safeHtml(WidgetWall.data.introduction)" ></div>
 				<div class="empty-box-container">
 					<img src="../../../../styles/media/empty.svg" alt="">
 				</div>

@@ -3,8 +3,8 @@
 (function (angular) {
     angular
         .module('customerFeedbackPluginContent')
-        .controller('ContentChatCtrl', ['$scope', '$routeParams', '$location', '$filter', 'Buildfire', 'TAG_NAME', 'STATUS_CODE', 'DataStore','EVENTS',
-            function ($scope, $routeParams, $location, $filter, Buildfire, TAG_NAME, STATUS_CODE, DataStore, EVENTS) {
+        .controller('ContentChatCtrl', ['$scope', '$routeParams', '$location', '$filter', 'Buildfire', 'TAG_NAME', 'STATUS_CODE', 'DataStore','EVENTS', '$modal',
+            function ($scope, $routeParams, $location, $filter, Buildfire, TAG_NAME, STATUS_CODE, DataStore, EVENTS, $modal) {
                 var ContentChat = this;
                 var encodedReview = $routeParams.encodedReview;
                 var review = JSON.parse(decodeURIComponent(encodedReview));
@@ -15,6 +15,7 @@
                 ContentChat.noMore = false;
                 ContentChat.waitAPICompletion = false;
                 ContentChat.review = review;
+                ContentChat.numberOfComments = 0;
                 /*
                  * Go pull any previously saved data
                  * */
@@ -43,6 +44,7 @@
                                 ContentChat.chatMessageData = ContentChat.chatMessageData ? ContentChat.chatMessageData : [];
                                 ContentChat.chatMessageData = ContentChat.chatMessageData.concat(results);
                                 ContentChat.chatMessageData = $filter('unique')(ContentChat.chatMessageData, 'id');
+                                ContentChat.numberOfComments = results.length;
                                 skip = skip + results.length;
                                 //$scope.complains = results;
                                 $scope.$apply();
@@ -106,6 +108,48 @@
                     }
                 };
 
+                ContentChat.deleteReview = function (review) {
+                    if (review && review.id && review.userToken) {
+                        var modalInstance = $modal.open({
+                            templateUrl: 'templates/deleteReviewModal.html',
+                            controller: 'RemovePopupCtrl',
+                            controllerAs: 'RemovePopup',
+                            size: 'sm',
+                        });
+                        modalInstance.result.then(
+                            function (message) {
+                                if (message === 'yes') {
+                                    buildfire.userData.delete(
+                                        review.id,
+                                        'AppRatings2',
+                                        review.userToken,
+                                        function (err, result) {
+                                            if (err)
+                                                console.log(
+                                                    'Error occured while deleting review:',
+                                                    err
+                                                );
+                                            else {
+                                                $scope.$digest();
+                                                $location.path('/');
+                                                buildfire.messaging.sendMessageToWidget(
+                                                    {
+                                                        scope: 'removeReview',
+                                                        review: review,
+                                                    }
+                                                );
+                                                $scope.$apply();
+                                            }
+                                        }
+                                    );
+                                }
+                            },
+                            function (data) {
+                                //do something on cancel
+                            }
+                        );
+                    }
+                };
                 document.getElementById('commentInput').addEventListener('keyup',(e)=>{
                     if(e.target.value.trim() !== '') {
                         document.getElementById('sendCommentButton').disabled = false;

@@ -254,7 +254,7 @@
     flex-direction: row;
     gap: 2px;
     justify-content: flex-end;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .review-comments-container .review-comments-card .card-body .review-details{

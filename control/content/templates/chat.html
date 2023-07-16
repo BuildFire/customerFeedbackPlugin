@@ -21,14 +21,14 @@
             <div class="col-xs-2 col">
                 <div class="comments-count">
                     <span class="icon icon-bubble"></span>
-                    <span class="number-of-comments">2</span>
+                    <span class="number-of-comments">{{ContentChat.numberOfComments}}</span>
                 </div>
             </div>
         </div>
         <div class="card-body infinite-scroll-parent scrollable" style="border: none; height: 50vh; overflow-y: auto;">
             <div class="review-details clearfix row">
                 <div class="review-message">{{ContentChat.review.data.Message}}</div>
-                <span class="delete-review-button">Delete Review</span>
+                <span class="delete-review-button" ng-click="ContentChat.deleteReview(ContentChat.review)">Delete Review</span>
             </div>
             <div class="clearfix row comments-details"    
             infinite-scroll-distance="1"

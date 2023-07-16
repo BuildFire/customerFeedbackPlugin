@@ -3,8 +3,8 @@
 (function (angular, buildfire) {
   angular
     .module('customerFeedbackPluginWidget')
-      .controller('WidgetWallCtrl', ['$scope','$location', '$rootScope', '$filter', 'DataStore', 'TAG_NAMES', 'ViewStack', 'EVENTS',
-        function ($scope, $location, $rootScope, $filter, DataStore, TAG_NAMES, ViewStack, EVENTS) {
+      .controller('WidgetWallCtrl', ['$scope','$location', '$rootScope', '$filter', 'DataStore', 'TAG_NAMES', 'ViewStack', 'EVENTS', '$sce',
+        function ($scope, $location, $rootScope, $filter, DataStore, TAG_NAMES, ViewStack, EVENTS, $sce) {
 
           var WidgetWall = this;
           var skip = 0;
@@ -25,7 +25,6 @@
 
             function init() {
               var success = function (result) {
-                        let introductionElement = document.getElementById('introduction');
                         WidgetWall.data = result.data;
                         if (!WidgetWall.data.design)
                             WidgetWall.data.design = {};
@@ -38,7 +37,6 @@
                             $rootScope.backgroundImage = WidgetWall.data.design.backgroundImage;
                         }
 //                        getReviews();
-                        if(introductionElement) introductionElement.innerHTML = result.data.introduction;
                         setBoxShadow();
                     }
                     , error = function (err) {
@@ -332,20 +330,13 @@
                     WidgetWall.totalRating = WidgetWall.totalRating - Number(event.review.data.starRating);
                     WidgetWall.startPoints = 0;
                     WidgetWall.lastRating = 0;
-                    WidgetWall.reviews.shift();
+                    WidgetWall.reviews = WidgetWall.reviews.filter(obj => obj.id !== event.review.id);
                     if (WidgetWall.reviews.length === 0) {
                         init();
                         WidgetWall.noReviews = true;
                     }
                     $scope.$apply();
                     return;
-                }
-                if(event.scope === 'introduction'){
-                  let introductionElement = document.getElementById('introduction');
-                  if(introductionElement){
-                    introductionElement.innerHTML = event.introductionContent;
-                  }
-                  return;
                 }
                 if(event.name == "CHAT_ADDED" && event.data){
                   if(WidgetWall.currentLoggedInUser && WidgetWall.currentLoggedInUser._id && (event.data.tag ==  'chatData-' + WidgetWall.currentLoggedInUser._id)){
@@ -355,6 +346,19 @@
                 }
               }
             }
+
+            WidgetWall.safeHtml = function (html) {
+              if (html) {
+                  var $html = $('<div />', {html: html});
+                  $html.find('iframe').each(function (index, element) {
+                      var src = element.src;
+                      console.log('element is: ', src, src.indexOf('http'));
+                      src = src && src.indexOf('file://') != -1 ? src.replace('file://', 'http://') : src;
+                      element.src = src && src.indexOf('http') != -1 ? src : 'http:' + src;
+                  });
+                  return $sce.trustAsHtml($html.html());
+              }
+          };
 
         }]);
 })(window.angular, window.buildfire);

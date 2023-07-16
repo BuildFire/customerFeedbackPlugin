@@ -14,39 +14,29 @@
             "placeholder": "Average Rating"
           },
           "oneStarRating": {
-            "title": "1 Star Rating",
+            "title": "Poor",
             "defaultValue": "Poor",
             "placeholder": "Poor"
           },
           "twoStarsRating": {
-            "title": "2 Stars Rating",
+            "title": "Average",
             "defaultValue": "Average",
             "placeholder": "Average"
           },
           "threeStarsRating": {
-            "title": "3 Stars Rating",
+            "title": "Good",
             "defaultValue": "Good",
             "placeholder": "Good"
           },
           "fourStarsRating": {
-            "title": "4 Stars Rating",
+            "title": "Excellent",
             "defaultValue": "Excellent",
             "placeholder": "Excellent"
           },
           "fiveStarsRating": {
-            "title": "5 Stars Rating",
+            "title": "Outstanding",
             "defaultValue": "Outstanding",
             "placeholder": "Outstanding"
-          },
-          "typeMessagePlaceholder": {
-            "title": "Type Message Placeholder",
-            "defaultValue": "Type your message...",
-            "placeholder": "Type your message..."
-          },
-          "sendMessage": {
-            "title": "Send Message",
-            "defaultValue": "Send",
-            "placeholder": "Send"
           }
         }
       },
@@ -89,7 +79,7 @@
         "title": "Add Review Message",
         "labels": {
           "typeYourMessage": {
-            "title": "Type your message...",
+            "title": "Type Your Message",
             "defaultValue": "Type your message...",
             "placeholder": "Type your message..."
           },

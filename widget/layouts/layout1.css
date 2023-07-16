@@ -232,6 +232,7 @@
 .user-info-container .column:nth-child(2){
 	display: flex;
 	flex-direction: column;
+	width: 80%;
 }
 .user-info-container .column .user-name{
 	font-style: normal;
@@ -261,6 +262,13 @@
 	font-size: 14px;
 	line-height: 20px;
 	color: var(--bf-theme-body-text);
+	white-space: nowrap;
+    display: flex;
+}
+.user-info-container .column .reviews-number-label{
+	overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
 }
 .user-info-container .column .average-rating{
 	font-style: normal;
@@ -268,6 +276,13 @@
 	font-size: 14px;
 	line-height: 20px;
 	color: var(--bf-theme-body-text);
+	white-space: nowrap;
+    display: flex;
+}
+.user-info-container .column .average-rating-label{
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: block;
 }
 .user-info-container .column .average-rating{
 	margin: 8px 0;
@@ -320,6 +335,7 @@
 }
 
 
+
 /* comments page */
 .review-comments {
 	padding-bottom: 32px;
@@ -353,6 +369,13 @@
 	color: var(--bf-theme-body-text);
 }
 
+.rating-average-label {
+	display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 15%;
+}
 /* submit-review page */
 .submit-review{
 	padding: 16px;
@@ -369,6 +392,10 @@
 	line-height: 32px;
 	color: var(--bf-theme-header-text);
 	margin-bottom: 24px;
+	display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .submit-review .top-container .subtitle{
 	font-style: normal;
@@ -377,6 +404,10 @@
 	line-height: 20px;
 	color: var(--bf-theme-body-text);
 	margin-bottom: 12px;
+	display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* textarea */
@@ -391,6 +422,11 @@
 	position: absolute;
     top: 12px;
     left: 16px;
+	display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 90%;
 }
 .review-message-textarea{
 	height: 80%;
@@ -409,4 +445,12 @@
 	width: 187.5px;
 	height: 40px;
 	background-color: var(--bf-theme-success);
+	display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.icon-star-full{
+	font-size: 24px;
 }
