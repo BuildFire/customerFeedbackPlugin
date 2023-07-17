@@ -6,8 +6,6 @@
     <p class="margin-zero" ng-if="ContentHome.avgRating > 0">Average Rating: <span style="font-weight:400;">{{ContentHome.avgRating | number : 2}}/5</span>
     <p class="margin-zero" ng-if="ContentHome.avgRating == 0">Average Rating: <span style="font-weight:400;">{{ContentHome.avgRating}}/5</span>
     </p>
-      <!-- <div class="intro text-left">
-      </div> -->
   </div>
   <div class="item row clearfix">
     <div class="col-xs-12">
@@ -28,9 +26,9 @@
     </div>
     <div class="main col-xs-12 pull-left">
         <div style="margin-bottom: 50px; "
-             infinite-scroll-distance="1"
-             infinite-scroll="ContentHome.loadMoreItems()"
-             infinite-scroll-disabled="ContentHome.noMore">
+            infinite-scroll-distance="1"
+            infinite-scroll="ContentHome.loadMoreItems()"
+            infinite-scroll-disabled="ContentHome.noMore">
       <div class="container review-item" ng-repeat="review in ContentHome.reviews | orderBy:'-data.addedDate' | unique:'userToken'">
         <div class="row review-header">
           <div class="col-xs-2 user-image-col">

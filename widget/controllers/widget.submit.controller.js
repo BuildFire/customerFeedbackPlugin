@@ -8,11 +8,9 @@
         var WidgetSubmit = this;
         WidgetSubmit.currentView = ViewStack.getCurrentView();
         WidgetSubmit.titlebarVisibility = window.titlebarVisibility;
-        console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         /* Initialize current logged in user as null. This field is re-initialized if user is already logged in or user login user auth api.
          */
         WidgetSubmit.disabled = true;
-       // buildfire.history.push('Events', { elementToShow: 'Event' });
         WidgetSubmit.Feedback = {
           Message : "",
           starRating:"5",
@@ -71,7 +69,6 @@
 
         var loginCallback = function () {
           buildfire.auth.getCurrentUser(function (err, user) {
-            console.log("_______________________", user);
             if (user) {
               $rootScope.$broadcast(EVENTS.LOGIN);
               WidgetSubmit.currentLoggedInUser = user;
@@ -82,7 +79,6 @@
         };
 
         var logoutCallback = function () {
-//            WidgetSubmit.openLogin();
             WidgetSubmit.currentLoggedInUser = null;
           ViewStack.popAllViews();
             $rootScope.$broadcast(EVENTS.LOGOUT);
@@ -92,23 +88,16 @@
         };
 
         WidgetSubmit.save = function () {
-          // WidgetSubmit.disabled = true;
             if (WidgetSubmit.currentLoggedInUser) {
-                //  $scope.complain.data.response = "";
                 var objData = {starRating: WidgetSubmit.Feedback.starRating || 1, Message: WidgetSubmit.Feedback.Message, displayName: WidgetSubmit.currentLoggedInUser.displayName, addedDate: new Date(), userName: WidgetSubmit.currentLoggedInUser.username, userImage: WidgetSubmit.currentLoggedInUser.imageUrl }
-                console.log("++++++++++++++", objData);
                 if (WidgetSubmit.Feedback.Message) {
                     buildfire.userData.insert(objData, 'AppRatings2', function (err, data) {
                         if (err) console.error("+++++++++++++++err", JSON.stringify(err));
                         else {
                             data.userToken = WidgetSubmit.currentLoggedInUser._id;
-                            console.log('>>>>>>>>>>>>>>>>>>>', data);
                             buildfire.messaging.sendMessageToControl({'name': EVENTS.REVIEW_CREATED, 'data': data, 'lastReviewCount': ((WidgetSubmit.currentView && WidgetSubmit.currentView.params && WidgetSubmit.currentView.params.lastReviewCount) || 0)});
                             $rootScope.$broadcast(EVENTS.REVIEW_CREATED, {'data': data, 'lastReviewCount': ((WidgetSubmit.currentView && WidgetSubmit.currentView.params && WidgetSubmit.currentView.params.lastReviewCount) || 0)});
-//                      $location.path('/');
-                          // WidgetSubmit.disabled = false;
                             $scope.$apply();
-                            console.log("+++++++++++++++success");
                             $timeout(function () {
                                 ViewStack.popAllViews();
                             }, 500);
@@ -124,23 +113,6 @@
               ViewStack.popAllViews();
           }
 
-        //WidgetSubmit.update = function () {
-        //  //  $scope.complain.data.response = "";
-        //  var objData = {starRating:WidgetSubmit.Feedback.starRating, Message:WidgetSubmit.Feedback.Message, displayName: WidgetSubmit.currentLoggedInUser.displayName, addedDate: new Date(), userName:WidgetSubmit.currentLoggedInUser.username}
-        //  console.log("++++++++++++++",objData)
-        //  buildfire.userData.update(WidgetSubmit.updateId, objData, 'AppRatings2', function (e) {
-        //    if (e) console.error("+++++++++++++++err",JSON.stringify(e));
-        //    else{
-        //      $location.path('/')
-        //      $scope.$apply();
-        //      console.log("+++++++++++++++success")
-        //    }
-        //  });
-        //}
-
-
-
-        //WidgetSubmit.save();
         /**
          * onLogin() listens when user logins using buildfire.auth api.
          */
@@ -150,7 +122,6 @@
          * Check for current logged in user, if not show Login screen
          */
         buildfire.auth.getCurrentUser(function (err, user) {
-          console.log("_______________________", user);
           if (user) {
             WidgetSubmit.currentLoggedInUser = user;
             var searchData = {

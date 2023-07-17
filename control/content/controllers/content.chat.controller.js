@@ -20,15 +20,12 @@
                  * */
 
                 buildfire.auth.getCurrentUser(function (err, user) {
-                    console.log("_______________________ssss", user);
                     if (user) {
                         ContentChat.currentLoggedInUser = user;
-//                        ContentChat.getChatData();
                     }
                 });
 
                 ContentChat.getChatData = function(){
-                    console.log('inside getChatData-------------');
                     if(!ContentChat.waitAPICompletion) {
                         ContentChat.waitAPICompletion = true;
                         buildfire.userData.search({skip: skip, limit: limit}, tagName, function (err, results) {
@@ -39,13 +36,11 @@
                                 if (results.length < limit) {
                                     ContentChat.noMore = true;
                                 }
-                                console.log("++++++++++++++successsChat", results);
                                 ContentChat.chatMessageData = ContentChat.chatMessageData ? ContentChat.chatMessageData : [];
                                 ContentChat.chatMessageData = ContentChat.chatMessageData.concat(results);
                                 ContentChat.chatMessageData = $filter('unique')(ContentChat.chatMessageData, 'id');
                                 ContentChat.numberOfComments = results.length;
                                 skip = skip + results.length;
-                                //$scope.complains = results;
                                 $scope.$apply();
                             }
                             ContentChat.waitAPICompletion = false;
@@ -53,12 +48,10 @@
                     }
                 }
                  var init = function () {
-//                     ContentChat.getChatData();
                      /**
                       * Check for current logged in user, if not show ogin screen
                       */
                      buildfire.auth.getCurrentUser(function (err, user) {
-                         console.log("_______________________ssss", user);
                          if (user) {
                              ContentChat.currentLoggedInUser = user;
                          }
@@ -81,7 +74,6 @@
                                     buildfire.messaging.sendMessageToWidget({'name': EVENTS.CHAT_ADDED, 'data': result});
                                     ContentChat.chatData = '';
                                     $scope.$apply();
-//                                    $location.path('/chat/' + $routeParams.userToken);
                                 }
                             });
                     }
@@ -89,9 +81,7 @@
 
                 init();
                 buildfire.messaging.onReceivedMessage = function (event) {
-                    console.log('Content syn called method in content.home.controller called-----', event);
                     if (event) {
-                        console.log("++++++++++++", event)
                         switch (event.name) {
                             case EVENTS.CHAT_ADDED :
                                 if (event.data.data) {

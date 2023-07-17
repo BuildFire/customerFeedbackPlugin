@@ -1,113 +1,74 @@
-<div  ng-class="{'invisible-titlebar-safe-area' : state.isTitleBarVisible}" ng-controller="WidgetHomeCtrl as WidgetHome">
-<div class="holder padding-zero has-bottom sticky-bottom-menu clearfix" >
-    <div class="infinite-scroll-parent scrollable">
-    <div class="feedback-plugin review">
-        <div class="media-center-banner plugin-banner clearfix" ng-if="WidgetHome.data">
-            <div id="carousel" ng-if="WidgetHome.data.content.carouselImages.length" build-fire-carousel=""
-                 ng-style="WidgetHome.data.content.carouselImages.length > 0 ? {'min-height': (9 * deviceWidth / 16) + 'px' } : {}"></div>
-        </div>
-        <div class="padded padding-bottom-zero" ng-if="WidgetHome.showDescription(WidgetHome.data.content.description)">
-            <p ng-bind-html='WidgetHome.safeHtml(WidgetHome.data.content.description)'></p>
-        </div>
-		<div class="intro" style="box-shadow: {{state.dynamicBoxShadow}};">
-            <div class="user-info-container">
-                <div class="column">
-                    <img ng-if="!WidgetHome.currentLoggedInUser.imageUrl" src="../../../styles/media/avatar-placeholder.png" alt="user name" class="user-image">
-                    <img ng-if="WidgetHome.currentLoggedInUser.imageUrl"  load-image="1x1"
-                    crop-width="60" crop-height="60" crop-type="crop"
-                    data-final-src="{{WidgetHome.currentLoggedInUser.imageUrl}}"
-                    alt="" class="user-image">
+<div ng-class="{'invisible-titlebar-safe-area' : state.isTitleBarVisible}" ng-controller="WidgetHomeCtrl as WidgetHome">
+    <div class="holder padding-zero has-bottom sticky-bottom-menu clearfix">
+        <div class="infinite-scroll-parent scrollable">
+            <div class="feedback-plugin review">
+                <div class="media-center-banner plugin-banner clearfix" ng-if="WidgetHome.data">
+                    <div id="carousel" ng-if="WidgetHome.data.content.carouselImages.length" build-fire-carousel=""
+                        ng-style="WidgetHome.data.content.carouselImages.length > 0 ? {'min-height': (9 * deviceWidth / 16) + 'px' } : {}">
+                    </div>
                 </div>
-                <div class="column">
-                    <span class="user-name" ng-click="WidgetWall.buildfire.auth.openProfile(WidgetWall.currentLoggedInUser._id)">{{WidgetWall.currentLoggedInUser.displayName || 'No Name'}}</span>
-                    <span class="review-date">{{WidgetHome.lastReviewDate |date:'medium'}}</span>
-                    <p ng-if="WidgetHome.reviews.length"><span class="review-message" ng-bind-html="WidgetHome.lastReviewComment | newLine"></span></p>
-                    <div class="rating-stars home-rating">
-                        <div class="rating br-wrapper br-theme-css-stars" ng-if="WidgetHome.reviews.length">
-                            <!--<ng-rate-it ng-model="WidgetWall.startPoints" class="custom"  read-only = "true"></ng-rate-it>-->
-                            <average-star-rating ng-model="WidgetHome.ratingAverage" max="5"><average-star-rating>            
+                <div class="padded padding-bottom-zero"
+                    ng-if="WidgetHome.showDescription(WidgetHome.data.content.description)">
+                    <p ng-bind-html='WidgetHome.safeHtml(WidgetHome.data.content.description)'></p>
+                </div>
+                <div class="intro" style="box-shadow: {{state.dynamicBoxShadow}};">
+                    <div class="user-info-container">
+                        <div class="column">
+                            <img ng-if="!WidgetHome.currentLoggedInUser.imageUrl"
+                                src="../../../styles/media/avatar-placeholder.png" alt="user name" class="user-image">
+                            <img ng-if="WidgetHome.currentLoggedInUser.imageUrl" load-image="1x1" crop-width="60"
+                                crop-height="60" crop-type="crop"
+                                data-final-src="{{WidgetHome.currentLoggedInUser.imageUrl}}" alt="" class="user-image">
+                        </div>
+                        <div class="column">
+                            <span class="user-name"
+                                ng-click="WidgetWall.buildfire.auth.openProfile(WidgetWall.currentLoggedInUser._id)">{{WidgetWall.currentLoggedInUser.displayName
+                                || 'No Name'}}</span>
+                            <span class="review-date">{{WidgetHome.lastReviewDate |date:'medium'}}</span>
+                            <p ng-if="WidgetHome.reviews.length"><span class="review-message"
+                                    ng-bind-html="WidgetHome.lastReviewComment | newLine"></span></p>
+                            <div class="rating-stars home-rating">
+                                <div class="rating br-wrapper br-theme-css-stars" ng-if="WidgetHome.reviews.length">
+                                    <average-star-rating ng-model="WidgetHome.ratingAverage"
+                                        max="5"><average-star-rating>
+                                </div>
+                                <span class="average-rating">{{ WidgetHome.ratingAverage | number:2 }}/5
+                                    <span class="rating-average-label"
+                                        ng-if="WidgetHome.ratingAverage >= 0 && WidgetHome.ratingAverage <=1 && WidgetHome.reviews.length">({{state.strings.reviews.oneStarRating
+                                        || 'Poor'}})</span>
+                                    <span class="rating-average-label"
+                                        ng-if="WidgetHome.ratingAverage>1 && WidgetHome.ratingAverage<=2 && WidgetHome.reviews.length">({{state.strings.reviews.twoStarsRating
+                                        || 'Average'}})</span>
+                                    <span class="rating-average-label"
+                                        ng-if="WidgetHome.ratingAverage>2 && WidgetHome.ratingAverage<=3 && WidgetHome.reviews.length">({{state.strings.reviews.threeStarsRating
+                                        || 'Good'}})</span>
+                                    <span class="rating-average-label"
+                                        ng-if="WidgetHome.ratingAverage>3 && WidgetHome.ratingAverage<=4 && WidgetHome.reviews.length">({{state.strings.reviews.fourStarsRating
+                                        || 'Excellent'}})</span>
+                                    <span class="rating-average-label"
+                                        ng-if="WidgetHome.ratingAverage>4 && WidgetHome.reviews.length">({{state.strings.reviews.fiveStarsRating
+                                        || 'Outstanding'}})</span>
+                                </span>
                             </div>
-                        <span class="average-rating">{{ WidgetHome.ratingAverage | number:2 }}/5
-                            <span class="rating-average-label" ng-if="WidgetHome.ratingAverage >= 0 && WidgetHome.ratingAverage <=1 && WidgetHome.reviews.length">({{state.strings.reviews.oneStarRating || 'Poor'}})</span>
-                            <span class="rating-average-label" ng-if="WidgetHome.ratingAverage>1 && WidgetHome.ratingAverage<=2 && WidgetHome.reviews.length">({{state.strings.reviews.twoStarsRating || 'Average'}})</span>
-                            <span class="rating-average-label" ng-if="WidgetHome.ratingAverage>2 && WidgetHome.ratingAverage<=3 && WidgetHome.reviews.length">({{state.strings.reviews.threeStarsRating || 'Good'}})</span>
-                            <span class="rating-average-label" ng-if="WidgetHome.ratingAverage>3 && WidgetHome.ratingAverage<=4 && WidgetHome.reviews.length">({{state.strings.reviews.fourStarsRating || 'Excellent'}})</span>
-                            <span class="rating-average-label" ng-if="WidgetHome.ratingAverage>4 && WidgetHome.reviews.length">({{state.strings.reviews.fiveStarsRating || 'Outstanding'}})</span>
-                        </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="review-comments clearfix">
+                    <div id="top" infinite-scroll-distance="1" data-infinite-container=".infinite-scroll-parent"
+                        infinite-scroll="WidgetHome.getChatData()" infinite-scroll-disabled="WidgetHome.noMore">
+                        <div class="comment" ng-repeat="data in WidgetHome.chatMessageData | orderBy:'-data.chatTime'">
+                            <span class="user-name"
+                                ng-click="WidgetHome.buildfire.auth.openProfile(data.data.id)">{{data.data.chatFrom ||
+                                'No Name'}}</span>
+                            <span class="comment-date">{{data.data.chatTime |date:'medium'}}</span>
+                            <p class="comment-message" ng-bind-html="data.data.chatMessage | newLine"></p>
+                        </div>
                     </div>
                 </div>
             </div>
-            <!-- <p ng-if="WidgetHome.reviews.length">Rating: <span style="font-weight:400;">{{WidgetHome.lastRating}}/5</span></p>
-            <div class="rating br-wrapper br-theme-css-stars" ng-if="WidgetHome.reviews.length">
-                <average-star-rating ng-model="WidgetHome.lastRating" max="5"><average-star-rating>
-
-            </div>
-            <p ng-if="WidgetHome.lastRating >= 0 && WidgetHome.lastRating <=1 && WidgetHome.reviews.length">Poor</p>
-            <p ng-if="WidgetHome.lastRating>1 && WidgetHome.lastRating<=2 && WidgetHome.reviews.length">Average</p>
-            <p ng-if="WidgetHome.lastRating>2 && WidgetHome.lastRating<=3 && WidgetHome.reviews.length">Good</p>
-            <p ng-if="WidgetHome.lastRating>3 && WidgetHome.lastRating<=4 && WidgetHome.reviews.length">Excellent</p>
-            <p ng-if="WidgetHome.lastRating>4 && WidgetHome.reviews.length">Outstanding</p> -->
-
-            <!--<p ng-if="WidgetHome.reviews.length"><span ng-bind-html="WidgetHome.lastReviewComment | newLine"></span></p>-->
-            <!--<a class="btn btn-success btn-sm" ng-if="WidgetHome.data && WidgetHome.reviews.length" ng-click="WidgetHome.openWall()">Wall</a>-->
-            <!--<a class="btn btn-success btn-sm"  ng-if="WidgetHome.data && !WidgetHome.reviews.length" ng-click="WidgetHome.openSubmit()">Submit Review</a>-->
-
-    </div>
-        <!-- <div class="head row clearfix padding-left-ten padding-right-ten margin-bottom-fifteen" ng-if="WidgetHome.reviews">
-            <div class="col-xs-8 pull-left">
-                <div class="media-holder pull-left">
-                    <img ng-if="!WidgetHome.currentView.params.data.data.userImage" src="../../../styles/media/avatar-placeholder.png">
-                    <img ng-if="WidgetHome.currentView.params.data.data.userImage"  load-image="1x1" crop-type="crop" crop-width="60" crop-height="60" data-final-src="{{WidgetHome.currentView.params.data.data.userImage}}">
-                </div>
-                <div>
-                    <p class="text-primary ellipsis margin-bottom-zero padding-left-ten">
-                        <a class="text-primary" ng-click="WidgetWall.buildfire.auth.openProfile(WidgetHome.currentView.params.data.userToken)">{{WidgetHome.currentView.params.data.data.displayName || 'No Name'}}</a>
-                    </p>
-                    <p class="date opacity-seventy">{{WidgetHome.currentView.params.data.data.addedDate | date:'medium'}}</p>
-                </div>
-            </div>
-        </div> -->
-        <!-- todo review message -->
-        <!-- <div class="copy padding-left-ten padding-right-ten margin-bottom-fifteen"  ng-if="WidgetHome.reviews.length">
-            <p class="margin-zero"><span ng-bind-html="WidgetHome.lastReviewComment | newLine"></span></p>
-        </div> -->
-
-    <div class="review-comments clearfix" >
-        <div id="top"
-             infinite-scroll-distance="1"
-             data-infinite-container=".infinite-scroll-parent"
-             infinite-scroll="WidgetHome.getChatData()"
-             infinite-scroll-disabled="WidgetHome.noMore">
-        <div class="comment" ng-repeat = "data in WidgetHome.chatMessageData | orderBy:'-data.chatTime'">
-            <span class="user-name" ng-click="WidgetHome.buildfire.auth.openProfile(data.data.id)">{{data.data.chatFrom || 'No Name'}}</span>
-            <span class="comment-date">{{data.data.chatTime |date:'medium'}}</span>
-            <p class="comment-message" ng-bind-html="data.data.chatMessage | newLine"></p>
-            <!-- <hr class="small">
-            <div class="inner">
-                <p class="info margin-bottom-zero opacity-seventy"><a class="text-primary" ng-click="WidgetHome.buildfire.auth.openProfile(data.data.id)">{{data.data.chatFrom || 'No Name'}}</a> - {{data.data.chatTime |date:'medium'}}</p>
-                <p class="margin-bottom-zero"><span ng-bind-html="data.data.chatMessage | newLine"></span></p>
-            </div> -->
-        </div>
         </div>
     </div>
+    <div class="holder padding-zero bottom-post post-container" ng-if="WidgetHome.currentLoggedInUser">
+        <div id="sendCommentFabContainer"></div>
     </div>
-</div>
-</div>
-<!--<a ng-click="WidgetHome.goBack()">Edit</a>-->
-<div class="holder padding-zero bottom-post post-container" ng-if="WidgetHome.currentLoggedInUser">
-    <div id="sendCommentFabContainer"></div>
-
-
-
-    <!-- <hr class="small"> -->
-    <!-- <div class="post-holder clearfix">
-        <div class="add-message pull-left">
-            <textarea rows="1" cols="30" placeholder="Type your message..." name="text"
-                      ng-model="WidgetHome.chatData" class="text-area-custom"></textarea>
-        </div>
-        <div class="send-message">
-            <input type="submit"  value="Send" ng-click="WidgetHome.sendMessage()">
-        </div>
-    </div> -->
-</div>
 </div>

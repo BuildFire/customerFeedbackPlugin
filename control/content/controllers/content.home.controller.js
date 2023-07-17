@@ -6,10 +6,6 @@
     .controller('ContentHomeCtrl', ['$scope', '$location', 'Buildfire', 'DataStore', 'TAG_NAME', 'STATUS_CODE', 'EVENTS','$modal', '$rootScope',
       function ($scope, $location, Buildfire, DataStore, TAG_NAME, STATUS_CODE, EVENTS,$modal, $rootScope) {
         var _data = {
-          /*"content": {
-            "carouselImages": [],
-            "description": '<p>&nbsp;<br></p>'
-          },*/
           "design": {
             "backgroundImage": ""
           }
@@ -49,14 +45,7 @@
               ContentHome.data = result.data;
               if (!ContentHome.data || (Object.keys(ContentHome.data).length === 0 && JSON.stringify(ContentHome.data) === JSON.stringify({}))) {
                 ContentHome.data = angular.copy(_data);
-              } /*else {
-                if (!ContentHome.data.content)
-                  ContentHome.data.content = {};
-               *//* if (!ContentHome.data.content.carouselImages)
-                  editor.loadItems([]);
-                else
-                  editor.loadItems(ContentHome.data.content.carouselImages);*//*
-              }*/
+              }
               updateMasterItem(ContentHome.data);
               if (tmrDelay)clearTimeout(tmrDelay);
             }
@@ -70,11 +59,9 @@
         };
 
         ContentHome.loadMoreItems = function () {
-            console.log('inside loadMoreItems ----------');
             buildfire.userData.search({skip: skip, limit: limit}, 'AppRatings2', function (err, results) {
                 if (err) console.error("++++++++++++++ctrlerr",JSON.stringify(err));
                 else {
-                    console.log("++++++++++++++ctrl", results);
                     ContentHome.reviews = ContentHome.reviews.concat(results);
                     results.sort(function(a, b) {
                         return new Date(b.data.addedDate) - new Date(a.data.addedDate);
@@ -96,7 +83,6 @@
                     ContentHome.avgRating = elemCount ? avgRating / elemCount : 0;
                     ContentHome.totalReviews = elemCount;
                     skip = skip + results.length;
-                    console.log("ContentHome.avgRating", ContentHome.avgRating);
                     Promise.all(promises).then((res) => {
                       ContentHome.numberOfCommentsList.push(...res);
                     }).then((res)=>{
@@ -183,7 +169,6 @@
         }, saveDataWithDelay, true);
 
           Buildfire.messaging.onReceivedMessage = function (event) {
-              console.log('Content syn called method in content.home.controller called-----', event);
               if (event) {
                   switch (event.name) {
                       case EVENTS.REVIEW_CREATED :

@@ -19,7 +19,6 @@
           WidgetWall.chatCommentCount = 0;
           WidgetWall.listeners = [];
           WidgetWall.titlebarVisibility = window.titlebarVisibility;
-          console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
           /* Initialize current logged in user as null. This field is re-initialized if user is already logged in or user login user auth api.
            */
           WidgetWall.currentLoggedInUser = null;
@@ -29,15 +28,11 @@
                 WidgetWall.data = result.data;
                         if (!WidgetWall.data.design)
                             WidgetWall.data.design = {};
-                        /*if (!WidgetHome.data.content)
-                         WidgetHome.data.content = {};*/
-                        console.log("WidgetHome.data.design.backgroundImage", WidgetWall.data.design.backgroundImage);
                         if (!WidgetWall.data.design.backgroundImage) {
                             $rootScope.backgroundImage = "";
                         } else {
                             $rootScope.backgroundImage = WidgetWall.data.design.backgroundImage;
                         }
-//                        getReviews();
                     }
                     , error = function (err) {
                         console.error('Error while getting data', err);
@@ -48,8 +43,6 @@
             init();
 
             WidgetWall.getReviews = function () {
-                // buildfire.history.push('Submit Reviewsss', {});
-                console.log('Inside getReviews---------');
                 if(!WidgetWall.waitAPICompletion) {
                     WidgetWall.waitAPICompletion = true;
                   buildfire.userData.search({sort: {addedDate: -1}, skip: skip, limit: limit}, 'AppRatings2', function (err, results) {
@@ -59,21 +52,18 @@
                             $scope.$apply();
                         }
                         else {
-                            console.log("++++++++++++++ctrldd", results);
                             if (results.length < limit) {
                                 WidgetWall.noMore = true;
                             }
                             WidgetWall.reviews = WidgetWall.reviews ? WidgetWall.reviews : [];
                             WidgetWall.reviews = WidgetWall.reviews.concat(results);
                             WidgetWall.reviews = $filter('unique')(WidgetWall.reviews, 'id');
-                            //WidgetWall.lastRating = results[results.length-1].data.starRating;
                           if(results.length) {
                             WidgetWall.noReviews = false;
                             WidgetWall.reviewButtonText = "Write a Review";
                             WidgetWall.ratingsTotal = results.reduce(function (a, b) {
                               return {data: {starRating: parseFloat(a.data.starRating) + parseFloat(b.data.starRating)}}; // returns object with property x
                             });
-                            console.log("+++++++++++++++++++++SSSSSSSSSSSS", WidgetWall.reviews.length, WidgetWall.ratingsTotal.data.starRating,  WidgetWall.reviews)
                             WidgetWall.totalRating = WidgetWall.totalRating + WidgetWall.ratingsTotal.data.starRating
                             WidgetWall.startPoints =  parseFloat((WidgetWall.totalRating / (WidgetWall.reviews.length )).toFixed(2));
                             WidgetWall.lastRating = WidgetWall.reviews && WidgetWall.reviews.length && WidgetWall.reviews[WidgetWall.reviews.length - 1].data.starRating;
@@ -82,7 +72,6 @@
                             WidgetWall.noReviews = true;
                             WidgetWall.reviewButtonText = "Submit Review";
                           }
-                            //$scope.complains = results;
                             skip = skip + results.length;
                             $scope.$apply();
                         }
@@ -101,12 +90,10 @@
               buildfire.auth.login({}, function () {
 
               });
-             // $scope.$apply();
           };
 
           var loginCallback = function () {
             buildfire.auth.getCurrentUser(function (err, user) {
-              console.log("_______________________rrr", user);
               WidgetWall.waitAPICompletion = false;
               $scope.$digest();
               if (user) {
@@ -117,20 +104,16 @@
                     console.error("Error", JSON.stringify(err));
                   }
                   else {
-                    console.log("_______result", results);
                     if(results && results.length){
                       WidgetWall.chatCommentCount = results.length;
                       $scope.$digest();
                     }
                   }
                 });
-                console.log("_______________________rrr22", user);
-                  //if(!WidgetWall.reviews || !WidgetWall.reviews.length) {
-                    skip = 0;
-                    WidgetWall.startPoints = 0;
-                    WidgetWall.totalRating= 0;
-                    WidgetWall.getReviews();
-                //  }
+                  skip = 0;
+                  WidgetWall.startPoints = 0;
+                  WidgetWall.totalRating= 0;
+                  WidgetWall.getReviews();
                 $scope.$apply();
               }
             });
@@ -170,23 +153,17 @@
             init();
             if (!$scope.$$phase)
               $scope.$digest();
-          });         /* WidgetWall.goBack = function(){
-            $location.path("/submit");
-          }*/
+          });
           WidgetWall.listeners[EVENTS.LOGIN] = $rootScope.$on(EVENTS.LOGIN, function (e) {
             buildfire.auth.getCurrentUser(function (err, user) {
-              console.log("_______________________rrr", user);
               WidgetWall.waitAPICompletion = false;
               $scope.$digest();
               if (user) {
                 WidgetWall.currentLoggedInUser = user;
-                console.log("_______________________rrr22", user);
-                //if(!WidgetWall.reviews || !WidgetWall.reviews.length) {
                 skip = 0;
                 WidgetWall.startPoints = 0;
                 WidgetWall.totalRating= 0;
                 WidgetWall.getReviews();
-                //  }
                 $scope.$apply();
               }
             })
@@ -215,7 +192,6 @@
           };
 
             $rootScope.$on(EVENTS.REVIEW_CREATED, function (e, result) {
-                console.log('inside review added event listener:::::::::::', result);
               if(!WidgetWall.reviews) {
                 WidgetWall.reviews = [];
               }
@@ -226,8 +202,6 @@
                   return {data: {starRating: parseFloat(a.data.starRating) + parseFloat(b.data.starRating)}}; // returns object with property x
                 });
               WidgetWall.totalRating = WidgetWall.ratingsTotal.data.starRating;
-              console.log("+++++++++++++++++++++SSSSSSSSSSSS", WidgetWall.reviews.length, WidgetWall.ratingsTotal.data.starRating, WidgetWall.totalRating)
-
               WidgetWall.startPoints = WidgetWall.ratingsTotal.data.starRating / (WidgetWall.reviews.length );
               WidgetWall.lastRating = WidgetWall.reviews && WidgetWall.reviews.length && WidgetWall.reviews[WidgetWall.reviews.length - 1].data.starRating;
                 if (!$scope.$$phase)
@@ -245,7 +219,6 @@
            */
           buildfire.auth.getCurrentUser(function (err, user) {
               init();
-            console.log("_______________________ssss", user);
             if (user) {
               WidgetWall.currentLoggedInUser = user;
               var tagName = 'chatData-' + WidgetWall.currentLoggedInUser._id;
@@ -254,7 +227,6 @@
                   console.error("Error", JSON.stringify(err));
                 }
                 else {
-                  console.log("_______result", results);
                   if(results && results.length){
                     WidgetWall.chatCommentCount = results.length;
                     $scope.$digest();
@@ -329,7 +301,6 @@
                   var $html = $('<div />', {html: html});
                   $html.find('iframe').each(function (index, element) {
                       var src = element.src;
-                      console.log('element is: ', src, src.indexOf('http'));
                       src = src && src.indexOf('file://') != -1 ? src.replace('file://', 'http://') : src;
                       element.src = src && src.indexOf('http') != -1 ? src : 'http:' + src;
                   });
