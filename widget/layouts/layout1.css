@@ -288,7 +288,8 @@
 	margin: 8px 0;
 }
 .user-info-container .column .home-rating .average-rating{
-	margin: 0 0 8px;
+	margin: 0 0;
+	width: 60%;
 }
 .user-info-container .column .home-rating{
 	display: flex;
@@ -374,7 +375,6 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    width: 15%;
 }
 /* submit-review page */
 .submit-review{

@@ -3,8 +3,8 @@
 (function (angular) {
   angular
     .module('customerFeedbackPluginContent')
-    .controller('ContentHomeCtrl', ['$scope', '$location', 'Buildfire', 'DataStore', 'TAG_NAME', 'STATUS_CODE', 'EVENTS','$modal',
-      function ($scope, $location, Buildfire, DataStore, TAG_NAME, STATUS_CODE, EVENTS,$modal) {
+    .controller('ContentHomeCtrl', ['$scope', '$location', 'Buildfire', 'DataStore', 'TAG_NAME', 'STATUS_CODE', 'EVENTS','$modal', '$rootScope',
+      function ($scope, $location, Buildfire, DataStore, TAG_NAME, STATUS_CODE, EVENTS,$modal, $rootScope) {
         var _data = {
           /*"content": {
             "carouselImages": [],
@@ -170,9 +170,9 @@
         };
 
           ContentHome.getUrl = function (review) {
+              $rootScope.state.currentReview = review;
               ContentHome.showChat = true;
-              var encodedReview = encodeURIComponent(JSON.stringify(review));
-              $location.path('/chat/' + encodedReview);
+              $location.path('/chat/' + review.userToken);
           };
 
         /*

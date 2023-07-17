@@ -3,19 +3,18 @@
 (function (angular) {
     angular
         .module('customerFeedbackPluginContent')
-        .controller('ContentChatCtrl', ['$scope', '$routeParams', '$location', '$filter', 'Buildfire', 'TAG_NAME', 'STATUS_CODE', 'DataStore','EVENTS', '$modal',
-            function ($scope, $routeParams, $location, $filter, Buildfire, TAG_NAME, STATUS_CODE, DataStore, EVENTS, $modal) {
+        .controller('ContentChatCtrl', ['$scope','$rootScope', '$routeParams', '$location', '$filter', 'Buildfire', 'TAG_NAME', 'STATUS_CODE', 'DataStore','EVENTS', '$modal',
+            function ($scope, $rootScope, $routeParams, $location, $filter, Buildfire, TAG_NAME, STATUS_CODE, DataStore, EVENTS, $modal) {
                 var ContentChat = this;
-                var encodedReview = $routeParams.encodedReview;
-                var review = JSON.parse(decodeURIComponent(encodedReview));
-                var tagName = 'chatData-' + review.userToken;
+                var tagName = 'chatData-' + $routeParams.userId;
+                var state = $rootScope.state;
                 var skip = 0;
                 var limit = 10;
                 ContentChat.chatData = "";
                 ContentChat.noMore = false;
                 ContentChat.waitAPICompletion = false;
-                ContentChat.review = review;
                 ContentChat.numberOfComments = 0;
+                ContentChat.currentReview = state.currentReview;
                 /*
                  * Go pull any previously saved data
                  * */
@@ -75,7 +74,7 @@
                         id: ContentChat.currentLoggedInUser._id
                     }
                     if (ContentChat.chatData) {
-                            buildfire.userData.insert(ContentChat.chatMessageObj, tagName, ContentChat.review.userToken, function (err, result) {
+                            buildfire.userData.insert(ContentChat.chatMessageObj, tagName, $routeParams.userToken, function (err, result) {
                                 if (err) console.error("Error : ", JSON.stringify(err));
                                 else {
                                     ContentChat.chatMessageData.unshift(result);

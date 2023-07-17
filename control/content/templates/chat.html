@@ -8,14 +8,14 @@
     <div class="review-comments-card">
         <div class="card-header clearfix row">
             <div class="col-xs-1 col">
-                <img ng-if="!ContentChat.review.data.userImage" load-image="1x1"  data-final-src="../../../../styles/media/avatar-placeholder.png" alt="user-image" class="user-image">
-                <img ng-if="ContentChat.review.data.userImage" load-image="1x1"  data-final-src="{{ContentChat.review.data.userImage | getImageUrl : 60 : 60}}" alt="user-image" class="user-image">
+                <img ng-if="!ContentChat.currentReview.data.userImage" load-image="1x1"  data-final-src="../../../../styles/media/avatar-placeholder.png" alt="user-image" class="user-image">
+                <img ng-if="ContentChat.currentReview.data.userImage" load-image="1x1"  data-final-src="{{ContentChat.currentReview.data.userImage | getImageUrl : 60 : 60}}" alt="user-image" class="user-image">
             </div>
             <div class="col-xs-9 col">
-                <span class="user-name">{{ContentChat.review.data.displayName}}</span>
-                <span class="review-date">{{ContentChat.review.data.addedDate |date:'medium'}}</span>
+                <span class="user-name">{{ContentChat.currentReview.data.displayName}}</span>
+                <span class="review-date">{{ContentChat.currentReview.data.addedDate |date:'medium'}}</span>
                 <div class="review-rate">
-                    <ng-rate-it ng-model="ContentChat.review.data.starRating" class="custom" rated="" read-only = "true"></ng-rate-it>
+                    <ng-rate-it ng-model="ContentChat.currentReview.data.starRating" class="custom" rated="" read-only = "true"></ng-rate-it>
                 </div>
             </div>
             <div class="col-xs-2 col">
@@ -27,8 +27,8 @@
         </div>
         <div class="card-body infinite-scroll-parent scrollable" style="border: none; height: 50vh; overflow-y: auto;">
             <div class="review-details clearfix row">
-                <div class="review-message">{{ContentChat.review.data.Message}}</div>
-                <span class="delete-review-button" ng-click="ContentChat.deleteReview(ContentChat.review)">Delete Review</span>
+                <div class="review-message">{{ContentChat.currentReview.data.Message}}</div>
+                <span class="delete-review-button" ng-click="ContentChat.deleteReview(ContentChat.currentReview)">Delete Review</span>
             </div>
             <div class="clearfix row comments-details"    
             infinite-scroll-distance="1"

@@ -26,7 +26,7 @@
 
             function init() {
               var success = function (result) {
-                        WidgetWall.data = result.data;
+                WidgetWall.data = result.data;
                         if (!WidgetWall.data.design)
                             WidgetWall.data.design = {};
                         /*if (!WidgetHome.data.content)
@@ -38,7 +38,6 @@
                             $rootScope.backgroundImage = WidgetWall.data.design.backgroundImage;
                         }
 //                        getReviews();
-                        setBoxShadow();
                     }
                     , error = function (err) {
                         console.error('Error while getting data', err);
@@ -94,14 +93,6 @@
                 WidgetWall.initializedFABButton();
             };
 
-          const setBoxShadow = ()=>{
-              WidgetWall.dynamicBoxShadow = `rgba(${colorToRGBA(
-                  getComputedStyle(document.documentElement)
-                  .getPropertyValue('--bf-theme-body-text')
-                  .trim(),
-                  0.2
-              )}) 0 2px 8px`;
-          }
 
           /**
            * Method to open buildfire auth login pop up and allow user to login using credentials.
@@ -168,21 +159,6 @@
               WidgetWall.submitReview();
               $scope.$apply();
             };
-          }
-
-          const colorToRGBA = (color, opacity = 1)=> {
-              const isHexColor = (color) => /^#([A-Fa-f0-9]{3,4}){1,2}$/.test(color);
-              const getChunksFromString = (st, chunkSize) =>
-                  st.match(new RegExp(`.{${chunkSize}}`, 'g'));
-              const convertHexUnitTo256 = (hexStr) =>
-                  parseInt(hexStr.repeat(2 / hexStr.length), 16);
-      
-              if (isHexColor(color)) {
-                  const chunkSize = Math.floor((color.length - 1) / 3);
-                  const hexArr = getChunksFromString(color.slice(1), chunkSize);
-                  const [r, g, b] = hexArr.map(convertHexUnitTo256);
-                  return `${r}, ${g}, ${b},${opacity}`;
-              }
           }
 
 

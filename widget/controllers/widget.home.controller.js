@@ -8,16 +8,6 @@
         var WidgetHome = this;
         var skip = 0;
         var limit = 10;
-        let stringsKeys=[
-            'reviews.oneStarRating',
-            'reviews.twoStarsRating',
-            'reviews.threeStarsRating',
-            'reviews.fourStarsRating',
-            'reviews.fiveStarsRating',
-            'addReviewMessage.typeYourMessage',
-            'addReviewMessage.dialogSave',
-            'addReviewMessage.dialogCancel',
-        ];
         WidgetHome.chatData = "";
         WidgetHome.listeners = {};
         WidgetHome.buildfire = buildfire;
@@ -95,18 +85,8 @@
                   $scope.$digest();
           };
         
-        const getStrings = ()=>{
-            stringsKeys.forEach((key)=>{
-                buildfire.language.get({stringKey: key}, (err, result) => {
-                if (err) return console.error("Error while retrieving string value", err);
-                WidgetHome[key.split('.')[1]] = result;
-                });
-                
-            });
-        }
 
         function init() {
-            getStrings();
             var success = function (result) {
                     WidgetHome.data = result.data;
                     if (!WidgetHome.data.design)
@@ -119,7 +99,6 @@
                     } else {
                         $rootScope.backgroundImage = WidgetHome.data.design.backgroundImage;
                     }
-                    setBoxShadow();
                 }
                 , error = function (err) {
                     console.error('Error while getting data', err);
@@ -144,30 +123,6 @@
              */
             buildfire.auth.onLogin(loginCallback);
             buildfire.auth.onLogout(logoutCallback);
-        }
-
-        const setBoxShadow = ()=>{
-            WidgetHome.dynamicBoxShadow = `rgba(${colorToRGBA(
-                getComputedStyle(document.documentElement)
-                .getPropertyValue('--bf-theme-body-text')
-                .trim(),
-                0.2
-            )}) 0 2px 8px`;
-        }
-
-        const colorToRGBA = (color, opacity = 1)=> {
-            const isHexColor = (color) => /^#([A-Fa-f0-9]{3,4}){1,2}$/.test(color);
-            const getChunksFromString = (st, chunkSize) =>
-                st.match(new RegExp(`.{${chunkSize}}`, 'g'));
-            const convertHexUnitTo256 = (hexStr) =>
-                parseInt(hexStr.repeat(2 / hexStr.length), 16);
-    
-            if (isHexColor(color)) {
-                const chunkSize = Math.floor((color.length - 1) / 3);
-                const hexArr = getChunksFromString(color.slice(1), chunkSize);
-                const [r, g, b] = hexArr.map(convertHexUnitTo256);
-                return `${r}, ${g}, ${b},${opacity}`;
-            }
         }
 
         const initializedFABButton = function () {
@@ -201,9 +156,9 @@
           WidgetHome.showReviewDialog = function(){
             buildfire.input.showTextDialog(
               {
-                placeholder: WidgetHome.typeYourMessage || 'Type your message...',
-                saveText: WidgetHome.dialogSave || 'Save',
-                cancelText: WidgetHome.dialogCancel || 'Cancel',
+                placeholder: $rootScope.state.strings.addReviewMessage.typeYourMessage || 'Type your message...',
+                saveText: $rootScope.state.strings.addReviewMessage.dialogSave || 'Save',
+                cancelText: $rootScope.state.strings.addReviewMessage.dialogCancel || 'Cancel',
               },
               (err, response) => {
                 if (err) return console.error(err);

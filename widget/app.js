@@ -2,6 +2,44 @@
 
 (function (angular, buildfire) {
   angular.module('customerFeedbackPluginWidget', ['ngRoute', 'ngTouch', 'ngRateIt', 'infinite-scroll', 'ngAnimate'])
+  .run(['$rootScope', function ($rootScope) {
+        let stringsKeys=[
+            'addReview.leaveYourFeedback',
+            'addReview.yourRating',
+            'addReview.writeANote',
+            'addReview.submitReviewButton',
+            'addReview.dialogSave',
+            'addReview.dialogCancel',
+            'reviews.oneStarRating',
+            'reviews.twoStarsRating',
+            'reviews.threeStarsRating',
+            'reviews.fourStarsRating',
+            'reviews.fiveStarsRating',
+            'addReviewMessage.typeYourMessage',
+            'addReviewMessage.dialogSave',
+            'addReviewMessage.dialogCancel',
+        ];
+            
+        $rootScope.state = {
+            strings:{},
+            dynamicBoxShadow:null,
+            isTitleBarVisible:false,
+        };
+        
+        getStrings($rootScope,stringsKeys);
+
+        buildfire.appearance.titlebar.isVisible(null, (err, isVisible) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            if(!isVisible){
+                $rootScope.state.isTitleBarVisible = true;
+            }
+        });
+        
+        $rootScope.state.dynamicBoxShadow = setBoxShadow();
+    }])
     .config(['$routeProvider', '$compileProvider', function ($routeProvider, $compileProvider) {
 
       /**
@@ -197,13 +235,6 @@
           };
       })
       .run(['ViewStack', function (ViewStack) {
-        buildfire.appearance.titlebar.isVisible(null, (err, isVisible) => {
-            if (err) {
-                console.error(err);
-                return;
-            }
-            window.titlebarVisibility = isVisible;
-      });
           buildfire.navigation.onBackButtonClick = function () {
               if (ViewStack.hasViews()) {
                   ViewStack.pop();
@@ -287,8 +318,43 @@
       };
     });
 
+    const getStrings = ($rootScope,stringsKeys)=>{
+        stringsKeys.forEach((key)=>{
+            buildfire.language.get({stringKey:key}, (err, result) => {
+            if (err) return console.error("Error while retrieving string value", err);
+                let [section, property] = key.split('.');
+                if (!$rootScope.state.strings[section]) {
+                    $rootScope.state.strings[section] = {};
+                }
+                $rootScope.state.strings[section][property] = result;
+            });
+            
+        });
+    }
+    
+    const setBoxShadow = ()=>{
+        return `rgba(${colorToRGBA(
+            getComputedStyle(document.documentElement)
+            .getPropertyValue('--bf-theme-body-text')
+            .trim(),
+            0.2
+        )}) 0 2px 8px`;
+    }
 
+    const colorToRGBA = (color, opacity = 1)=> {
+        const isHexColor = (color) => /^#([A-Fa-f0-9]{3,4}){1,2}$/.test(color);
+        const getChunksFromString = (st, chunkSize) =>
+            st.match(new RegExp(`.{${chunkSize}}`, 'g'));
+        const convertHexUnitTo256 = (hexStr) =>
+            parseInt(hexStr.repeat(2 / hexStr.length), 16);
 
+        if (isHexColor(color)) {
+            const chunkSize = Math.floor((color.length - 1) / 3);
+            const hexArr = getChunksFromString(color.slice(1), chunkSize);
+            const [r, g, b] = hexArr.map(convertHexUnitTo256);
+            return `${r}, ${g}, ${b},${opacity}`;
+        }
+    }
   function starRating() {
     return {
       restrict: 'EA',

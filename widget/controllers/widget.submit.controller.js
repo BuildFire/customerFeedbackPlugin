@@ -4,17 +4,8 @@
   angular
     .module('customerFeedbackPluginWidget')
     .controller('WidgetSubmitCtrl', ['$scope','$location', '$rootScope', '$timeout', 'EVENTS', 'ViewStack',
-      function ($scope, $location, $rootScope, $timeout, EVENTS, ViewStack) {
-
+      function ($scope, $location, $rootScope, $timeout, EVENTS, ViewStack) {        
         var WidgetSubmit = this;
-        let stringsKeys=[
-          'leaveYourFeedback',
-          'yourRating',
-          'writeANote',
-          'submitReviewButton',
-          'dialogSave',
-          'dialogCancel',
-      ];
         WidgetSubmit.currentView = ViewStack.getCurrentView();
         WidgetSubmit.titlebarVisibility = window.titlebarVisibility;
         console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
@@ -30,17 +21,7 @@
         }
         WidgetSubmit.currentLoggedInUser = null;
 
-        const getStrings = ()=>{
-          stringsKeys.forEach((key)=>{
-              buildfire.language.get({stringKey: 'addReview.' + key}, (err, result) => {
-              if (err) return console.error("Error while retrieving string value", err);
-              WidgetSubmit[key] = result;
-              });
-              
-          });
-        }
 
-        getStrings();
         
         document.getElementById('submitReviewButton').value = WidgetSubmit.submitReviewButton || 'Submit';
 
@@ -66,9 +47,9 @@
           let textarea = document.getElementById('requiredReviewTextarea');
           buildfire.input.showTextDialog(
             {
-              placeholder: WidgetSubmit.writeANote || 'Write a Review',
-              saveText: WidgetSubmit.dialogSave || 'Save',
-              cancelText: WidgetSubmit.dialogCancel || 'Cancel',
+              placeholder: $rootScope.state.strings.addReview.writeANote || 'Write a Review',
+              saveText: $rootScope.state.strings.addReview.dialogSave || 'Save',
+              cancelText: $rootScope.state.strings.addReview.dialogCancel || 'Cancel',
               defaultValue: textarea.value,
             },
             (err, response) => {
