@@ -212,7 +212,7 @@
                         results.forEach(review => {
                             WidgetHome.totalRating += Number(review.data.starRating);
                         });
-                        WidgetHome.ratingAverage = WidgetHome.totalRating / results.length;
+                        WidgetHome.ratingAverage = WidgetHome.currentView.params.data.data.starRating;
                         WidgetHome.startPoints = WidgetHome.currentView.params.data.data.starRating / (WidgetHome.reviews.length )
                         WidgetHome.lastReviewComment = WidgetHome.currentView.params.data.data.Message;
                         WidgetHome.lastReviewDate = WidgetHome.currentView.params.data.data.addedDate;

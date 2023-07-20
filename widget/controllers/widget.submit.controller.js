@@ -4,7 +4,7 @@
   angular
     .module('customerFeedbackPluginWidget')
     .controller('WidgetSubmitCtrl', ['$scope','$location', '$rootScope', '$timeout', 'EVENTS', 'ViewStack',
-      function ($scope, $location, $rootScope, $timeout, EVENTS, ViewStack) {        
+      function ($scope, $location, $rootScope, $timeout, EVENTS, ViewStack) { 
         var WidgetSubmit = this;
         WidgetSubmit.currentView = ViewStack.getCurrentView();
         WidgetSubmit.titlebarVisibility = window.titlebarVisibility;

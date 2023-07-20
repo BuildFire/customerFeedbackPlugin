@@ -3,22 +3,25 @@
 (function (angular, buildfire) {
   angular.module('customerFeedbackPluginWidget', ['ngRoute', 'ngTouch', 'ngRateIt', 'infinite-scroll', 'ngAnimate'])
   .run(['$rootScope', function ($rootScope) {
-        let stringsKeys=[
-            'addReview.leaveYourFeedback',
-            'addReview.yourRating',
-            'addReview.writeANote',
-            'addReview.submitReviewButton',
-            'addReview.dialogSave',
-            'addReview.dialogCancel',
-            'reviews.oneStarRating',
-            'reviews.twoStarsRating',
-            'reviews.threeStarsRating',
-            'reviews.fourStarsRating',
-            'reviews.fiveStarsRating',
-            'addReviewMessage.typeYourMessage',
-            'addReviewMessage.dialogSave',
-            'addReviewMessage.dialogCancel',
-        ];
+    let stringsKeys = [
+        'addReview.leaveYourFeedback',
+        'addReview.yourRating',
+        'addReview.writeANote',
+        'addReview.submitReviewButton',
+        'addReview.dialogSave',
+        'addReview.dialogCancel',
+        'reviews.oneStarRating',
+        'reviews.twoStarsRating',
+        'reviews.threeStarsRating',
+        'reviews.fourStarsRating',
+        'reviews.fiveStarsRating',
+        'reviews.reviews',
+        'reviews.averageRating',
+        'addReviewMessage.typeYourMessage',
+        'addReviewMessage.dialogSave',
+        'addReviewMessage.dialogCancel',
+    ];
+    
             
         $rootScope.state = {
             strings:{},
@@ -28,6 +31,9 @@
         
         getStrings($rootScope,stringsKeys);
 
+        buildfire.appearance.titlebar.show(null, (err) => {
+            if (err) return console.error(err);
+          });       
         buildfire.appearance.titlebar.isVisible(null, (err, isVisible) => {
             if (err) {
                 console.error(err);
@@ -86,7 +92,7 @@
                               }
                               $(elem).append(parTpl);
                               views++;
-
+                              buildfire.history.push(view.template,{showLabelInTitlebar: false});
                           } else if (type === 'POP') {
                               var _elToRemove = $(elem).find('#' + view.template),
                                   _child = _elToRemove.children("div").eq(0);
@@ -96,6 +102,7 @@
                                   _elToRemove.remove();
                                   views--;
                               });
+                              buildfire.history.pop();
                           }
                           else if (type === 'POPALL') {
                               angular.forEach(view, function (value, key) {
