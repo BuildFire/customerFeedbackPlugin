@@ -92,7 +92,6 @@
                               }
                               $(elem).append(parTpl);
                               views++;
-                              buildfire.history.push(view.template,{showLabelInTitlebar: false});
                           } else if (type === 'POP') {
                               var _elToRemove = $(elem).find('#' + view.template),
                                   _child = _elToRemove.children("div").eq(0);
@@ -102,7 +101,6 @@
                                   _elToRemove.remove();
                                   views--;
                               });
-                              buildfire.history.pop();
                           }
                           else if (type === 'POPALL') {
                               angular.forEach(view, function (value, key) {
@@ -248,12 +246,22 @@
         template : "<div class='average-rating-container'>" +
         "  <ul class='rating background' class='readonly'>" +
         "    <li ng-repeat='star in stars' class='star' style='opacity:0.5;'>" +
-        "      <i class='icon-star-full'>&#9733;</i>" + //&#9733
+                `<svg width="25" height="24" viewBox="0 0 25 24" fill="var(--bf-theme-warning)" xmlns="http://www.w3.org/2000/svg">
+                    <g id="bf-icons/favourite-filled" opacity="0.5">
+                    <path id="Vector" d="M22.5 9.62105L15.31 8.96842L12.5 2L9.69 8.97895L2.5 9.62105L7.96 14.6L6.32 22L12.5 18.0737L18.68 22L17.05 14.6L22.5 9.62105Z" fill="var(--bf-theme-warning)"/>
+                    </g>
+                </svg>
+                ` + //&#9733
         "    </li>" +
         "  </ul>" +
         "  <ul class='rating foreground' class='readonly' style='width:{{filledInStarsContainerWidth}}%'>" +
         "    <li ng-repeat='star in stars' class='star filled'>" +
-        "      <i class='icon-star-full'>&#9733;</i>" + //&#9733
+                `<svg width="25" height="24" viewBox="0 0 25 24" fill="var(--bf-theme-warning)" xmlns="http://www.w3.org/2000/svg">
+                    <g id="bf-icons/favourite-filled" opacity="0.5">
+                    <path id="Vector" d="M22.5 9.62105L15.31 8.96842L12.5 2L9.69 8.97895L2.5 9.62105L7.96 14.6L6.32 22L12.5 18.0737L18.68 22L17.05 14.6L22.5 9.62105Z" fill="var(--bf-theme-warning)"/>
+                    </g>
+                </svg>
+                ` + //&#9733
         "    </li>" +
         "  </ul>" +
         "</div>",
@@ -321,7 +329,13 @@
       template:
       '<ul class="star-rating" ng-class="{readonly: readonly}">' +
       '  <li ng-repeat="star in stars" class="star" ng-class="{filled: star.filled}" ng-click="toggle($index)">' +
-      '    <i class="icon-star-full">&#9733;</i>' + // or &#9733
+      `
+        <svg width="25" height="24" viewBox="0 0 25 24" fill="var(--bf-theme-warning)" xmlns="http://www.w3.org/2000/svg">
+        <g id="bf-icons/favourite-filled" opacity="0.5">
+        <path id="Vector" d="M22.5 9.62105L15.31 8.96842L12.5 2L9.69 8.97895L2.5 9.62105L7.96 14.6L6.32 22L12.5 18.0737L18.68 22L17.05 14.6L22.5 9.62105Z" fill="var(--bf-theme-warning)"/>
+        </g>
+        </svg>
+      ` + // or &#9733
       '  </li>' +
       '</ul>',
       scope: {

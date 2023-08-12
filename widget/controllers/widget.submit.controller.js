@@ -43,6 +43,7 @@
 
          WidgetSubmit.showReviewDialog = function(){
           let textarea = document.getElementById('requiredReviewTextarea');
+          textarea.blur();
           buildfire.input.showTextDialog(
             {
               placeholder: $rootScope.state.strings.addReview.writeANote || 'Write a Review',

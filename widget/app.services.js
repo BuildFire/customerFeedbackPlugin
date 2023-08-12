@@ -58,6 +58,7 @@
                         viewMap[view.template] = 1;
                         views.push(view);
                         $rootScope.$broadcast('VIEW_CHANGED', 'PUSH', view);
+                        buildfire.history.push(view.template,{showLabelInTitlebar: false});
                     }
                     return view;
                 },
@@ -66,6 +67,7 @@
                     var view = views.pop();
                     delete viewMap[view.template];
                     $rootScope.$broadcast('VIEW_CHANGED', 'POP', view);
+                    buildfire.history.pop();
                     return view;
                 },
                 hasViews: function () {

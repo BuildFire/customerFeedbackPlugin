@@ -114,7 +114,7 @@
             buildfire.auth.onLogout(logoutCallback);
         }
 
-        const initializedFABButton = function () {
+        WidgetHome.initializedFABButton = function () {
             const fabSpeedDial = new buildfire.components.fabSpeedDial('#sendCommentFabContainer', {
               showOverlay: false,
               mainButton: {
@@ -207,7 +207,6 @@
                             $scope.$digest();
                     }
                     else {
-                        initializedFABButton();
                         WidgetHome.reviews = results || [];
                         results.forEach(review => {
                             WidgetHome.totalRating += Number(review.data.starRating);

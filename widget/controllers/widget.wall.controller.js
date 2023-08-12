@@ -19,9 +19,24 @@
           WidgetWall.chatCommentCount = 0;
           WidgetWall.listeners = [];
           WidgetWall.titlebarVisibility = window.titlebarVisibility;
+          WidgetWall.isDebouncing = false;
           /* Initialize current logged in user as null. This field is re-initialized if user is already logged in or user login user auth api.
            */
           WidgetWall.currentLoggedInUser = null;
+
+          WidgetWall.initializedFABButton = function () {
+            let fabSpeedDial = new buildfire.components.fabSpeedDial('#fabSpeedDialContainer', {
+              showOverlay: false,
+              mainButton: {
+                type: 'success',
+              },
+            });
+
+            fabSpeedDial.onMainButtonClick = event => {
+              WidgetWall.submitReview();
+              $scope.$apply();
+            };
+          }
 
             function init() {
               var success = function (result) {
@@ -38,7 +53,7 @@
                         console.error('Error while getting data', err);
                     };
                 DataStore.get(TAG_NAMES.FEEDBACK_APP_INFO).then(success, error);
-            }
+              }
 
             init();
 
@@ -79,7 +94,6 @@
                     });
 
                 }
-                WidgetWall.initializedFABButton();
             };
 
 
@@ -130,19 +144,6 @@
             WidgetWall.reviews = [];
             $scope.$digest();
           };
-          WidgetWall.initializedFABButton = function () {
-            const fabSpeedDial = new buildfire.components.fabSpeedDial('#fabSpeedDialContainer', {
-              showOverlay: false,
-              mainButton: {
-                type: 'success',
-              },
-            });
-
-            fabSpeedDial.onMainButtonClick = event => {
-              WidgetWall.submitReview();
-              $scope.$apply();
-            };
-          }
 
 
           WidgetWall.listeners[EVENTS.LOGOUT] = $rootScope.$on(EVENTS.LOGOUT, function (e) {
@@ -170,6 +171,8 @@
           });
 
           WidgetWall.submitReview = function () {
+              if(!WidgetWall.isDebouncing){
+                WidgetWall.isDebouncing = true;
                 if(WidgetWall.currentLoggedInUser) {
                     ViewStack.push({
                         template: 'submit',
@@ -180,15 +183,25 @@
                 } else {
                     WidgetWall.openLogin();
                 }
+              }
+              setTimeout(function() {
+                WidgetWall.isDebouncing = false;
+            }, 1000);
             };
 
           WidgetWall.goToChat = function (data) {
-              ViewStack.push({
-                template: 'home',
-                params: {
-                  data: data
-                }
-              });
+              if(!WidgetWall.isDebouncing){
+                WidgetWall.isDebouncing = true;
+                ViewStack.push({
+                  template: 'home',
+                  params: {
+                    data: data
+                  }
+                });
+              }
+              setTimeout(function() {
+                WidgetWall.isDebouncing = false;
+            }, 1000);
           };
 
             $rootScope.$on(EVENTS.REVIEW_CREATED, function (e, result) {
