@@ -22,7 +22,7 @@
                         </div>
                         <div class="column">
                             <span class="user-name"
-                                ng-click="WidgetWall.buildfire.auth.openProfile(WidgetWall.currentLoggedInUser._id)">{{WidgetWall.currentLoggedInUser.displayName
+                                ng-click="WidgetHome.buildfire.auth.openProfile(WidgetHome.currentLoggedInUser._id)">{{WidgetHome.currentLoggedInUser.displayName
                                 || 'No Name'}}</span>
                             <span class="review-date">{{WidgetHome.lastReviewDate |date:'medium'}}</span>
                             <p ng-if="WidgetHome.reviews.length"><span class="review-message"
@@ -32,7 +32,7 @@
                                     <average-star-rating ng-model="WidgetHome.ratingAverage"
                                         max="5"><average-star-rating>
                                 </div>
-                                <span class="average-rating">{{ WidgetHome.ratingAverage | number:2 }}/5
+                                <span class="average-rating">{{ state.getAverageRating(WidgetHome.ratingAverage) }}/5
                                     <span class="rating-average-label"
                                         ng-if="WidgetHome.ratingAverage >= 0 && WidgetHome.ratingAverage <=1 && WidgetHome.reviews.length">({{state.strings.reviews.oneStarRating
                                         || 'Poor'}})</span>

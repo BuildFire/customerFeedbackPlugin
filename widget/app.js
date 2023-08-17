@@ -24,9 +24,16 @@
     
             
         $rootScope.state = {
-            strings:{},
-            dynamicBoxShadow:null,
-            isTitleBarVisible:false,
+            strings: {},
+            dynamicBoxShadow: null,
+            isTitleBarVisible: false,
+            getAverageRating: function (averageRating) {
+                if (averageRating % 1 !== 0) {
+                    return parseFloat(Number(averageRating).toFixed(2));
+                } else {
+                    return averageRating;
+                }
+            },
         };
         
         getStrings($rootScope,stringsKeys);

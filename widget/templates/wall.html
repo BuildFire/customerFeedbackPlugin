@@ -19,7 +19,7 @@
 			<div class="column">
 				<span class="user-name" ng-click="WidgetWall.buildfire.auth.openProfile(WidgetWall.currentLoggedInUser._id)">{{WidgetWall.currentLoggedInUser.displayName || 'No Name'}}</span>
 				<span class="reviews-number"><span class="reviews-number-label">{{state.strings.reviews.reviews || 'Reviews'}}</span>: {{WidgetWall.reviews.length}}</span>
-				<span class="average-rating"><span class="average-rating-label">{{state.strings.reviews.averageRating || 'Average Rating'}}</span>: {{ WidgetWall.totalRating / (WidgetWall.reviews.length) | number:2 }}/5</span>
+				<span class="average-rating"><span class="average-rating-label">{{state.strings.reviews.averageRating || 'Average Rating'}}</span>: {{ state.getAverageRating(WidgetWall.totalRating / (WidgetWall.reviews.length)) }}/5</span>
 				<div class="rating-stars">
 					<div class="rating br-wrapper br-theme-css-stars" ng-if="WidgetWall.reviews.length">
 						<average-star-rating ng-model="WidgetWall.startPoints" max="5"></average-star-rating>
@@ -43,7 +43,7 @@
 		<div class="review-item review-container clearfix" ng-repeat = "data in WidgetWall.reviews | orderBy:'-data.addedDate'">
 			<div class="review-title">
 				<span class="review-date">{{data.data.addedDate | date:'medium'}}</span>
-				<span ng-click="WidgetWall.goToChat(data)" class="material-icons comment-icon">
+				<span ng-if="WidgetWall.chatCommentCount" ng-click="WidgetWall.goToChat(data)" class="material-icons comment-icon">
 					<svg width="25" height="24" viewBox="0 0 25 24"  xmlns="http://www.w3.org/2000/svg">
 					<g id="icons/chat">
 					<path id="Vector" d="M22.7034 22.2033L18.7034 18.2033H4.57187C3.94216 18.2033 3.40556 17.9816 2.96207 17.5381C2.51861 17.0946 2.29688 16.558 2.29688 15.9283V4.07178C2.29688 3.44206 2.51862 2.90546 2.96213 2.46198C3.40559 2.01849 3.94218 1.79675 4.5719 1.79675H20.4284C21.0581 1.79675 21.5947 2.01849 22.0382 2.46198C22.4817 2.90546 22.7034 3.44206 22.7034 4.07178V22.2033H22.7034ZM4.57187 4.07178V15.9283H19.4686L20.4284 16.8881V4.07178H4.57187Z"/>

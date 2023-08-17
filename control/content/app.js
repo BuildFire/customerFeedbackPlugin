@@ -20,7 +20,7 @@
                     controllerAs: 'ContentChat',
                     controller: 'ContentChatCtrl'
                 })
-                .when('/chat/:userId', {
+                .when('/chat/:userToken', {
                     templateUrl: 'templates/chat.html',
                     controllerAs: 'ContentChat',
                     controller: 'ContentChatCtrl'

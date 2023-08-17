@@ -6,7 +6,7 @@
         .controller('ContentChatCtrl', ['$scope','$rootScope', '$routeParams', '$location', '$filter', 'Buildfire', 'TAG_NAME', 'STATUS_CODE', 'DataStore','EVENTS', '$modal',
             function ($scope, $rootScope, $routeParams, $location, $filter, Buildfire, TAG_NAME, STATUS_CODE, DataStore, EVENTS, $modal) {
                 var ContentChat = this;
-                var tagName = 'chatData-' + $routeParams.userId;
+                var tagName = 'chatData-' + $routeParams.userToken;
                 var state = $rootScope.state;
                 var skip = 0;
                 var limit = 10;
@@ -28,7 +28,7 @@
                 ContentChat.getChatData = function(){
                     if(!ContentChat.waitAPICompletion) {
                         ContentChat.waitAPICompletion = true;
-                        buildfire.userData.search({skip: skip, limit: limit}, tagName, function (err, results) {
+                        buildfire.userData.search({}, tagName, function (err, results) {
                             if (err) {
                                 console.error("Error", JSON.stringify(err));
                             }
@@ -73,6 +73,7 @@
                                     ContentChat.chatMessageData.unshift(result);
                                     buildfire.messaging.sendMessageToWidget({'name': EVENTS.CHAT_ADDED, 'data': result});
                                     ContentChat.chatData = '';
+                                    ContentChat.numberOfComments+=1;
                                     $scope.$apply();
                                 }
                             });

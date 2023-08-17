@@ -105,7 +105,6 @@
 
               });
           };
-
           var loginCallback = function () {
             buildfire.auth.getCurrentUser(function (err, user) {
               WidgetWall.waitAPICompletion = false;
@@ -132,7 +131,6 @@
               }
             });
           };
-
 
 
           var logoutCallback = function () {

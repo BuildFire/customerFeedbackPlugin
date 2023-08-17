@@ -341,16 +341,16 @@
           });
 
           
-          function onReceivedMessage(event) {
 
-        }
         buildfire.messaging.onReceivedMessage = (event)=> {
             if (event) {
                 switch (event.name) {
                     case EVENTS.CHAT_ADDED :
-                        if (event.data && event.data.data) {
-                            WidgetHome.chatMessageData = WidgetHome.chatMessageData ? WidgetHome.chatMessageData : [];
-                            WidgetHome.chatMessageData.unshift(event.data);
+                        if(WidgetHome.currentLoggedInUser && WidgetHome.currentLoggedInUser._id && (event.data.tag ==  'chatData-' + WidgetHome.currentLoggedInUser._id)){
+                            if (event.data && event.data.data) {
+                                WidgetHome.chatMessageData = WidgetHome.chatMessageData ? WidgetHome.chatMessageData : [];
+                                WidgetHome.chatMessageData.unshift(event.data);
+                            }
                         }
                         break;
                     default :

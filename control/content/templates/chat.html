@@ -31,10 +31,8 @@
                 <span class="delete-review-button" ng-click="ContentChat.deleteReview(ContentChat.currentReview)">Delete Review</span>
             </div>
             <div class="clearfix row comments-details"    
-            infinite-scroll-distance="1"
-            data-infinite-container=".infinite-scroll-parent"
-            infinite-scroll="ContentChat.getChatData()"
-            infinite-scroll-disabled="ContentChat.noMore">
+                ng-init="ContentChat.getChatData()"
+            >
                 <div class="row comment-item" ng-repeat = "chatData in ContentChat.chatMessageData | orderBy: '-data.chatTime' ">
                     <div class="col-xs-1 col point">
                         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
