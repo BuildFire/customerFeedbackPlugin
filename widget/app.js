@@ -2,28 +2,63 @@
 
 (function (angular, buildfire) {
   angular.module('customerFeedbackPluginWidget', ['ngRoute', 'ngTouch', 'ngRateIt', 'infinite-scroll', 'ngAnimate'])
+  .run(['$rootScope', function ($rootScope) {
+    let stringsKeys = [
+        'addReview.leaveYourFeedback',
+        'addReview.yourRating',
+        'addReview.writeANote',
+        'addReview.submitReviewButton',
+        'addReview.dialogSave',
+        'addReview.dialogCancel',
+        'reviews.oneStarRating',
+        'reviews.twoStarsRating',
+        'reviews.threeStarsRating',
+        'reviews.fourStarsRating',
+        'reviews.fiveStarsRating',
+        'reviews.reviews',
+        'reviews.averageRating',
+        'addReviewMessage.typeYourMessage',
+        'addReviewMessage.dialogSave',
+        'addReviewMessage.dialogCancel',
+    ];
+    
+            
+        $rootScope.state = {
+            strings: {},
+            dynamicBoxShadow: null,
+            isTitleBarVisible: false,
+            getAverageRating: function (averageRating) {
+                if (averageRating % 1 !== 0) {
+                    return parseFloat(Number(averageRating).toFixed(2));
+                } else {
+                    return averageRating;
+                }
+            },
+        };
+        
+        getStrings($rootScope,stringsKeys);
+
+        buildfire.appearance.titlebar.show(null, (err) => {
+            if (err) return console.error(err);
+          });       
+        buildfire.appearance.titlebar.isVisible(null, (err, isVisible) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            if(!isVisible){
+                $rootScope.state.isTitleBarVisible = true;
+            }
+        });
+        
+        $rootScope.state.dynamicBoxShadow = setBoxShadow();
+    }])
     .config(['$routeProvider', '$compileProvider', function ($routeProvider, $compileProvider) {
 
       /**
        * To make href urls safe on mobile
        */
       $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|cdvfile|file):/);
-
-        /*$routeProvider
-            .when('/', {
-              templateUrl: 'templates/home.html',
-              controllerAs: 'WidgetHome',
-              controller: 'WidgetHomeCtrl'
-            }).when('/wall', {
-              templateUrl: 'templates/wall.html',
-              controllerAs: 'WidgetWall',
-              controller: 'WidgetWallCtrl'
-            }).when('/submit/:lastReviewCount?', {
-              templateUrl: 'templates/submit.html',
-              controllerAs: 'WidgetSubmit',
-              controller: 'WidgetSubmitCtrl'
-            })
-            .otherwise('/');*/
       }])
       .filter('cropImage', [function () {
           return function (url, width, height, noDefault) {
@@ -37,33 +72,6 @@
               });
           };
       }])
-      /*.run(['$rootScope', '$location', function ($rootScope, $location) {
-          buildfire.navigation.onBackButtonClick = function () {
-             // $location.path('/')
-               if($location.path()=='/submit')
-               {
-                   $location.path('/wall')
-               }else{
-                   $location.path('/')
-               }
-              console.log("=================",$location.path())
-              $rootScope.$apply();
-
-
-          };
-          //buildfire.history.onPop(function(breadcrumb) {
-          //   console.log("=====================",breadcrumb)
-          //});
-
-      }])*/
-      /*.directive("buildFireCarousel", ["$rootScope", function ($rootScope) {
-          return {
-              restrict: 'A',
-              link: function (scope, elem, attrs) {
-                  $rootScope.$broadcast("Carousel:LOADED");
-              }
-          };
-      }])*/
       .directive("viewSwitcher", ["ViewStack", "$rootScope", '$compile', "$templateCache",
           function (ViewStack, $rootScope, $compile, $templateCache) {
               return {
@@ -91,7 +99,6 @@
                               }
                               $(elem).append(parTpl);
                               views++;
-
                           } else if (type === 'POP') {
                               var _elToRemove = $(elem).find('#' + view.template),
                                   _child = _elToRemove.children("div").eq(0);
@@ -101,11 +108,8 @@
                                   _elToRemove.remove();
                                   views--;
                               });
-
-                              //$(elem).find('#' + view.template).remove();
                           }
                           else if (type === 'POPALL') {
-                              console.log(view);
                               angular.forEach(view, function (value, key) {
                                   $(elem).find('#' + value.template).remove();
                               });
@@ -145,7 +149,6 @@
                               });
                           }
                       });
-                      // img = $filter("cropImage")(value, $rootScope.deviceWidth, $rootScope.deviceHeight, true);
                   }
                   else {
                       img = "";
@@ -249,13 +252,23 @@
         restrict : "EA",
         template : "<div class='average-rating-container'>" +
         "  <ul class='rating background' class='readonly'>" +
-        "    <li ng-repeat='star in stars' class='star'>" +
-        "      <i class='icon-star'></i>" + //&#9733
+        "    <li ng-repeat='star in stars' class='star' style='opacity:0.5;'>" +
+                `<svg width="25" height="24" viewBox="0 0 25 24" fill="var(--bf-theme-warning)" xmlns="http://www.w3.org/2000/svg">
+                    <g id="bf-icons/favourite-filled" opacity="0.5">
+                    <path id="Vector" d="M22.5 9.62105L15.31 8.96842L12.5 2L9.69 8.97895L2.5 9.62105L7.96 14.6L6.32 22L12.5 18.0737L18.68 22L17.05 14.6L22.5 9.62105Z" fill="var(--bf-theme-warning)"/>
+                    </g>
+                </svg>
+                ` + //&#9733
         "    </li>" +
         "  </ul>" +
         "  <ul class='rating foreground' class='readonly' style='width:{{filledInStarsContainerWidth}}%'>" +
-        "    <li ng-repeat='star in stars' class='star primaryTheme'>" +
-        "      <i class='icon-star'></i>" + //&#9733
+        "    <li ng-repeat='star in stars' class='star filled'>" +
+                `<svg width="25" height="24" viewBox="0 0 25 24" fill="var(--bf-theme-warning)" xmlns="http://www.w3.org/2000/svg">
+                    <g id="bf-icons/favourite-filled" opacity="0.5">
+                    <path id="Vector" d="M22.5 9.62105L15.31 8.96842L12.5 2L9.69 8.97895L2.5 9.62105L7.96 14.6L6.32 22L12.5 18.0737L18.68 22L17.05 14.6L22.5 9.62105Z" fill="var(--bf-theme-warning)"/>
+                    </g>
+                </svg>
+                ` + //&#9733
         "    </li>" +
         "  </ul>" +
         "</div>",
@@ -280,15 +293,56 @@
       };
     });
 
+    const getStrings = ($rootScope,stringsKeys)=>{
+        stringsKeys.forEach((key)=>{
+            buildfire.language.get({stringKey:key}, (err, result) => {
+            if (err) return console.error("Error while retrieving string value", err);
+                let [section, property] = key.split('.');
+                if (!$rootScope.state.strings[section]) {
+                    $rootScope.state.strings[section] = {};
+                }
+                $rootScope.state.strings[section][property] = result;
+            });
+            
+        });
+    }
+    
+    const setBoxShadow = ()=>{
+        return `rgba(${colorToRGBA(
+            getComputedStyle(document.documentElement)
+            .getPropertyValue('--bf-theme-body-text')
+            .trim(),
+            0.2
+        )}) 0 2px 8px`;
+    }
 
+    const colorToRGBA = (color, opacity = 1)=> {
+        const isHexColor = (color) => /^#([A-Fa-f0-9]{3,4}){1,2}$/.test(color);
+        const getChunksFromString = (st, chunkSize) =>
+            st.match(new RegExp(`.{${chunkSize}}`, 'g'));
+        const convertHexUnitTo256 = (hexStr) =>
+            parseInt(hexStr.repeat(2 / hexStr.length), 16);
 
+        if (isHexColor(color)) {
+            const chunkSize = Math.floor((color.length - 1) / 3);
+            const hexArr = getChunksFromString(color.slice(1), chunkSize);
+            const [r, g, b] = hexArr.map(convertHexUnitTo256);
+            return `${r}, ${g}, ${b},${opacity}`;
+        }
+    }
   function starRating() {
     return {
       restrict: 'EA',
       template:
       '<ul class="star-rating" ng-class="{readonly: readonly}">' +
-      '  <li ng-repeat="star in stars" class="star" ng-class="{primaryTheme: star.filled}" ng-click="toggle($index)">' +
-      '    <i class="icon-star"></i>' + // or &#9733
+      '  <li ng-repeat="star in stars" class="star" ng-class="{filled: star.filled}" ng-click="toggle($index)">' +
+      `
+        <svg width="25" height="24" viewBox="0 0 25 24" fill="var(--bf-theme-warning)" xmlns="http://www.w3.org/2000/svg">
+        <g id="bf-icons/favourite-filled" opacity="0.5">
+        <path id="Vector" d="M22.5 9.62105L15.31 8.96842L12.5 2L9.69 8.97895L2.5 9.62105L7.96 14.6L6.32 22L12.5 18.0737L18.68 22L17.05 14.6L22.5 9.62105Z" fill="var(--bf-theme-warning)"/>
+        </g>
+        </svg>
+      ` + // or &#9733
       '  </li>' +
       '</ul>',
       scope: {

@@ -1,59 +1,69 @@
 <div class="feedback-container">
-  <div class="item clearfix row">
-    <div class="labels col-xs-2 pull-left">
-      <span>Feedback</span>
-    </div>
-    <div class="main col-xs-10 pull-right">
-      <div class="intro text-left">
-        <p class="margin-zero">Total Reviews: <span
-            style="font-weight:400;" ng-if="ContentHome.totalReviews >= 0">{{ContentHome.totalReviews}}</span></p>
+  <div class="info-note feedback-calculations">
+    <p class="margin-zero">Total Reviews: <span
+        style="font-weight:400;" ng-if="ContentHome.totalReviews >= 0">{{ContentHome.totalReviews}}</span></p>
 
-        <p class="margin-zero" ng-if="ContentHome.avgRating > 0">Average Rating: <span style="font-weight:400;">{{ContentHome.avgRating | number : 2}}/5</span>
-        <p class="margin-zero" ng-if="ContentHome.avgRating == 0">Average Rating: <span style="font-weight:400;">{{ContentHome.avgRating}}/5</span>
-        </p>
-      </div>
+    <p class="margin-zero" ng-if="ContentHome.avgRating > 0">Average Rating: <span style="font-weight:400;">{{ContentHome.avgRating | number : 2}}/5</span>
+    <p class="margin-zero" ng-if="ContentHome.avgRating == 0">Average Rating: <span style="font-weight:400;">{{ContentHome.avgRating}}/5</span>
+    </p>
+  </div>
+  <div class="item row clearfix">
+    <div class="col-xs-12">
+      <h1 class="section-title">Introduction</h1>
+      <textarea
+        id="introduction"
+        ui-tinymce
+        ng-model="ContentHome.data.introduction"
+      ></textarea>
     </div>
   </div>
   <hr class="none">
-  <div class="item clearfix row infinite-scroll-parent scrollable" style="height: 300px; overflow-y: auto;">
+  <div class="item clearfix row infinite-scroll-parent scrollable">
+    <div class="row" style="padding: 0;margin: 0;">
+      <div class="col-xs-12">
+        <h1 class="section-title">Reviews</h1>
+      </div>
+    </div>
     <div class="main col-xs-12 pull-left">
         <div style="margin-bottom: 50px; "
-             infinite-scroll-distance="1"
-             data-infinite-container=".infinite-scroll-parent"
-             infinite-scroll="ContentHome.loadMoreItems()"
-             infinite-scroll-disabled="ContentHome.noMore">
-      <div class="review-item" ng-repeat="review in ContentHome.reviews | orderBy:'-data.addedDate' | unique:'userToken'">
-        <div class="rating br-wrapper br-theme-css-stars">
-            <ng-rate-it ng-model="review.data.starRating" class="custom" rated="" read-only = "true"></ng-rate-it>
+            infinite-scroll-distance="1"
+            infinite-scroll="ContentHome.loadMoreItems()"
+            infinite-scroll-disabled="ContentHome.noMore">
+      <div class="container review-item" ng-repeat="review in ContentHome.reviews | orderBy:'-data.addedDate' | unique:'userToken'">
+        <div class="row review-header">
+          <div class="col-xs-2 user-image-col">
+            <img ng-if="!review.data.userImage" load-image="1x1" class="user-image"
+            data-final-src="../../../../styles/media/avatar-placeholder.png">
+            <img ng-if="review.data.userImage"  load-image="1x1" class="user-image"
+                  data-final-src="{{review.data.userImage | getImageUrl : 60 : 60}}">
+          </div>
+          <div class="col-xs-8 user-info-col">
+            <div class="user-name">
+              <span>{{review.data.displayName || 'No Name'}}</span>
+            </div>
+            <div class="review-date">
+              <span>{{review.data.addedDate |date:'medium'}}</span>
+            </div>
+            <div class="rating br-wrapper br-theme-css-stars">
+              <ng-rate-it ng-model="review.data.starRating" class="custom" rated="" read-only = "true"></ng-rate-it>
+          </div>
+          </div>
+          <div class="col-xs-2 comments-col">
+            <span class=""><span class="icon icon-bubble"></span></span>
+            <span class="number-of-comments">{{review.numberOfComments || '0'}}</span>
+          </div>
         </div>
-
-        <p><span ng-bind-html="review.data.Message | newLine"></span> <span class="pull-right dlt-review" ng-click="ContentHome.deleteReview(review, $index)">Delete Review</span></p>
-          <div class="item clearfix row">
-              <div class="col-xs-8 pull-left text-left">
-                  <p class="author no-icon info padding-zero margin-zero">
-                      <!--<img src="http://www.placehold.it/100x100" ng-if="!review.data.userImage">-->
-                      <!--<img ng-src="{{review.data.userImage}}" ng-if="review.data.userImage">-->
-                      <img ng-if="!review.data.userImage" load-image="1x1"
-                           data-final-src="../../../../styles/media/avatar-placeholder.png">
-                      <img ng-if="review.data.userImage"  load-image="1x1"
-                           data-final-src="{{review.data.userImage | getImageUrl : 60 : 60}}">
-                      <a class="text-primary">{{review.data.displayName || 'No Name'}}</a> - {{review.data.addedDate |date:'medium'}}
-                  </p>
-              </div>
-              <div class="col-xs-4 pull-right text-right">
-                  <a class="text-primary no-decoration margin-left-twenty" ng-click="ContentHome.getUrl(review.userToken)"><span class="icon icon-bubble"></span></a>
-              </div>
+        <div class="row" style="padding-top: 16px;">
+          <div class="col-xs-12">
+            <p class="review-message">{{review.data.Message}}</p>
           </div>
-
-          <!--<div class="col-md-6 pull-right text-right">
-              <a class="text-primary" ng-click="ContentHome.getUrl(review.userToken)">Comments</a>
+        </div>
+        <div class="row review-action-row">
+          <div class="col-xs-12 review-action-col">
+            <span class="pull-right dlt-review" ng-click="ContentHome.deleteReview(review, $index)">Delete Review</span>
+            <span class="pull-right dlt-review text-primary" ng-click="ContentHome.getUrl(review)">Show Comments</span>
           </div>
-
-        <p class="author info padding-zero margin-zero">
-          <img src="http://www.placehold.it/100x100" ng-if="!review.data.userImage">
-          <img ng-src="{{review.data.userImage}}" ng-if="review.data.userImage">
-          {{review.data.displayName}} on {{review.data.addedDate |date:'medium'}}
-        </p>-->
+        </div>
       </div>
       </div>
     </div>

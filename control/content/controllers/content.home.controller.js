@@ -3,13 +3,9 @@
 (function (angular) {
   angular
     .module('customerFeedbackPluginContent')
-    .controller('ContentHomeCtrl', ['$scope', '$location', 'Buildfire', 'DataStore', 'TAG_NAME', 'STATUS_CODE', 'EVENTS','$modal',
-      function ($scope, $location, Buildfire, DataStore, TAG_NAME, STATUS_CODE, EVENTS,$modal) {
+    .controller('ContentHomeCtrl', ['$scope', '$location', 'Buildfire', 'DataStore', 'TAG_NAME', 'STATUS_CODE', 'EVENTS','$modal', '$rootScope',
+      function ($scope, $location, Buildfire, DataStore, TAG_NAME, STATUS_CODE, EVENTS,$modal, $rootScope) {
         var _data = {
-          /*"content": {
-            "carouselImages": [],
-            "description": '<p>&nbsp;<br></p>'
-          },*/
           "design": {
             "backgroundImage": ""
           }
@@ -28,6 +24,7 @@
         ContentHome.showChat = false;
         ContentHome.noMore = false;
         ContentHome.reviews = [];
+        ContentHome.numberOfCommentsList =[];
 
         updateMasterItem(_data);
 
@@ -48,14 +45,7 @@
               ContentHome.data = result.data;
               if (!ContentHome.data || (Object.keys(ContentHome.data).length === 0 && JSON.stringify(ContentHome.data) === JSON.stringify({}))) {
                 ContentHome.data = angular.copy(_data);
-              } /*else {
-                if (!ContentHome.data.content)
-                  ContentHome.data.content = {};
-               *//* if (!ContentHome.data.content.carouselImages)
-                  editor.loadItems([]);
-                else
-                  editor.loadItems(ContentHome.data.content.carouselImages);*//*
-              }*/
+              }
               updateMasterItem(ContentHome.data);
               if (tmrDelay)clearTimeout(tmrDelay);
             }
@@ -69,11 +59,9 @@
         };
 
         ContentHome.loadMoreItems = function () {
-            console.log('inside loadMoreItems ----------');
             buildfire.userData.search({skip: skip, limit: limit}, 'AppRatings2', function (err, results) {
                 if (err) console.error("++++++++++++++ctrlerr",JSON.stringify(err));
                 else {
-                    console.log("++++++++++++++ctrl", results);
                     ContentHome.reviews = ContentHome.reviews.concat(results);
                     results.sort(function(a, b) {
                         return new Date(b.data.addedDate) - new Date(a.data.addedDate);
@@ -81,21 +69,54 @@
                     if (results.length < limit ) {
                         ContentHome.noMore = true;
                     }
+                    let promises = [];
                     results.forEach(function (result) {
                         if (uniqueTokens.indexOf(result.userToken) == -1) {
-                            uniqueTokens.push(result.userToken);
-                            uniqueReviews.push(result);
-                            elemCount = elemCount + 1;
-                            avgRating = avgRating + parseInt(result.data.starRating);
+                          uniqueTokens.push(result.userToken);
+                          uniqueReviews.push(result);
+                          elemCount = elemCount + 1;
+                          avgRating = avgRating + parseInt(result.data.starRating);
+                          promises.push(getCommentsCount(result.userToken));
                         }
                     });
+                    
                     ContentHome.avgRating = elemCount ? avgRating / elemCount : 0;
                     ContentHome.totalReviews = elemCount;
                     skip = skip + results.length;
-                    console.log("ContentHome.avgRating", ContentHome.avgRating);
-                    $scope.$apply();
+                    Promise.all(promises).then((res) => {
+                      ContentHome.numberOfCommentsList.push(...res);
+                    }).then((res)=>{
+                      results.forEach(function (result) {
+                        let numberOfComments =
+                        ContentHome.numberOfCommentsList.find(
+                            (item) =>
+                                item.userToken === result.userToken
+                        )?.numberOfComments || 0;
+                        ContentHome.reviews.forEach((item) => {
+                            if (item.userToken === result.userToken) {
+                                item.numberOfComments = numberOfComments;
+                            }
+                        });
+                      });
+                    }).then(()=>{
+                      $scope.$apply();
+                    });
+                    
                 }
             });
+        };
+
+        const getCommentsCount = function (userToken) {
+          return new Promise((resolve, reject) => {
+            buildfire.userData.search({ recordCount:true }, 'chatData-' + userToken, function (err, results) {
+              if (err) {
+                reject("Error", JSON.stringify(err));
+              }
+              else {
+                  resolve({userToken, numberOfComments: results.totalRecord});
+              }
+          });
+        });
         };
 
         /*
@@ -134,9 +155,10 @@
           }
         };
 
-          ContentHome.getUrl = function (userToken) {
+          ContentHome.getUrl = function (review) {
+              $rootScope.state.currentReview = review;
               ContentHome.showChat = true;
-              $location.path('/chat/' + userToken);
+              $location.path('/chat/' + review.userToken);
           };
 
         /*
@@ -147,12 +169,17 @@
         }, saveDataWithDelay, true);
 
           Buildfire.messaging.onReceivedMessage = function (event) {
-              console.log('Content syn called method in content.home.controller called-----', event);
               if (event) {
                   switch (event.name) {
                       case EVENTS.REVIEW_CREATED :
                           if (event.data) {
                               ContentHome.reviews.push(event.data);
+                              let reviewItem = ContentHome.numberOfCommentsList.find(
+                                (item) =>
+                                item.userToken === event.data.userToken);
+                                if(reviewItem) {
+                                  event.data.numberOfComments = reviewItem.numberOfComments
+                                }; 
                               if (uniqueTokens.indexOf(event.data.userToken) == -1) {
                                   uniqueTokens.push(event.data.userToken);
                                   uniqueReviews.push(event.data);
@@ -163,6 +190,14 @@
                                   ContentHome.avgRating = ((ContentHome.avgRating * ContentHome.totalReviews) - parseInt(event.lastReviewCount) + parseInt(event.data.data.starRating)) / ContentHome.totalReviews;
                           }
                           break;
+                      case EVENTS.CHAT_ADDED :
+                          if(event.data){
+                            let reviewItem = ContentHome.reviews.find(
+                              (item) =>
+                              item.userToken === event.data.data.id);
+                              if(reviewItem) reviewItem.numberOfComments +=1; 
+                            }
+                          break;   
                       default :
                           break;
                   }
@@ -185,8 +220,12 @@
                   if(err)
                   console.log("Error occured while deleting review:", err);
                   else{
-                    ContentHome.reviews.splice(index, 1);
+                    ContentHome.reviews.pop();
                     $scope.$digest();
+                    buildfire.messaging.sendMessageToWidget({
+                      scope: "removeReview",
+                      review: review,
+                    });
                   }
                 });
               }
@@ -195,6 +234,7 @@
             });
           }
         };
+
         init();
       }]);
 })(window.angular);

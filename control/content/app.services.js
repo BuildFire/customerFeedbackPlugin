@@ -14,6 +14,10 @@
         get: function (_tagName) {
           var deferred = $q.defer();
           Buildfire.datastore.get(_tagName, function (err, result) {
+            if (!result || !result.data || !result.data.introduction || Object.keys(result.data).length === 0) {
+              result.data.introduction = '';
+              buildfire.datastore.save(result, _tagName);
+            }
             if (err) {
               return deferred.reject(err);
             } else if (result) {

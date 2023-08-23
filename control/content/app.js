@@ -2,6 +2,11 @@
 
 (function (angular) {
     angular.module('customerFeedbackPluginContent', ['ngRoute', 'ui.tinymce', 'ui.bootstrap', 'ngRateIt', 'infinite-scroll'])
+        .run(['$rootScope', function($rootScope){
+            $rootScope.state={
+                currentReview: null
+            }
+        }])
         //injected ngRoute for routing
         .config(['$routeProvider', function ($routeProvider) {
             $routeProvider

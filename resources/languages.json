@@ -1,0 +1,99 @@
+{
+    "sections": {
+      "reviews": {
+        "title": "Reviews",
+        "labels": {
+          "reviews": {
+            "title": "Reviews",
+            "defaultValue": "Reviews",
+            "placeholder": "Reviews"
+          },
+          "averageRating": {
+            "title": "Average Rating",
+            "defaultValue": "Average Rating",
+            "placeholder": "Average Rating"
+          },
+          "oneStarRating": {
+            "title": "Poor",
+            "defaultValue": "Poor",
+            "placeholder": "Poor"
+          },
+          "twoStarsRating": {
+            "title": "Average",
+            "defaultValue": "Average",
+            "placeholder": "Average"
+          },
+          "threeStarsRating": {
+            "title": "Good",
+            "defaultValue": "Good",
+            "placeholder": "Good"
+          },
+          "fourStarsRating": {
+            "title": "Excellent",
+            "defaultValue": "Excellent",
+            "placeholder": "Excellent"
+          },
+          "fiveStarsRating": {
+            "title": "Outstanding",
+            "defaultValue": "Outstanding",
+            "placeholder": "Outstanding"
+          }
+        }
+      },
+      "addReview": {
+        "title": "Add Review",
+        "labels": {
+          "leaveYourFeedback": {
+            "title": "Leave Your Feedback",
+            "defaultValue": "Leave Your Feedback",
+            "placeholder": "Leave Your Feedback"
+          },
+          "yourRating": {
+            "title": "Your Rating",
+            "defaultValue": "Your Rating",
+            "placeholder": "Your Rating"
+          },
+          "writeANote": {
+            "title": "Write a Note",
+            "defaultValue": "Write a Note",
+            "placeholder": "Write a Note"
+          },
+          "submitReviewButton": {
+            "title": "Submit",
+            "defaultValue": "Submit",
+            "placeholder": "Submit"
+          },
+          "dialogSave":{
+            "title":"Save",
+            "defaultValue":"Save",
+            "placeholder":"Save"
+          },
+          "dialogCancel":{
+            "title":"Cancel",
+            "defaultValue":"Cancel",
+            "placeholder":"Cancel"
+          }
+        }
+      },
+      "addReviewMessage": {
+        "title": "Add Review Message",
+        "labels": {
+          "typeYourMessage": {
+            "title": "Type Your Message",
+            "defaultValue": "Type your message...",
+            "placeholder": "Type your message..."
+          },
+          "dialogSave":{
+            "title":"Save",
+            "defaultValue":"Save",
+            "placeholder":"Save"
+          },
+          "dialogCancel":{
+            "title":"Cancel",
+            "defaultValue":"Cancel",
+            "placeholder":"Cancel"
+          }
+        }
+      }
+    }
+  }

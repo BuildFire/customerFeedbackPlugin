@@ -1,17 +1,41 @@
+.feedback-calculations{
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.section-title {
+    font-size: 21px;
+    font-weight: bold;
+    color: #000;
+    padding-top: .875rem;
+    margin-bottom: 1.5rem;
+    margin-top: 0;
+}
+
+.section-title::before {
+    display: block;
+    content: '';
+    height: .25rem;
+    width: 3.5rem;
+    margin-bottom: .875rem;
+    background-color: #000;
+}
+
+.content .section-header {
+    margin-bottom: 20px;
+}
+
 .review-item{
     border-radius:3px;
-    border:1px solid #ddd;
-    padding:15px;
+    border: 1px solid #DDDDDD;
+    border-radius: 4px;
+    width: 100% !important;
+    margin: 0;
+    padding-bottom: 16px;
 }
-.review-item:nth-child(even){
-    background:#eef0f0;
-}
-.review-item:nth-child(even) .comment{
-    text-align:left;
-}
-.review-item:nth-child(even) .well{
-    background:#fff;
-}
+
 .review-item .well .comment{
     text-align:left;
 }
@@ -81,16 +105,7 @@
 .holder.bottom-post .post-holder{
     position:relative;
 }
-.holder.bottom-post .post-holder .add-message{
-    width:100%;
-    padding:0 49px 0 5px;
-}
-.holder.bottom-post .post-holder .add-message input{
-    border:none;
-    padding:8px 6px;
-    line-height:21px;
-    height:100%;
-}
+
 .holder.bottom-post .post-holder .add-media{
     position:absolute;
     left:0px;
@@ -114,38 +129,6 @@
     width:49px;
     height:100%;
 }
-.holder.bottom-post .post-holder .send-message input{
-    border:none;
-    background:none;
-    height:100%;
-}
-.holder.has-bottom{
-    padding-bottom:37px !important;
-}
-
-/* Review Template */
-.review .comment .inner{
-    padding:5px 15px 2px;
-}
-.review .review-comments .comment:first-child > hr.small{
-    margin-top:-5px;
-}
-.review .comment p.info{
-    font-size:12px;
-}
-.review .review-comments .comment:nth-child(even){
-    text-align:right;
-}
-.holder.has-bottom .review .review-comments .comment:last-child{
-    margin-bottom:12px;
-}
-
-.sticky-bottom-menu {
-    position: absolute;
-    width: 100% ;
-    height: 100%;
-    overflow-y: auto;
-}
 .icon-bubble {
     font-size: 18px;
 }
@@ -156,4 +139,243 @@
 .dlt-review {
     color: red;
     cursor: pointer;
+}
+
+.review-item .row{
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+.review-item .review-header{
+    background: #F2F2F2;
+    padding: 12px 16px;
+    gap: 8px;
+}
+.review-item .user-image-col{
+    display: flex;
+    padding: 0;
+    width: auto !important;
+}
+.review-item .user-image-col .user-image{
+    width: 48px;
+    height: 48px;
+    border-radius: 100%;
+}
+
+.review-item .user-info-col{
+    padding-left: 4px;
+}
+.review-item .user-info-col .user-name span{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #5F5F5F;
+}
+.review-item .user-info-col .review-date span{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 20px;
+    color: #AFAFAF;
+}
+.review-item .comments-col{
+    display: flex;
+    padding: 0;
+    justify-content: flex-end;
+    align-items: center;
+    flex: auto;
+    margin: auto 0;
+    gap: 5px;
+}
+
+.review-item .review-message{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 20px;
+    color: #5F5F5F;
+}
+
+.review-item .review-action-col{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/*  chat page style  */
+.review-comments-container,
+.close-button-container{
+    padding: 0 8px 0 0;
+}
+.review-comments-container .row,
+.close-button-container .row{
+    padding: 0;
+    margin: 0;
+}
+.review-comments-container .review-comments-card{
+    border-radius: 4px;
+    border: 1px solid #DDD;
+}
+.review-comments-container .review-comments-card .card-header{
+    display: flex;
+    padding: 12px 16px;
+    align-items: center;
+    border-radius: 3px 3px 0px 0px;
+    background: #F2F2F2;
+}
+.review-comments-container .review-comments-card  .col{
+    padding: 0;
+}
+.review-comments-container .review-comments-card .card-header .col:nth-child(2){
+    padding-left: 8px;
+}
+.review-comments-container .review-comments-card .card-header .user-image{
+    width: 48px;
+    height: 48px;
+    border-radius: 100%;
+}
+.review-comments-container .review-comments-card .card-header .user-name{
+    color:#5F5F5F;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+}
+.review-comments-container .review-comments-card .card-header .review-date{
+    color: #AFAFAF;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+}
+.review-comments-container .review-comments-card .card-header .comments-count{
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+    justify-content: flex-end;
+    align-items: flex-start;
+}
+
+.review-comments-container .review-comments-card .card-body .review-details{
+    padding: 16px;
+}
+.review-comments-container .review-comments-card .card-body .review-details .review-message{
+    margin-bottom: 24px;
+    color: #5F5F5F;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+}
+.review-comments-container .review-comments-card .card-body .review-details .delete-review-button{
+    color:#ED4B4B;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    cursor: pointer;
+}
+
+.review-comments-container .review-comments-card .card-body .comments-details{
+    display: flex;
+    flex-direction: column;
+}
+.review-comments-container .review-comments-card .card-body .comments-details .comment-item{
+    border-top: 1px solid #DDD;
+    padding: 16px;
+}
+.review-comments-container .review-comments-card .card-body .comments-details .comment-item .point{
+    width: auto;
+    margin-right: 16px;
+}
+.review-comments-container .review-comments-card .card-body .comments-details .comment-item .comment-item-content{
+    display: flex;
+    flex-direction: column;
+}
+
+.review-comments-container .review-comments-card .card-body .comments-details .comment-item .comment-item-content .comment-user-name{
+    color:#5F5F5F;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+}
+.review-comments-container .review-comments-card .card-body .comments-details .comment-item .comment-item-content .comment-date{
+    color: #AFAFAF;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 14px;  
+}
+.review-comments-container .review-comments-card .card-body .comments-details .comment-item .comment-item-content .comment-content{
+    color:#5F5F5F;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+}
+.review-comments-container .review-comments-card .card-footer {
+    display: flex;
+    flex-direction: row;
+    padding: 30px 8px 8px;
+}
+.review-comments-container .review-comments-card .card-footer .comment-input{
+    border-end-end-radius: 0;
+    border-start-end-radius: 0;
+    border-right: none;
+    
+}
+.review-comments-container .review-comments-card .card-footer .comment-input:focus{
+    border-color: #dddddd;
+}
+.review-comments-container .review-comments-card .card-footer .send-comment-btn{
+    border-radius: 0px 4px 4px 0px;
+    border: 1px solid #14CB5D;
+    color: #14CB5D;
+    background-color: transparent;
+    width: 93px;
+    height: 34px;
+}
+.review-comments-container .review-comments-card .card-footer .send-comment-btn:hover{
+    background-color: #14CB5D;
+    color: #FFF;
+}
+.review-comments-container .review-comments-card .card-footer .send-comment-btn:disabled{
+    opacity: 0.3;
+}
+
+/* breadcrumb */
+.review-comments-container .breadcrumb{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+.review-comments-container .breadcrumb li:last-child a{
+    color: #000 !important;
+    margin-left: 11px;
+}
+.close-button-container{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+.close-button-container .row{
+    position: fixed;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    bottom: 0;
+    left: 0;
+    background-color: var(--c-white);
+    padding-top: 0.75rem;
+    box-shadow: 0 -0.125rem 0.5rem rgba(0, 0, 0, .1);
+}
+.close-button-container .row a{
+    border-radius: 4px;
+    border: 1px solid #DDD;
+    background-color: transparent;
+    width: 10rem;
+    color: #000;
 }
