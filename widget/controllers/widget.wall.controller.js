@@ -13,7 +13,7 @@
           WidgetWall.waitAPICompletion = false;
           WidgetWall.noMore = false;
           WidgetWall.buildfire = buildfire;
-          WidgetWall.noReviews = true;
+          WidgetWall.noReviews = false;
           WidgetWall.reviewButtonText = "";
           WidgetWall.totalRating = 0;
           WidgetWall.chatCommentCount = 0;
@@ -63,6 +63,7 @@
                   buildfire.userData.search({sort: {addedDate: -1}, skip: skip, limit: limit}, 'AppRatings2', function (err, results) {
                         if (err) {
                             console.error("++++++++++++++ctrlerrddd", JSON.stringify(err));
+                            WidgetWall.noReviews = true;
                             $location.path('/');
                             $scope.$apply();
                         }

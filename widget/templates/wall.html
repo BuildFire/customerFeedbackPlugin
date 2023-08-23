@@ -8,7 +8,7 @@
 </script>
 <div class="holder padding-zero wall-page" ng-class="{'invisible-titlebar-safe-area' : state.isTitleBarVisible}" ng-controller="WidgetWallCtrl as WidgetWall">
 	<div class="feedback-plugin review-wall">
-		<div ng-if="!WidgetWall.noReviews"  class="user-info-container" ng-class="{'invisible-titlebar-safe-area':window.isTitlebarVisible}" style="box-shadow: {{state.dynamicBoxShadow}};">
+		<div ng-if="!WidgetWall.noReviews && WidgetWall.reviews.length"  class="user-info-container" ng-class="{'invisible-titlebar-safe-area':window.isTitlebarVisible}" style="box-shadow: {{state.dynamicBoxShadow}};">
 			<div class="column">
 				<img ng-if="!WidgetWall.currentLoggedInUser.imageUrl" src="../../../styles/media/avatar-placeholder.png" alt="user name" class="user-image">
 				<img ng-if="WidgetWall.currentLoggedInUser.imageUrl"  load-image="1x1"
@@ -28,7 +28,7 @@
 			</div>
 		</div>
 		<div>
-			<div  ng-if="WidgetWall.noReviews" class="no-event-found padded">
+			<div  ng-if="WidgetWall.noReviews" class="padded">
 				<div id="introduction" ng-bind-html="WidgetWall.safeHtml(WidgetWall.data.introduction)" ></div>
 				<div class="empty-box-container">
 					<img src="../../../styles/media/empty.svg" alt="">

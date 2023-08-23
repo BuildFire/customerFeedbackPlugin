@@ -372,12 +372,10 @@
     padding-top: 0.75rem;
     box-shadow: 0 -0.125rem 0.5rem rgba(0, 0, 0, .1);
 }
-.close-button-container .row button{
+.close-button-container .row a{
     border-radius: 4px;
     border: 1px solid #DDD;
     background-color: transparent;
     width: 10rem;
-}
-.close-button-container .row button a{
     color: #000;
 }

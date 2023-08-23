@@ -9,7 +9,7 @@
                 var tagName = 'chatData-' + $routeParams.userToken;
                 var state = $rootScope.state;
                 var skip = 0;
-                var limit = 10;
+                var limit = 50;
                 ContentChat.chatData = "";
                 ContentChat.noMore = false;
                 ContentChat.waitAPICompletion = false;
@@ -28,7 +28,7 @@
                 ContentChat.getChatData = function(){
                     if(!ContentChat.waitAPICompletion) {
                         ContentChat.waitAPICompletion = true;
-                        buildfire.userData.search({}, tagName, function (err, results) {
+                        buildfire.userData.search({skip: skip, limit: limit}, tagName, function (err, results) {
                             if (err) {
                                 console.error("Error", JSON.stringify(err));
                             }
@@ -39,7 +39,7 @@
                                 ContentChat.chatMessageData = ContentChat.chatMessageData ? ContentChat.chatMessageData : [];
                                 ContentChat.chatMessageData = ContentChat.chatMessageData.concat(results);
                                 ContentChat.chatMessageData = $filter('unique')(ContentChat.chatMessageData, 'id');
-                                ContentChat.numberOfComments = results.length;
+                                ContentChat.numberOfComments += results.length;
                                 skip = skip + results.length;
                                 $scope.$apply();
                             }
