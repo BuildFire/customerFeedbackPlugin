@@ -108,12 +108,12 @@
 
         const getCommentsCount = function (userToken) {
           return new Promise((resolve, reject) => {
-            buildfire.userData.search({}, 'chatData-' + userToken, function (err, results) {
+            buildfire.userData.search({ recordCount:true }, 'chatData-' + userToken, function (err, results) {
               if (err) {
-                 reject("Error", JSON.stringify(err));
+                reject("Error", JSON.stringify(err));
               }
               else {
-                  resolve({userToken, numberOfComments: results.length});
+                  resolve({userToken, numberOfComments: results.totalRecord});
               }
           });
         });

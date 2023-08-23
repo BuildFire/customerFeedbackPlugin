@@ -28,19 +28,19 @@
                 ContentChat.getChatData = function(){
                     if(!ContentChat.waitAPICompletion) {
                         ContentChat.waitAPICompletion = true;
-                        buildfire.userData.search({skip: skip, limit: limit}, tagName, function (err, results) {
+                        buildfire.userData.search({skip: skip, limit: limit, recordCount:true}, tagName, function (err, comments) {
                             if (err) {
                                 console.error("Error", JSON.stringify(err));
                             }
                             else {
-                                if (results.length < limit) {
+                                if (comments.result.length < limit) {
                                     ContentChat.noMore = true;
                                 }
                                 ContentChat.chatMessageData = ContentChat.chatMessageData ? ContentChat.chatMessageData : [];
-                                ContentChat.chatMessageData = ContentChat.chatMessageData.concat(results);
+                                ContentChat.chatMessageData = ContentChat.chatMessageData.concat(comments.result);
                                 ContentChat.chatMessageData = $filter('unique')(ContentChat.chatMessageData, 'id');
-                                ContentChat.numberOfComments += results.length;
-                                skip = skip + results.length;
+                                ContentChat.numberOfComments = comments.totalRecord;
+                                skip = skip + comments.result.length;
                                 $scope.$apply();
                             }
                             ContentChat.waitAPICompletion = false;
