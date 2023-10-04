@@ -1,7 +1,7 @@
 {
   "author":"Buildfire"
 ,"pluginName":"Customer Feedback"
-,"pluginDescription":"Listen to your customers' honest feedback through a star rating system and custom commenting. Customer feedback is critical in gaining insight and creating better processes whether own a restaurant, small business, school, consulting, or any other type of company."
+,"pluginDescription":"Gather user feedback, engage with customers, and improve your app"
 ,"pluginKeywords":"feedback,review,rating,stars,comment"
 ,"supportEmail":"support@buildfire.com"
 ,"supportSite":"https://learn.buildfire.com/en/articles/1695373-customer-feedback-tutorial"
@@ -34,6 +34,31 @@
 
 },
   "features" : [],
-  "media": [{ "type": "image-resource", "path": "image.gif" }],
-  "languages" : ["en"]
+  "languages" : ["en"],
+  "media": [
+    {
+      "type": "image-resource",
+      "path": "1-Plugin.png"
+    },
+    {
+      "type": "image-resource",
+      "path": "2-Benefits.png"
+    },
+    {
+      "type": "image-resource",
+      "path": "3-Use-Cases.png"
+    },
+    {
+      "type": "image-resource",
+      "path": "4-Content-Tab.png"
+    },
+    {
+      "type": "image-resource",
+      "path": "5-Analytics-Tab.png"
+    },
+    {
+      "type": "youtube-video",
+      "path": "https://www.youtube.com/watch?v=zO-6cVvIBbI"
+    }
+  ]
 }
