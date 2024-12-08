@@ -19,9 +19,9 @@
     "enabled": true,
     "languageJsonPath": "resources/languages.json"
   },
-  "cssInjection": { 
+  "cssInjection": {
       "enabled": true,
-      "layouts": [ 
+      "layouts": [
         {
             "name": "Layout 1",
             "imageUrl": "resources/layouts_img/layout1.png",
