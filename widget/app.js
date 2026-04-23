@@ -38,9 +38,6 @@
         
         getStrings($rootScope,stringsKeys);
 
-        buildfire.appearance.titlebar.show(null, (err) => {
-            if (err) return console.error(err);
-          });       
         buildfire.appearance.titlebar.isVisible(null, (err, isVisible) => {
             if (err) {
                 console.error(err);

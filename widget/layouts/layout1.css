@@ -1,6 +1,5 @@
 .invisible-titlebar-safe-area {
-    padding-top: calc(30px + constant(safe-area-inset-top)) !important;
-    padding-top: calc(30px + env(safe-area-inset-top)) !important;
+    padding-top: calc(30px + var(--bf-safe-area-inset-top)) !important;
 }
 
 .wall-page{
