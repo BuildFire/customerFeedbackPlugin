@@ -14,11 +14,8 @@
         var ContentHome = this;
         var skip = 0;
         var limit = 15;
-        var inProgress = false;
           var uniqueTokens = [];
           var uniqueReviews = [];
-          var avgRating = 0;
-          var elemCount = 0;
         ContentHome.avgRating = 0;
         ContentHome.totalReviews = 0;
         ContentHome.masterData = null;
@@ -26,6 +23,7 @@
         ContentHome.noMore = false;
         ContentHome.reviews = [];
         ContentHome.numberOfCommentsList =[];
+        ContentHome.inProgress = false;
 
         updateMasterItem(_data);
 
@@ -93,10 +91,10 @@
         };
 
         ContentHome.loadMoreItems = function () {
-            if (inProgress) return;
-            inProgress = true;
-            buildfire.userData.search({skip: skip, limit: limit}, 'AppRatings2', function (err, results) {
-                inProgress = false;
+            if (ContentHome.inProgress) return;
+            ContentHome.inProgress = true;
+            Buildfire.userData.search({skip: skip, limit: limit}, 'AppRatings2', function (err, results) {
+                ContentHome.inProgress = false;
                 if (err) console.error("++++++++++++++ctrlerr",JSON.stringify(err));
                 else {
                     ContentHome.reviews = ContentHome.reviews.concat(results);
@@ -108,8 +106,6 @@
                     }
                     let promises = [];
                     results.forEach(function (result) {
-                        elemCount = elemCount + 1;
-                        avgRating = avgRating + parseInt(result.data.starRating);
                         if (uniqueTokens.indexOf(result.userToken) == -1) {
                           uniqueTokens.push(result.userToken);
                           uniqueReviews.push(result);

@@ -30,7 +30,7 @@
           <div infinite-scroll-distance="1"
               data-infinite-container=".reviews-scroll-container"
               infinite-scroll="ContentHome.loadMoreItems()"
-              infinite-scroll-disabled="ContentHome.noMore">
+              infinite-scroll-disabled="ContentHome.noMore || ContentHome.inProgress">
       <div class="container review-item" ng-repeat="review in ContentHome.reviews track by $index">
         <div class="row review-header">
           <div class="col-xs-2 user-image-col">
