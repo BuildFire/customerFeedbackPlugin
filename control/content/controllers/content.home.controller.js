@@ -14,6 +14,7 @@
         var ContentHome = this;
         var skip = 0;
         var limit = 15;
+        var inProgress = false;
           var uniqueTokens = [];
           var uniqueReviews = [];
           var avgRating = 0;
@@ -56,10 +57,46 @@
               }
             };
             DataStore.get(TAG_NAME.FEEDBACK_APP_INFO).then(success, error);
+            getTotalReviewsAndAverageCount();
+            ContentHome.loadMoreItems();
+        };
+
+        const getTotalReviewsAndAverageCount = function () {
+          Buildfire.userData.aggregate(
+            {
+              pipelineStages: [
+                {
+                  $match: {
+                    "_buildfire.index.string1": { $exists: false }
+                  }
+                },
+                {
+                  "$group": {
+                      "_id": null,
+                      "totalReviews": { "$sum": 1 },
+                      "avgRating": {
+                          "$avg": "$starRating"
+                      }
+                  }
+               }
+              ]
+            },
+            'AppRatings2',
+            function (err, result) {
+              if (err) return console.error('Error aggregating reviews:', JSON.stringify(err));
+              var summary = result && result[0];
+              ContentHome.totalReviews = summary ? summary.totalReviews : 0;
+              ContentHome.avgRating = summary ? summary.avgRating : 0;
+              if (!$scope.$$phase) $scope.$apply();
+            }
+          );
         };
 
         ContentHome.loadMoreItems = function () {
+            if (inProgress) return;
+            inProgress = true;
             buildfire.userData.search({skip: skip, limit: limit}, 'AppRatings2', function (err, results) {
+                inProgress = false;
                 if (err) console.error("++++++++++++++ctrlerr",JSON.stringify(err));
                 else {
                     ContentHome.reviews = ContentHome.reviews.concat(results);
@@ -71,17 +108,15 @@
                     }
                     let promises = [];
                     results.forEach(function (result) {
+                        elemCount = elemCount + 1;
+                        avgRating = avgRating + parseInt(result.data.starRating);
                         if (uniqueTokens.indexOf(result.userToken) == -1) {
                           uniqueTokens.push(result.userToken);
                           uniqueReviews.push(result);
-                          elemCount = elemCount + 1;
-                          avgRating = avgRating + parseInt(result.data.starRating);
                           promises.push(getCommentsCount(result.userToken));
                         }
                     });
                     
-                    ContentHome.avgRating = elemCount ? avgRating / elemCount : 0;
-                    ContentHome.totalReviews = elemCount;
                     skip = skip + results.length;
                     Promise.all(promises).then((res) => {
                       ContentHome.numberOfCommentsList.push(...res);
@@ -183,11 +218,8 @@
                               if (uniqueTokens.indexOf(event.data.userToken) == -1) {
                                   uniqueTokens.push(event.data.userToken);
                                   uniqueReviews.push(event.data);
-                                  ContentHome.avgRating = ((ContentHome.avgRating * ContentHome.totalReviews) + parseInt(event.data.data.starRating))/(ContentHome.totalReviews + 1);
-                                  elemCount = elemCount + 1;
-                                  ContentHome.totalReviews = elemCount;
-                              } else
-                                  ContentHome.avgRating = ((ContentHome.avgRating * ContentHome.totalReviews) - parseInt(event.lastReviewCount) + parseInt(event.data.data.starRating)) / ContentHome.totalReviews;
+                              }
+                              getTotalReviewsAndAverageCount();
                           }
                           break;
                       case EVENTS.CHAT_ADDED :

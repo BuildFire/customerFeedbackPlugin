@@ -25,11 +25,13 @@
       </div>
     </div>
     <div class="main col-xs-12 pull-left">
-        <div style="margin-bottom: 50px; "
-            infinite-scroll-distance="1"
-            infinite-scroll="ContentHome.loadMoreItems()"
-            infinite-scroll-disabled="ContentHome.noMore">
-      <div class="container review-item" ng-repeat="review in ContentHome.reviews | orderBy:'-data.addedDate' | unique:'userToken'">
+        <div style="margin-bottom: 50px; max-height: 500px; overflow-y: auto;"
+            class="padding-right-fifteen margin-right-fifteen reviews-scroll-container">
+          <div infinite-scroll-distance="1"
+              data-infinite-container=".reviews-scroll-container"
+              infinite-scroll="ContentHome.loadMoreItems()"
+              infinite-scroll-disabled="ContentHome.noMore">
+      <div class="container review-item" ng-repeat="review in ContentHome.reviews track by $index">
         <div class="row review-header">
           <div class="col-xs-2 user-image-col">
             <img ng-if="!review.data.userImage" load-image="1x1" class="user-image"
@@ -62,6 +64,7 @@
           <div class="col-xs-12 review-action-col">
             <span class="pull-right dlt-review" ng-click="ContentHome.deleteReview(review, $index)">Delete Review</span>
             <span class="pull-right dlt-review text-primary" ng-click="ContentHome.getUrl(review)">Show Comments</span>
+         </div>
           </div>
         </div>
       </div>
