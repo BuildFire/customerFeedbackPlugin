@@ -3,8 +3,8 @@
 (function (angular) {
   angular
     .module('customerFeedbackPluginContent')
-    .controller('ContentHomeCtrl', ['$scope', '$location', 'Buildfire', 'DataStore', 'TAG_NAME', 'STATUS_CODE', 'EVENTS','$modal', '$rootScope',
-      function ($scope, $location, Buildfire, DataStore, TAG_NAME, STATUS_CODE, EVENTS,$modal, $rootScope) {
+    .controller('ContentHomeCtrl', ['$scope', '$location', 'Buildfire', 'DataStore', 'TAG_NAME', 'STATUS_CODE', 'EVENTS','$modal', '$rootScope', 'Reviews', 'Comments',
+      function ($scope, $location, Buildfire, DataStore, TAG_NAME, STATUS_CODE, EVENTS,$modal, $rootScope, Reviews, Comments) {
         var _data = {
           "design": {
             "backgroundImage": ""
@@ -13,11 +13,9 @@
 
         var ContentHome = this;
         var skip = 0;
-        var limit = 15;
+        var limit = 10;
           var uniqueTokens = [];
           var uniqueReviews = [];
-          var avgRating = 0;
-          var elemCount = 0;
         ContentHome.avgRating = 0;
         ContentHome.totalReviews = 0;
         ContentHome.masterData = null;
@@ -25,6 +23,7 @@
         ContentHome.noMore = false;
         ContentHome.reviews = [];
         ContentHome.numberOfCommentsList =[];
+        ContentHome.isFetching = false;
 
         updateMasterItem(_data);
 
@@ -56,67 +55,66 @@
               }
             };
             DataStore.get(TAG_NAME.FEEDBACK_APP_INFO).then(success, error);
+            getTotalReviewsAndAverageCount();
+            ContentHome.loadMoreItems();
+        };
+
+        const getTotalReviewsAndAverageCount = function () {
+          Reviews.getSummary().then(function (summary) {
+            ContentHome.totalReviews = summary.totalReviews;
+            ContentHome.avgRating = summary.avgRating;
+          }, function (err) {
+            console.error('Error aggregating reviews:', JSON.stringify(err));
+          });
         };
 
         ContentHome.loadMoreItems = function () {
-            buildfire.userData.search({skip: skip, limit: limit}, 'AppRatings2', function (err, results) {
-                if (err) console.error("++++++++++++++ctrlerr",JSON.stringify(err));
-                else {
-                    ContentHome.reviews = ContentHome.reviews.concat(results);
-                    results.sort(function(a, b) {
-                        return new Date(b.data.addedDate) - new Date(a.data.addedDate);
-                    });
-                    if (results.length < limit ) {
-                        ContentHome.noMore = true;
+            if (ContentHome.isFetching) return;
+            ContentHome.isFetching = true;
+            Reviews.search({skip: skip, limit: limit, sort: {addedDate: -1}}).then(function (results) {
+                ContentHome.reviews = ContentHome.reviews.concat(results);
+                if (results.length < limit ) {
+                    ContentHome.noMore = true;
+                }
+                let promises = [];
+                results.forEach(function (result) {
+                    if (uniqueTokens.indexOf(result.userToken) == -1) {
+                      uniqueTokens.push(result.userToken);
+                      uniqueReviews.push(result);
+                      promises.push(getCommentsCount(result.userToken));
                     }
-                    let promises = [];
-                    results.forEach(function (result) {
-                        if (uniqueTokens.indexOf(result.userToken) == -1) {
-                          uniqueTokens.push(result.userToken);
-                          uniqueReviews.push(result);
-                          elemCount = elemCount + 1;
-                          avgRating = avgRating + parseInt(result.data.starRating);
-                          promises.push(getCommentsCount(result.userToken));
+                });
+
+                skip = skip + results.length;
+                ContentHome.isFetching = false;
+                Promise.all(promises).then((res) => {
+                  ContentHome.numberOfCommentsList.push(...res);
+                }).then((res)=>{
+                  results.forEach(function (result) {
+                    let numberOfComments =
+                    ContentHome.numberOfCommentsList.find(
+                        (item) =>
+                            item.userToken === result.userToken
+                    )?.numberOfComments || 0;
+                    ContentHome.reviews.forEach((item) => {
+                        if (item.userToken === result.userToken) {
+                            item.numberOfComments = numberOfComments;
                         }
                     });
-                    
-                    ContentHome.avgRating = elemCount ? avgRating / elemCount : 0;
-                    ContentHome.totalReviews = elemCount;
-                    skip = skip + results.length;
-                    Promise.all(promises).then((res) => {
-                      ContentHome.numberOfCommentsList.push(...res);
-                    }).then((res)=>{
-                      results.forEach(function (result) {
-                        let numberOfComments =
-                        ContentHome.numberOfCommentsList.find(
-                            (item) =>
-                                item.userToken === result.userToken
-                        )?.numberOfComments || 0;
-                        ContentHome.reviews.forEach((item) => {
-                            if (item.userToken === result.userToken) {
-                                item.numberOfComments = numberOfComments;
-                            }
-                        });
-                      });
-                    }).then(()=>{
-                      $scope.$apply();
-                    });
-                    
-                }
+                  });
+                }).then(()=>{
+                  $scope.$apply();
+                });
+            }, function (err) {
+                console.error("++++++++++++++ctrlerr",JSON.stringify(err));
+                ContentHome.isFetching = false;
             });
         };
 
         const getCommentsCount = function (userToken) {
-          return new Promise((resolve, reject) => {
-            buildfire.userData.search({ recordCount:true }, 'chatData-' + userToken, function (err, results) {
-              if (err) {
-                reject("Error", JSON.stringify(err));
-              }
-              else {
-                  resolve({userToken, numberOfComments: results.totalRecord});
-              }
+          return Comments.getCount(userToken).then(function (numberOfComments) {
+            return { userToken: userToken, numberOfComments: numberOfComments };
           });
-        });
         };
 
         /*
@@ -161,6 +159,14 @@
               $location.path('/chat/' + review.userToken);
           };
 
+          function resetState() {
+            skip = 0;
+            ContentHome.reviews = [];
+            uniqueTokens = [];
+            uniqueReviews = [];
+            ContentHome.numberOfCommentsList = [];
+          }
+
         /*
          * watch for changes in data and trigger the saveDataWithDelay function on change
          * */
@@ -173,21 +179,9 @@
                   switch (event.name) {
                       case EVENTS.REVIEW_CREATED :
                           if (event.data) {
-                              ContentHome.reviews.push(event.data);
-                              let reviewItem = ContentHome.numberOfCommentsList.find(
-                                (item) =>
-                                item.userToken === event.data.userToken);
-                                if(reviewItem) {
-                                  event.data.numberOfComments = reviewItem.numberOfComments
-                                }; 
-                              if (uniqueTokens.indexOf(event.data.userToken) == -1) {
-                                  uniqueTokens.push(event.data.userToken);
-                                  uniqueReviews.push(event.data);
-                                  ContentHome.avgRating = ((ContentHome.avgRating * ContentHome.totalReviews) + parseInt(event.data.data.starRating))/(ContentHome.totalReviews + 1);
-                                  elemCount = elemCount + 1;
-                                  ContentHome.totalReviews = elemCount;
-                              } else
-                                  ContentHome.avgRating = ((ContentHome.avgRating * ContentHome.totalReviews) - parseInt(event.lastReviewCount) + parseInt(event.data.data.starRating)) / ContentHome.totalReviews;
+                              resetState();
+                              ContentHome.loadMoreItems();
+                              getTotalReviewsAndAverageCount();
                           }
                           break;
                       case EVENTS.CHAT_ADDED :
@@ -216,17 +210,15 @@
             });
             modalInstance.result.then(function (message) {
               if (message === 'yes') {
-                buildfire.userData.delete(review.id, 'AppRatings2',review.userToken, function (err, result) {
-                  if(err)
+                Reviews.remove(review.id, review.userToken).then(function (result) {
+                  ContentHome.reviews.splice(index, 1);
+                  buildfire.messaging.sendMessageToWidget({
+                    scope: "removeReview",
+                    review: review,
+                  });
+                  getTotalReviewsAndAverageCount();
+                }, function (err) {
                   console.log("Error occured while deleting review:", err);
-                  else{
-                    ContentHome.reviews.pop();
-                    $scope.$digest();
-                    buildfire.messaging.sendMessageToWidget({
-                      scope: "removeReview",
-                      review: review,
-                    });
-                  }
                 });
               }
             }, function (data) {

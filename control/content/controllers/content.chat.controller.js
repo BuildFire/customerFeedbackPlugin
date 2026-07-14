@@ -3,10 +3,9 @@
 (function (angular) {
     angular
         .module('customerFeedbackPluginContent')
-        .controller('ContentChatCtrl', ['$scope','$rootScope', '$routeParams', '$location', '$filter', 'Buildfire', 'TAG_NAME', 'STATUS_CODE', 'DataStore','EVENTS', '$modal',
-            function ($scope, $rootScope, $routeParams, $location, $filter, Buildfire, TAG_NAME, STATUS_CODE, DataStore, EVENTS, $modal) {
+        .controller('ContentChatCtrl', ['$scope','$rootScope', '$routeParams', '$location', '$filter', 'Buildfire', 'TAG_NAME', 'STATUS_CODE', 'DataStore','EVENTS', '$modal', 'Reviews', 'Comments',
+            function ($scope, $rootScope, $routeParams, $location, $filter, Buildfire, TAG_NAME, STATUS_CODE, DataStore, EVENTS, $modal, Reviews, Comments) {
                 var ContentChat = this;
-                var tagName = 'chatData-' + $routeParams.userToken;
                 var state = $rootScope.state;
                 var skip = 0;
                 var limit = 50;
@@ -28,21 +27,18 @@
                 ContentChat.getChatData = function(){
                     if(!ContentChat.waitAPICompletion) {
                         ContentChat.waitAPICompletion = true;
-                        buildfire.userData.search({skip: skip, limit: limit, recordCount:true}, tagName, function (err, comments) {
-                            if (err) {
-                                console.error("Error", JSON.stringify(err));
+                        Comments.search($routeParams.userToken, {skip: skip, limit: limit, recordCount:true}).then(function (comments) {
+                            if (comments.result.length < limit) {
+                                ContentChat.noMore = true;
                             }
-                            else {
-                                if (comments.result.length < limit) {
-                                    ContentChat.noMore = true;
-                                }
-                                ContentChat.chatMessageData = ContentChat.chatMessageData ? ContentChat.chatMessageData : [];
-                                ContentChat.chatMessageData = ContentChat.chatMessageData.concat(comments.result);
-                                ContentChat.chatMessageData = $filter('unique')(ContentChat.chatMessageData, 'id');
-                                ContentChat.numberOfComments = comments.totalRecord;
-                                skip = skip + comments.result.length;
-                                $scope.$apply();
-                            }
+                            ContentChat.chatMessageData = ContentChat.chatMessageData ? ContentChat.chatMessageData : [];
+                            ContentChat.chatMessageData = ContentChat.chatMessageData.concat(comments.result);
+                            ContentChat.chatMessageData = $filter('unique')(ContentChat.chatMessageData, 'id');
+                            ContentChat.numberOfComments = comments.totalRecord;
+                            skip = skip + comments.result.length;
+                            ContentChat.waitAPICompletion = false;
+                        }, function (err) {
+                            console.error("Error", JSON.stringify(err));
                             ContentChat.waitAPICompletion = false;
                         });
                     }
@@ -67,15 +63,13 @@
                         id: ContentChat.currentLoggedInUser._id
                     }
                     if (ContentChat.chatData) {
-                            buildfire.userData.insert(ContentChat.chatMessageObj, tagName, $routeParams.userToken, function (err, result) {
-                                if (err) console.error("Error : ", JSON.stringify(err));
-                                else {
-                                    ContentChat.chatMessageData.unshift(result);
-                                    buildfire.messaging.sendMessageToWidget({'name': EVENTS.CHAT_ADDED, 'data': result});
-                                    ContentChat.chatData = '';
-                                    ContentChat.numberOfComments+=1;
-                                    $scope.$apply();
-                                }
+                            Comments.insert($routeParams.userToken, ContentChat.chatMessageObj).then(function (result) {
+                                ContentChat.chatMessageData.unshift(result);
+                                buildfire.messaging.sendMessageToWidget({'name': EVENTS.CHAT_ADDED, 'data': result});
+                                ContentChat.chatData = '';
+                                ContentChat.numberOfComments+=1;
+                            }, function (err) {
+                                console.error("Error : ", JSON.stringify(err));
                             });
                     }
                 }
@@ -109,27 +103,21 @@
                         modalInstance.result.then(
                             function (message) {
                                 if (message === 'yes') {
-                                    buildfire.userData.delete(
-                                        review.id,
-                                        'AppRatings2',
-                                        review.userToken,
-                                        function (err, result) {
-                                            if (err)
-                                                console.log(
-                                                    'Error occured while deleting review:',
-                                                    err
-                                                );
-                                            else {
-                                                $scope.$digest();
-                                                $location.path('/');
-                                                buildfire.messaging.sendMessageToWidget(
-                                                    {
-                                                        scope: 'removeReview',
-                                                        review: review,
-                                                    }
-                                                );
-                                                $scope.$apply();
-                                            }
+                                    Reviews.remove(review.id, review.userToken).then(
+                                        function (result) {
+                                            $location.path('/');
+                                            buildfire.messaging.sendMessageToWidget(
+                                                {
+                                                    scope: 'removeReview',
+                                                    review: review,
+                                                }
+                                            );
+                                        },
+                                        function (err) {
+                                            console.log(
+                                                'Error occured while deleting review:',
+                                                err
+                                            );
                                         }
                                     );
                                 }
