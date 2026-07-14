@@ -7,7 +7,9 @@
         CHAT_ADDED: "CHAT_ADDED"
        })
         .constant('TAG_NAME', {
-            FEEDBACK_APP_INFO: "FeedbackAppInfo"
+            FEEDBACK_APP_INFO: "FeedbackAppInfo",
+            REVIEWS: "AppRatings2",
+            CHAT_PREFIX: "chatData-"
         })
         .constant('STATUS_CODE', {
             INSERTED: 'inserted',

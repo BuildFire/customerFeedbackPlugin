@@ -3,8 +3,8 @@
 (function (angular) {
   angular
     .module('customerFeedbackPluginContent')
-    .controller('ContentHomeCtrl', ['$scope', '$location', 'Buildfire', 'DataStore', 'TAG_NAME', 'STATUS_CODE', 'EVENTS','$modal', '$rootScope',
-      function ($scope, $location, Buildfire, DataStore, TAG_NAME, STATUS_CODE, EVENTS,$modal, $rootScope) {
+    .controller('ContentHomeCtrl', ['$scope', '$location', 'Buildfire', 'DataStore', 'TAG_NAME', 'STATUS_CODE', 'EVENTS','$modal', '$rootScope', 'Reviews', 'Comments',
+      function ($scope, $location, Buildfire, DataStore, TAG_NAME, STATUS_CODE, EVENTS,$modal, $rootScope, Reviews, Comments) {
         var _data = {
           "design": {
             "backgroundImage": ""
@@ -13,7 +13,7 @@
 
         var ContentHome = this;
         var skip = 0;
-        var limit = 15;
+        var limit = 10;
           var uniqueTokens = [];
           var uniqueReviews = [];
         ContentHome.avgRating = 0;
@@ -23,7 +23,7 @@
         ContentHome.noMore = false;
         ContentHome.reviews = [];
         ContentHome.numberOfCommentsList =[];
-        ContentHome.inProgress = false;
+        ContentHome.isFetching = false;
 
         updateMasterItem(_data);
 
@@ -60,94 +60,61 @@
         };
 
         const getTotalReviewsAndAverageCount = function () {
-          Buildfire.userData.aggregate(
-            {
-              pipelineStages: [
-                {
-                  $match: {
-                    "_buildfire.index.string1": { $exists: false }
-                  }
-                },
-                {
-                  "$group": {
-                      "_id": null,
-                      "totalReviews": { "$sum": 1 },
-                      "avgRating": {
-                          "$avg": "$starRating"
-                      }
-                  }
-               }
-              ]
-            },
-            'AppRatings2',
-            function (err, result) {
-              if (err) return console.error('Error aggregating reviews:', JSON.stringify(err));
-              var summary = result && result[0];
-              ContentHome.totalReviews = summary ? summary.totalReviews : 0;
-              ContentHome.avgRating = summary ? summary.avgRating : 0;
-              if (!$scope.$$phase) $scope.$apply();
-            }
-          );
+          Reviews.getSummary().then(function (summary) {
+            ContentHome.totalReviews = summary.totalReviews;
+            ContentHome.avgRating = summary.avgRating;
+          }, function (err) {
+            console.error('Error aggregating reviews:', JSON.stringify(err));
+          });
         };
 
         ContentHome.loadMoreItems = function () {
-            if (ContentHome.inProgress) return;
-            ContentHome.inProgress = true;
-            Buildfire.userData.search({skip: skip, limit: limit}, 'AppRatings2', function (err, results) {
-                ContentHome.inProgress = false;
-                if (err) console.error("++++++++++++++ctrlerr",JSON.stringify(err));
-                else {
-                    ContentHome.reviews = ContentHome.reviews.concat(results);
-                    results.sort(function(a, b) {
-                        return new Date(b.data.addedDate) - new Date(a.data.addedDate);
-                    });
-                    if (results.length < limit ) {
-                        ContentHome.noMore = true;
+            if (ContentHome.isFetching) return;
+            ContentHome.isFetching = true;
+            Reviews.search({skip: skip, limit: limit, sort: {addedDate: -1}}).then(function (results) {
+                ContentHome.reviews = ContentHome.reviews.concat(results);
+                if (results.length < limit ) {
+                    ContentHome.noMore = true;
+                }
+                let promises = [];
+                results.forEach(function (result) {
+                    if (uniqueTokens.indexOf(result.userToken) == -1) {
+                      uniqueTokens.push(result.userToken);
+                      uniqueReviews.push(result);
+                      promises.push(getCommentsCount(result.userToken));
                     }
-                    let promises = [];
-                    results.forEach(function (result) {
-                        if (uniqueTokens.indexOf(result.userToken) == -1) {
-                          uniqueTokens.push(result.userToken);
-                          uniqueReviews.push(result);
-                          promises.push(getCommentsCount(result.userToken));
+                });
+
+                skip = skip + results.length;
+                ContentHome.isFetching = false;
+                Promise.all(promises).then((res) => {
+                  ContentHome.numberOfCommentsList.push(...res);
+                }).then((res)=>{
+                  results.forEach(function (result) {
+                    let numberOfComments =
+                    ContentHome.numberOfCommentsList.find(
+                        (item) =>
+                            item.userToken === result.userToken
+                    )?.numberOfComments || 0;
+                    ContentHome.reviews.forEach((item) => {
+                        if (item.userToken === result.userToken) {
+                            item.numberOfComments = numberOfComments;
                         }
                     });
-                    
-                    skip = skip + results.length;
-                    Promise.all(promises).then((res) => {
-                      ContentHome.numberOfCommentsList.push(...res);
-                    }).then((res)=>{
-                      results.forEach(function (result) {
-                        let numberOfComments =
-                        ContentHome.numberOfCommentsList.find(
-                            (item) =>
-                                item.userToken === result.userToken
-                        )?.numberOfComments || 0;
-                        ContentHome.reviews.forEach((item) => {
-                            if (item.userToken === result.userToken) {
-                                item.numberOfComments = numberOfComments;
-                            }
-                        });
-                      });
-                    }).then(()=>{
-                      $scope.$apply();
-                    });
-                    
-                }
+                  });
+                }).then(()=>{
+                  $scope.$apply();
+                });
+            }, function (err) {
+                console.error("++++++++++++++ctrlerr",JSON.stringify(err));
+                ContentHome.isFetching = false;
             });
         };
 
         const getCommentsCount = function (userToken) {
-          return new Promise((resolve, reject) => {
-            buildfire.userData.search({ recordCount:true }, 'chatData-' + userToken, function (err, results) {
-              if (err) {
-                reject("Error", JSON.stringify(err));
-              }
-              else {
-                  resolve({userToken, numberOfComments: results.totalRecord});
-              }
+          return Comments.getCount(userToken).then(function (numberOfComments) {
+            return { userToken: userToken, numberOfComments: numberOfComments };
           });
-        });
         };
 
         /*
@@ -244,17 +211,14 @@
             });
             modalInstance.result.then(function (message) {
               if (message === 'yes') {
-                buildfire.userData.delete(review.id, 'AppRatings2',review.userToken, function (err, result) {
-                  if(err)
+                Reviews.remove(review.id, review.userToken).then(function (result) {
+                  ContentHome.reviews.pop();
+                  buildfire.messaging.sendMessageToWidget({
+                    scope: "removeReview",
+                    review: review,
+                  });
+                }, function (err) {
                   console.log("Error occured while deleting review:", err);
-                  else{
-                    ContentHome.reviews.pop();
-                    $scope.$digest();
-                    buildfire.messaging.sendMessageToWidget({
-                      scope: "removeReview",
-                      review: review,
-                    });
-                  }
                 });
               }
             }, function (data) {
