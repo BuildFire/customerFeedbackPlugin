@@ -217,6 +217,7 @@
                     scope: "removeReview",
                     review: review,
                   });
+                  getTotalReviewsAndAverageCount();
                 }, function (err) {
                   console.log("Error occured while deleting review:", err);
                 });
