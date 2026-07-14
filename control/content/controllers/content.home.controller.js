@@ -212,7 +212,7 @@
             modalInstance.result.then(function (message) {
               if (message === 'yes') {
                 Reviews.remove(review.id, review.userToken).then(function (result) {
-                  ContentHome.reviews.pop();
+                  ContentHome.reviews.splice(index, 1);
                   buildfire.messaging.sendMessageToWidget({
                     scope: "removeReview",
                     review: review,
