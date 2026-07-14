@@ -159,6 +159,14 @@
               $location.path('/chat/' + review.userToken);
           };
 
+          function resetState() {
+            skip = 0;
+            ContentHome.reviews = [];
+            uniqueTokens = [];
+            uniqueReviews = [];
+            ContentHome.numberOfCommentsList = [];
+          }
+
         /*
          * watch for changes in data and trigger the saveDataWithDelay function on change
          * */
@@ -171,17 +179,8 @@
                   switch (event.name) {
                       case EVENTS.REVIEW_CREATED :
                           if (event.data) {
-                              ContentHome.reviews.push(event.data);
-                              let reviewItem = ContentHome.numberOfCommentsList.find(
-                                (item) =>
-                                item.userToken === event.data.userToken);
-                                if(reviewItem) {
-                                  event.data.numberOfComments = reviewItem.numberOfComments
-                                }; 
-                              if (uniqueTokens.indexOf(event.data.userToken) == -1) {
-                                  uniqueTokens.push(event.data.userToken);
-                                  uniqueReviews.push(event.data);
-                              }
+                              resetState();
+                              ContentHome.loadMoreItems();
                               getTotalReviewsAndAverageCount();
                           }
                           break;
